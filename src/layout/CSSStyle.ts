@@ -14,7 +14,6 @@ import { getStringFunctionParam } from "../utils/Utils";
  *  fixed 生成绝对定位的元素，相对于舞台进行定位。
  *
  *  static 没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。
- *
  */
 export type Position = "absolute" | "fixed" | "static";
 
@@ -499,7 +498,7 @@ export class CSSStyle {
                 this.parent.filterGrayscale = target.value;
                 break;
             case "outline":
-                this.parent.filterOutline = value;
+                //this.parent.filterOutline = value;
                 break;
         }
     }
@@ -508,10 +507,10 @@ export class CSSStyle {
     /**
      * 设置鼠标样式
      */
-    public get cursor(){
+    public get cursor() {
         return this.parent.container.cursor;
     }
-    public set cursor(value: string){
+    public set cursor(value: string) {
         this.parent.container.cursor = value;
     }
 

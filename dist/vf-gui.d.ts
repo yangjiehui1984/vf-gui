@@ -1914,7 +1914,6 @@ declare module 'layout/CSSStyle' {
 	 *  fixed 生成绝对定位的元素，相对于舞台进行定位。
 	 *
 	 *  static 没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。
-	 *
 	 */
 	export type Position = "absolute" | "fixed" | "static";
 	/** 对齐方式 父级如果是grid布局，会忽略当前居中模式 */
@@ -2429,6 +2428,9 @@ declare module 'core/DisplayObject' {
 	    /** 色调 */
 	    private _tint;
 	    tint: number | undefined;
+	    /**
+	     * 混合模式
+	     */
 	    private _blendMode;
 	    blendMode: PIXI.BLEND_MODES | undefined;
 	    /**
@@ -2438,6 +2440,14 @@ declare module 'core/DisplayObject' {
 	     *
 	     */
 	    filterBlur: number;
+	    /**
+	     * 设置灰度
+	     *
+	     * 参数类型为 number, 接收一个百分比值，然后再将其转换为小数
+	     */
+	    private grayscaleFilter?;
+	    private grayscaleFilterValue;
+	    filterGrayscale: number;
 	    /**
 	     * 私有样式代理
 	     * */
