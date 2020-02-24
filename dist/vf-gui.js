@@ -12177,10 +12177,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.6.1.1.6.1.1.6) ==1.1.6.1.1.6.1.1.6;
+//     return this.lastIndexOf(word, pos1.1.7.1.1.7.1.1.7) ==1.1.7.1.1.7.1.1.7;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.6";
+window.gui.version = "1.1.7";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
