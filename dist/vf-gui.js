@@ -8578,11 +8578,13 @@ function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, margin
     if (marginTop === void 0) { marginTop = 0; }
     if (marginLeft === void 0) { marginLeft = 0; }
     if (target.style == undefined) {
-        return;
+        return false;
     }
     if (target.style.justifyContent == undefined && target.style.alignContent == undefined) {
-        return;
+        return false;
     }
+    var oldX = target.x;
+    var oldY = target.y;
     var startX = 0;
     var startY = 0;
     var bounds = target.getPreferredBounds(exports.$TempRectangle);
@@ -8612,6 +8614,10 @@ function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, margin
         target.x = startX;
     if (startY !== 0)
         target.y = startY;
+    if (oldX !== startX || oldY !== startY) {
+        return true;
+    }
+    return false;
 }
 /**
  * 调整目标的元素的大小并定位这些元素。
@@ -8628,16 +8634,20 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
         var size = CSSGridLayout_1.updateGridLayout(target);
         CSSBasicLayout_1.updateBasicDisplayList(target, size.width, size.height);
     }
+    var isUpdateTransform = false;
     if (target.parent) {
-        updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
+        isUpdateTransform = updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
     }
     if (target.isContainer) {
         var bounds = target.getPreferredBounds(exports.$TempRectangle);
         var child = void 0;
         for (var i = 0; i < target.uiChildren.length; i++) {
             child = target.uiChildren[i];
-            updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridRowGap, child.style.gridColumnGap);
+            isUpdateTransform = updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridRowGap, child.style.gridColumnGap);
         }
+    }
+    if (isUpdateTransform) {
+        target.updateTransform();
     }
 }
 exports.updateDisplayLayout = updateDisplayLayout;
@@ -12177,10 +12187,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.7.1.1.7.1.1.7) ==1.1.7.1.1.7.1.1.7;
+//     return this.lastIndexOf(word, pos1.1.8.1.1.8.1.1.8) ==1.1.8.1.1.8.1.1.8;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.7";
+window.gui.version = "1.1.8";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
