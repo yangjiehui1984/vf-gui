@@ -110,7 +110,6 @@ export class InputBase extends DisplayObject{
     protected onClick(){
         if(this._clickSound){
             this.emit(ComponentEvent.PLAY_AUDIO, {name:this._clickSound,mode:'effect'});
-            console.log("aaa");
         }
     }
 

@@ -150,10 +150,8 @@ export class Image extends DisplayObject implements MaskSprite{
             }, this);
 
             let sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
-
-            if (!PIXI.utils.isWebGLSupported()) {
-                sprite = PIXI.Sprite.from(texture);
-            } else {
+            
+            try{
                 if (this.fillMode === "no-repeat") {
                     if (sprite instanceof PIXI.Sprite) {
                         sprite.texture = texture;
@@ -173,7 +171,10 @@ export class Image extends DisplayObject implements MaskSprite{
                         sprite = new PIXI.NineSlicePlane(texture);
                     }
                 }
+            }catch(e){
+                sprite = PIXI.Sprite.from(texture);
             }
+
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }

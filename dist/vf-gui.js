@@ -1996,6 +1996,7 @@ var DisplayObject = /** @class */ (function (_super) {
         _this.dragThreshold = 0;
         /** 拖动时，事件流是否继续传输 */
         _this.dragStopPropagation = true;
+        _this.grayscaleFilterValue = 0;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
@@ -2133,6 +2134,22 @@ var DisplayObject = /** @class */ (function (_super) {
                 container.filters = [this.blurFilter];
             }
             this.blurFilter.blur = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "filterGrayscale", {
+        get: function () {
+            return this.grayscaleFilterValue * 100;
+        },
+        set: function (value) {
+            var container = this.container;
+            if (this.grayscaleFilter === undefined) {
+                this.grayscaleFilter = new PIXI.filters.ColorMatrixFilter();
+                container.filters = [this.grayscaleFilter];
+            }
+            this.grayscaleFilterValue = value / 100;
+            this.grayscaleFilter.greyscale(this.grayscaleFilterValue, false);
         },
         enumerable: true,
         configurable: true
@@ -3700,8 +3717,8 @@ var ConnectLine = /** @class */ (function (_super) {
                     pos = Utils_1.pointPlus(startPos, { x: display.width, y: display.height });
                     break;
                 default:
-                    pos.x = _linePostion[0];
-                    pos.y = _linePostion[1];
+                    pos.x = startPos.x + _linePostion[0];
+                    pos.y = startPos.y + _linePostion[1];
             }
         }
         else {
@@ -4544,10 +4561,7 @@ var Image = /** @class */ (function (_super) {
                 _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
             }, this);
             var sprite = this._sprite;
-            if (!PIXI.utils.isWebGLSupported()) {
-                sprite = PIXI.Sprite.from(texture_1);
-            }
-            else {
+            try {
                 if (this.fillMode === "no-repeat") {
                     if (sprite instanceof PIXI.Sprite) {
                         sprite.texture = texture_1;
@@ -4572,6 +4586,9 @@ var Image = /** @class */ (function (_super) {
                         sprite = new PIXI.NineSlicePlane(texture_1);
                     }
                 }
+            }
+            catch (e) {
+                sprite = PIXI.Sprite.from(texture_1);
             }
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
@@ -7058,7 +7075,6 @@ var InputBase = /** @class */ (function (_super) {
     InputBase.prototype.onClick = function () {
         if (this._clickSound) {
             this.emit(Index_1.ComponentEvent.PLAY_AUDIO, { name: this._clickSound, mode: 'effect' });
-            console.log("aaa");
         }
     };
     InputBase.prototype.keyDownEvent = function (event) {
@@ -8561,11 +8577,13 @@ function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, margin
     if (marginTop === void 0) { marginTop = 0; }
     if (marginLeft === void 0) { marginLeft = 0; }
     if (target.style == undefined) {
-        return;
+        return false;
     }
     if (target.style.justifyContent == undefined && target.style.alignContent == undefined) {
-        return;
+        return false;
     }
+    var oldX = target.x;
+    var oldY = target.y;
     var startX = 0;
     var startY = 0;
     var bounds = target.getPreferredBounds(exports.$TempRectangle);
@@ -8595,6 +8613,10 @@ function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, margin
         target.x = startX;
     if (startY !== 0)
         target.y = startY;
+    if (oldX !== startX || oldY !== startY) {
+        return true;
+    }
+    return false;
 }
 /**
  * 调整目标的元素的大小并定位这些元素。
@@ -8611,16 +8633,20 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
         var size = CSSGridLayout_1.updateGridLayout(target);
         CSSBasicLayout_1.updateBasicDisplayList(target, size.width, size.height);
     }
+    var isUpdateTransform = false;
     if (target.parent) {
-        updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
+        isUpdateTransform = updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
     }
     if (target.isContainer) {
         var bounds = target.getPreferredBounds(exports.$TempRectangle);
         var child = void 0;
         for (var i = 0; i < target.uiChildren.length; i++) {
             child = target.uiChildren[i];
-            updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridRowGap, child.style.gridColumnGap);
+            isUpdateTransform = updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridRowGap, child.style.gridColumnGap);
         }
+    }
+    if (isUpdateTransform) {
+        target.updateTransform();
     }
 }
 exports.updateDisplayLayout = updateDisplayLayout;
@@ -9410,6 +9436,12 @@ var CSSStyle = /** @class */ (function () {
                 case "blur":
                     this.parent.filterBlur = target.value;
                     break;
+                case "grayscale":
+                    this.parent.filterGrayscale = target.value;
+                    break;
+                case "outline":
+                    //this.parent.filterOutline = value;
+                    break;
             }
         },
         enumerable: true,
@@ -9990,7 +10022,7 @@ CSS3.0 所有样式属性
     writingMode: string;
     // zIndex: string | null;
     zoom: string | null;
-    */ 
+    */
 
 
 /***/ }),
@@ -12154,10 +12186,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.5.1.1.5.1.1.5) ==1.1.5.1.1.5.1.1.5;
+//     return this.lastIndexOf(word, pos1.1.10.1.1.10.1.1.10) ==1.1.10.1.1.10.1.1.10;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.5";
+window.gui.version = "1.1.10";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
