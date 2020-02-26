@@ -4561,10 +4561,7 @@ var Image = /** @class */ (function (_super) {
                 _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
             }, this);
             var sprite = this._sprite;
-            if (!PIXI.utils.isWebGLSupported()) {
-                sprite = PIXI.Sprite.from(texture_1);
-            }
-            else {
+            try {
                 if (this.fillMode === "no-repeat") {
                     if (sprite instanceof PIXI.Sprite) {
                         sprite.texture = texture_1;
@@ -4589,6 +4586,9 @@ var Image = /** @class */ (function (_super) {
                         sprite = new PIXI.NineSlicePlane(texture_1);
                     }
                 }
+            }
+            catch (e) {
+                sprite = PIXI.Sprite.from(texture_1);
             }
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
@@ -7075,7 +7075,6 @@ var InputBase = /** @class */ (function (_super) {
     InputBase.prototype.onClick = function () {
         if (this._clickSound) {
             this.emit(Index_1.ComponentEvent.PLAY_AUDIO, { name: this._clickSound, mode: 'effect' });
-            console.log("aaa");
         }
     };
     InputBase.prototype.keyDownEvent = function (event) {
@@ -12187,10 +12186,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.8.1.1.8.1.1.8) ==1.1.8.1.1.8.1.1.8;
+//     return this.lastIndexOf(word, pos1.1.10.1.1.10.1.1.10) ==1.1.10.1.1.10.1.1.10;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.8";
+window.gui.version = "1.1.10";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
