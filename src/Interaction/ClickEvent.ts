@@ -2,6 +2,7 @@ import {DisplayObject} from "../core/DisplayObject";
 import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
 import {InteractionEvent} from "../event/InteractionEvent";
 import {TouchMouseEvent } from "../event/TouchMouseEvent";
+import { debug } from "../utils/Utils";
 
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
@@ -162,6 +163,13 @@ export class ClickEvent {
     }
 
     private emitTouchEvent(event: string | symbol,e: InteractionEvent, ... args: unknown[]){
+        if(debug){
+            const stage = this.obj.stage;
+            if(stage && event !== TouchMouseEvent.onMove){
+                stage.inputLog({code:event, level:'info', target:this.obj, data:args});
+            }
+           
+        }
         if(this.isOpenEmitEvent){
             e.type = event.toString();
             this.obj.emit(e.type,e,this.obj,... args);
