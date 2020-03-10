@@ -3,7 +3,7 @@ import { DragEvent, DragDropController, InteractionEvent, ComponentEvent } from 
 import { TouchMouseEventEnum } from "../../interaction/TouchMouseEventEnum";
 import { DisplayObjectAbstract } from "../DisplayObjectAbstract";
 import { Stage } from "../Stage";
-import { getDisplayObject } from "../../utils/Utils";
+import { getDisplayObject, debug } from "../../utils/Utils";
 
 
 /**
@@ -174,7 +174,7 @@ export class UIBaseDrag implements Lifecycle {
                 if (this.target == undefined) {
                     return;
                 }
-                let target = this.target;
+                const target = this.target;
                 this.$targetParent = target.parent;
                 
                 if(this._dragContainer == undefined && !this.dragBoundary){
@@ -201,6 +201,17 @@ export class UIBaseDrag implements Lifecycle {
                     } else {
                         stageOffset.set(0);
                     }
+                    if(debug){ //debug 模式下，日志信息
+                        const stage = target.stage;
+                        if(stage){
+                            stage.inputLog({code:ComponentEvent.DRAG_START, 
+                                level:'info', target:target, 
+                                data:[target.parent,containerStart.x - stageOffset.x,containerStart.y - stageOffset.y],
+                                message:'parent,start,offset pos',
+                            });
+                        }
+                       
+                    }
                     target.emit(ComponentEvent.DRAG_START, target, e);
                 }
             };
@@ -210,22 +221,35 @@ export class UIBaseDrag implements Lifecycle {
                 if (this.target == undefined) {
                     return;
                 }
-                let target = this.target;
+                const target = this.target;
                 if (this.dragging && target.stage) {
-                    let x = containerStart.x + (offset.x/target.stage.scaleX) - stageOffset.x;
-                    let y = containerStart.y + (offset.y/target.stage.scaleY) - stageOffset.y;
+                    const x = containerStart.x + (offset.x/target.stage.scaleX) - stageOffset.x;
+                    const y = containerStart.y + (offset.y/target.stage.scaleY) - stageOffset.y;
+                    const dragPosition = this._dragPosition;
                     if (this.dragRestrictAxis == "x") {
-                        this._dragPosition.set(x, containerStart.y - stageOffset.y);
+                        dragPosition.set(x, containerStart.y - stageOffset.y);
                     } else if (this.dragRestrictAxis == "y") {
-                        this._dragPosition.set(containerStart.x - stageOffset.x, y);
+                        dragPosition.set(containerStart.x - stageOffset.x, y);
                     } else {
                         this._dragPosition.set(x, y);
                     }
                     if (this.dragBoundary && target.parent) {
-                        this._dragPosition.x = Math.max(0, this._dragPosition.x);
-                        this._dragPosition.x = Math.min(this._dragPosition.x, target.parent.width - target.width);
-                        this._dragPosition.y = Math.max(0, this._dragPosition.y);
-                        this._dragPosition.y = Math.min(this._dragPosition.y, target.parent.height - target.height);
+                        dragPosition.x = Math.max(0, dragPosition.x);
+                        dragPosition.x = Math.min(dragPosition.x, target.parent.width - target.width);
+                        dragPosition.y = Math.max(0, dragPosition.y);
+                        dragPosition.y = Math.min(dragPosition.y, target.parent.height - target.height);
+                    }
+                    if(debug){//debug 模式下，日志信息
+                        const stage = target.stage;
+                        if(stage){
+                            stage.inputLog({code:ComponentEvent.DRAG_MOVE, 
+                                level:'info', 
+                                target:target, 
+                                data:[target.parent,dragPosition.x,dragPosition.y],
+                                message:'parent,move pos'
+                            });
+                        }
+                       
                     }
                     target.setPosition(this._dragPosition.x, this._dragPosition.y);
                     target.emit(ComponentEvent.DRAG_MOVE, target, e);
@@ -244,8 +268,8 @@ export class UIBaseDrag implements Lifecycle {
                         }
 
                         //dragBounces
-                        let target = this.target;
-                        let parent = this.$targetParent;
+                        const target = this.target;
+                        const parent = this.$targetParent;
                         target.interactive = true;
                         const item = DragDropController.getItem(target);
                         target.emit(ComponentEvent.DRAG_END_BEFORE, target, e);
@@ -261,6 +285,18 @@ export class UIBaseDrag implements Lifecycle {
                                 target.y = this._containerStart.y;
                             }
                         }
+                        if(debug){//debug 模式下，日志信息
+                            const stage = target.stage;
+                            if(stage){
+                                stage.inputLog({code:ComponentEvent.DRAG_END, 
+                                    level:'info', 
+                                    target:target, 
+                                    data:[target.parent,target.x,target.y],
+                                    message:'parent,end pos'
+                                });
+                            }
+                           
+                        }
                         target.emit(ComponentEvent.DRAG_END, target, e);
 
 
@@ -275,7 +311,7 @@ export class UIBaseDrag implements Lifecycle {
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
+        const target = this.target;
         if (this.dropInitialized) {
             this.dropInitialized = false;
             target.container.off(TouchMouseEventEnum.mouseup, this.onDrop, this);
@@ -287,7 +323,7 @@ export class UIBaseDrag implements Lifecycle {
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
+        const target = this.target;
         if (!this.dropInitialized) {
             this.dropInitialized = true;
             const container = target.container;
@@ -319,12 +355,24 @@ export class UIBaseDrag implements Lifecycle {
                 }
                 item.dragOption.$targetParent = parent;
             }
+            if(debug){//debug 模式下，日志信息
+                const stage = target.stage;
+                if(stage){
+                    stage.inputLog({code:ComponentEvent.DRAG_TARGET, 
+                        level:'info', 
+                        target:item, 
+                        data:[target.parent,item.x,item.y],
+                        message:'drag target,item pos'
+                    });
+                }
+               
+            }
             item.emit(ComponentEvent.DRAG_TARGET, item, e);
         }
     }
 
     load() {
-
+        //
     }
 
     release() {

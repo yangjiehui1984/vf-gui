@@ -3,6 +3,10 @@ import { Stage } from "../core/Stage";
 import { DisplayObjectAbstract } from "../core/DisplayObjectAbstract";
 
 /**
+ * 是否调试模式
+ */
+export let debug: boolean;
+/**
  * 工具类
  */
 

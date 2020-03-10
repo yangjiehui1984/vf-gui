@@ -89,4 +89,12 @@ export class Stage extends DisplayLayoutAbstract{
         //this.updateChildren();
     }
 
+    /**
+     * 虚接口，子类可以扩充
+     */
+    public inputLog(msg: TAny){
+        //
+        //console.log(msg);
+    }
+
 }

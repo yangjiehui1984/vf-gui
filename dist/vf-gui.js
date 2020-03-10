@@ -333,6 +333,8 @@ exports.Event = Event;
  */
 var Enum = __webpack_require__(/*! ./enum/Index */ "./src/enum/Index.ts");
 exports.Enum = Enum;
+var Scheduler_1 = __webpack_require__(/*! ./core/Scheduler */ "./src/core/Scheduler.ts");
+exports.Scheduler = Scheduler_1.Scheduler;
 
 
 /***/ }),
@@ -2491,6 +2493,157 @@ exports.DisplayObjectAbstract = DisplayObjectAbstract;
 
 /***/ }),
 
+/***/ "./src/core/Scheduler.ts":
+/*!*******************************!*\
+  !*** ./src/core/Scheduler.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
+/**
+ * Schedule anything
+ *
+ * @author 8088
+ */
+var Scheduler = /** @class */ (function (_super) {
+    __extends(Scheduler, _super);
+    function Scheduler(_timeout, _interval) {
+        if (_timeout === void 0) { _timeout = Infinity; }
+        if (_interval === void 0) { _interval = 0; }
+        var _this = _super.call(this) || this;
+        _this.interval = 0;
+        _this.timeout = Infinity;
+        _this.start = 0;
+        _this.lastTick = -1;
+        _this.elapsedTimeAtPause = 0;
+        _this.lastVisited = -1;
+        _this._running = false;
+        _this._lastExecuted = 0;
+        _this._id = Math.random();
+        _this.TIMEOUT = 1000;
+        _this.endHandler = _this.noop;
+        _this.tickHandler = _this.noop;
+        _this.timeout = _timeout;
+        _this.interval = _interval;
+        _this.restart();
+        return _this;
+    }
+    Object.defineProperty(Scheduler.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Scheduler.setInterval = function (time, listener) {
+        var scheduler = new Scheduler(Infinity, time);
+        scheduler.addListener("tick" /* TICK */, listener);
+        return scheduler;
+    };
+    Scheduler.setTimeout = function (time, listener) {
+        var scheduler = new Scheduler(time, Infinity);
+        scheduler.addListener("end" /* END */, listener, scheduler);
+        return scheduler;
+    };
+    Scheduler.prototype.restart = function () {
+        this.elapsedTimeAtPause = 0;
+        this.start = Scheduler.clock();
+        this._lastExecuted = this.start;
+        this._running = true;
+        Scheduler.ticker.addUpdateEvent(this.run, this);
+    };
+    Scheduler.prototype.stop = function () {
+        this.elapsedTimeAtPause = 0;
+        this._running = false;
+        Scheduler.ticker.removeUpdateEvent(this.run, this);
+    };
+    Scheduler.prototype.pause = function () {
+        if (this._running) {
+            this.stop();
+            this.elapsedTimeAtPause = Scheduler.clock() - this.start;
+        }
+    };
+    Scheduler.prototype.resume = function () {
+        var _t;
+        if (!this._running) {
+            _t = this.elapsedTimeAtPause;
+            this.restart();
+            this.start = this.start - _t;
+        }
+    };
+    Scheduler.prototype.seek = function (time) {
+        this.elapsedTimeAtPause = time;
+    };
+    Scheduler.prototype.isTickable = function (num) {
+        return num - this.lastTick >= this.interval;
+    };
+    Scheduler.prototype.noop = function (evt) {
+        if (evt === void 0) { evt = null; }
+        return;
+    };
+    // Internals
+    //
+    Scheduler.prototype.run = function () {
+        var elapsed;
+        var t = Scheduler.clock();
+        var timeElapsed = t - this._lastExecuted;
+        this._lastExecuted = t;
+        if (timeElapsed >= this.TIMEOUT) {
+            return false; // init Scheduler
+        }
+        if (this.lastVisited <= t) {
+            this.lastVisited = t;
+            elapsed = t - this.start;
+            if (this.isTickable(t)) {
+                this.lastTick = t;
+                var info = {
+                    code: "tick" /* TICK */,
+                    level: "status" /* STATUS */,
+                    target: this,
+                    elapsed: elapsed,
+                };
+                this.emit("tick" /* TICK */, info);
+            }
+            if (elapsed >= this.timeout) {
+                this.stop();
+                var info = {
+                    code: "end" /* END */,
+                    level: "status" /* STATUS */,
+                    target: this,
+                    elapsed: elapsed,
+                };
+                this.emit("end" /* END */, info);
+            }
+            // ..
+        }
+        return false;
+    };
+    Scheduler.clock = Date.now;
+    Scheduler.ticker = UI_1.TickerShared;
+    return Scheduler;
+}(PIXI.utils.EventEmitter));
+exports.Scheduler = Scheduler;
+
+
+/***/ }),
+
 /***/ "./src/core/Stage.ts":
 /*!***************************!*\
   !*** ./src/core/Stage.ts ***!
@@ -2607,6 +2760,13 @@ var Stage = /** @class */ (function (_super) {
     Stage.prototype.resize = function () {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         //this.updateChildren();
+    };
+    /**
+     * 虚接口，子类可以扩充
+     */
+    Stage.prototype.inputLog = function (msg) {
+        //
+        //console.log(msg);
     };
     return Stage;
 }(DisplayLayoutAbstract_1.DisplayLayoutAbstract));
@@ -2898,6 +3058,16 @@ var UIBaseDrag = /** @class */ (function () {
                     else {
                         stageOffset_1.set(0);
                     }
+                    if (Utils_1.debug) { //debug 模式下，日志信息
+                        var stage = target.stage;
+                        if (stage) {
+                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_START,
+                                level: 'info', target: target,
+                                data: [target.parent, containerStart_1.x - stageOffset_1.x, containerStart_1.y - stageOffset_1.y],
+                                message: 'parent,start,offset pos',
+                            });
+                        }
+                    }
                     target.emit(Index_1.ComponentEvent.DRAG_START, target, e);
                 }
             };
@@ -2909,20 +3079,32 @@ var UIBaseDrag = /** @class */ (function () {
                 if (_this.dragging && target.stage) {
                     var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
                     var y = containerStart_1.y + (offset.y / target.stage.scaleY) - stageOffset_1.y;
+                    var dragPosition = _this._dragPosition;
                     if (_this.dragRestrictAxis == "x") {
-                        _this._dragPosition.set(x, containerStart_1.y - stageOffset_1.y);
+                        dragPosition.set(x, containerStart_1.y - stageOffset_1.y);
                     }
                     else if (_this.dragRestrictAxis == "y") {
-                        _this._dragPosition.set(containerStart_1.x - stageOffset_1.x, y);
+                        dragPosition.set(containerStart_1.x - stageOffset_1.x, y);
                     }
                     else {
                         _this._dragPosition.set(x, y);
                     }
                     if (_this.dragBoundary && target.parent) {
-                        _this._dragPosition.x = Math.max(0, _this._dragPosition.x);
-                        _this._dragPosition.x = Math.min(_this._dragPosition.x, target.parent.width - target.width);
-                        _this._dragPosition.y = Math.max(0, _this._dragPosition.y);
-                        _this._dragPosition.y = Math.min(_this._dragPosition.y, target.parent.height - target.height);
+                        dragPosition.x = Math.max(0, dragPosition.x);
+                        dragPosition.x = Math.min(dragPosition.x, target.parent.width - target.width);
+                        dragPosition.y = Math.max(0, dragPosition.y);
+                        dragPosition.y = Math.min(dragPosition.y, target.parent.height - target.height);
+                    }
+                    if (Utils_1.debug) { //debug 模式下，日志信息
+                        var stage = target.stage;
+                        if (stage) {
+                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_MOVE,
+                                level: 'info',
+                                target: target,
+                                data: [target.parent, dragPosition.x, dragPosition.y],
+                                message: 'parent,move pos'
+                            });
+                        }
                     }
                     target.setPosition(_this._dragPosition.x, _this._dragPosition.y);
                     target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
@@ -2952,6 +3134,17 @@ var UIBaseDrag = /** @class */ (function () {
                             if (_this.dragBounces && _this._containerStart) {
                                 target.x = _this._containerStart.x;
                                 target.y = _this._containerStart.y;
+                            }
+                        }
+                        if (Utils_1.debug) { //debug 模式下，日志信息
+                            var stage = target.stage;
+                            if (stage) {
+                                stage.inputLog({ code: Index_1.ComponentEvent.DRAG_END,
+                                    level: 'info',
+                                    target: target,
+                                    data: [target.parent, target.x, target.y],
+                                    message: 'parent,end pos'
+                                });
                             }
                         }
                         target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
@@ -3005,10 +3198,22 @@ var UIBaseDrag = /** @class */ (function () {
                 }
                 item.dragOption.$targetParent = parent_1;
             }
+            if (Utils_1.debug) { //debug 模式下，日志信息
+                var stage = target.stage;
+                if (stage) {
+                    stage.inputLog({ code: Index_1.ComponentEvent.DRAG_TARGET,
+                        level: 'info',
+                        target: item,
+                        data: [target.parent, item.x, item.y],
+                        message: 'drag target,item pos'
+                    });
+                }
+            }
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
     };
     UIBaseDrag.prototype.load = function () {
+        //
     };
     UIBaseDrag.prototype.release = function () {
         this.clearDraggable();
@@ -7494,6 +7699,7 @@ exports.TweenEvent = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
  *
@@ -7611,7 +7817,7 @@ var ClickEvent = /** @class */ (function () {
         this.onPress && this.onPress.call(this.obj, e, this.obj, true), this.obj;
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onPress, e, true);
         if (this.obj.listenerCount(TouchMouseEvent_1.TouchMouseEvent.onDown) > 0) {
-            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onDown, e);
+            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onDown, e, true);
         }
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp, this);
@@ -7634,15 +7840,16 @@ var ClickEvent = /** @class */ (function () {
         }
         e.data.originalEvent.preventDefault();
     };
-    ClickEvent.prototype.emitTouchEvent = function (event, e) {
-        var _a;
-        var args = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            args[_i - 2] = arguments[_i];
+    ClickEvent.prototype.emitTouchEvent = function (event, e, args) {
+        if (Utils_1.debug) {
+            var stage = this.obj.stage;
+            if (stage && event !== TouchMouseEvent_1.TouchMouseEvent.onMove) {
+                stage.inputLog({ code: event, level: 'info', target: this.obj, data: [args] });
+            }
         }
         if (this.isOpenEmitEvent) {
             e.type = event.toString();
-            (_a = this.obj).emit.apply(_a, [e.type, e, this.obj].concat(args));
+            this.obj.emit(e.type, e, this.obj, args);
         }
     };
     ClickEvent.prototype._mouseUpAll = function (e) {
@@ -7660,7 +7867,7 @@ var ClickEvent = /** @class */ (function () {
         }
         this.onPress && this.onPress.call(this.obj, e, this.obj, false);
         if (this.obj.listenerCount(TouchMouseEvent_1.TouchMouseEvent.onUp) > 0) {
-            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onUp, e);
+            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onUp, e, false);
         }
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onPress, e, false);
     };
@@ -12186,10 +12393,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.10.1.1.10.1.1.10) ==1.1.10.1.1.10.1.1.10;
+//     return this.lastIndexOf(word, pos1.1.12.1.1.12.1.1.12) ==1.1.12.1.1.12.1.1.12;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.10";
+window.gui.version = "1.1.12";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
