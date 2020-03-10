@@ -214,7 +214,8 @@ import * as Event from "./event/Index";
  */
 import * as Enum from './enum/Index';
 
+import {Scheduler} from './core/Scheduler';
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
     Label,TextInput,Button,CheckBox,Rect,Circle,Graphics,FollowLine,ConnectLine,Interaction,
-    DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum};
+    DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum,Scheduler};
