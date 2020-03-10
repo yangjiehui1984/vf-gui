@@ -206,7 +206,7 @@ export class UIBaseDrag implements Lifecycle {
                         if(stage){
                             stage.inputLog({code:ComponentEvent.DRAG_START, 
                                 level:'info', target:target, 
-                                data:[target.parent,containerStart.x,containerStart.y,stageOffset.x,stageOffset.y],
+                                data:[target.parent,containerStart.x - stageOffset.x,containerStart.y - stageOffset.y],
                                 message:'parent,start,offset pos',
                             });
                         }

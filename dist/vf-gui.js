@@ -2608,6 +2608,13 @@ var Stage = /** @class */ (function (_super) {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         //this.updateChildren();
     };
+    /**
+     * 虚接口，子类可以扩充
+     */
+    Stage.prototype.inputLog = function (msg) {
+        //
+        console.log(msg);
+    };
     return Stage;
 }(DisplayLayoutAbstract_1.DisplayLayoutAbstract));
 exports.Stage = Stage;
@@ -2898,6 +2905,16 @@ var UIBaseDrag = /** @class */ (function () {
                     else {
                         stageOffset_1.set(0);
                     }
+                    if (Utils_1.debug) { //debug 模式下，日志信息
+                        var stage = target.stage;
+                        if (stage) {
+                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_START,
+                                level: 'info', target: target,
+                                data: [target.parent, containerStart_1.x - stageOffset_1.x, containerStart_1.y - stageOffset_1.y],
+                                message: 'parent,start,offset pos',
+                            });
+                        }
+                    }
                     target.emit(Index_1.ComponentEvent.DRAG_START, target, e);
                 }
             };
@@ -2909,20 +2926,32 @@ var UIBaseDrag = /** @class */ (function () {
                 if (_this.dragging && target.stage) {
                     var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
                     var y = containerStart_1.y + (offset.y / target.stage.scaleY) - stageOffset_1.y;
+                    var dragPosition = _this._dragPosition;
                     if (_this.dragRestrictAxis == "x") {
-                        _this._dragPosition.set(x, containerStart_1.y - stageOffset_1.y);
+                        dragPosition.set(x, containerStart_1.y - stageOffset_1.y);
                     }
                     else if (_this.dragRestrictAxis == "y") {
-                        _this._dragPosition.set(containerStart_1.x - stageOffset_1.x, y);
+                        dragPosition.set(containerStart_1.x - stageOffset_1.x, y);
                     }
                     else {
                         _this._dragPosition.set(x, y);
                     }
                     if (_this.dragBoundary && target.parent) {
-                        _this._dragPosition.x = Math.max(0, _this._dragPosition.x);
-                        _this._dragPosition.x = Math.min(_this._dragPosition.x, target.parent.width - target.width);
-                        _this._dragPosition.y = Math.max(0, _this._dragPosition.y);
-                        _this._dragPosition.y = Math.min(_this._dragPosition.y, target.parent.height - target.height);
+                        dragPosition.x = Math.max(0, dragPosition.x);
+                        dragPosition.x = Math.min(dragPosition.x, target.parent.width - target.width);
+                        dragPosition.y = Math.max(0, dragPosition.y);
+                        dragPosition.y = Math.min(dragPosition.y, target.parent.height - target.height);
+                    }
+                    if (Utils_1.debug) { //debug 模式下，日志信息
+                        var stage = target.stage;
+                        if (stage) {
+                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_MOVE,
+                                level: 'info',
+                                target: target,
+                                data: [target.parent, dragPosition.x, dragPosition.y],
+                                message: 'parent,move pos'
+                            });
+                        }
                     }
                     target.setPosition(_this._dragPosition.x, _this._dragPosition.y);
                     target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
@@ -2952,6 +2981,17 @@ var UIBaseDrag = /** @class */ (function () {
                             if (_this.dragBounces && _this._containerStart) {
                                 target.x = _this._containerStart.x;
                                 target.y = _this._containerStart.y;
+                            }
+                        }
+                        if (Utils_1.debug) { //debug 模式下，日志信息
+                            var stage = target.stage;
+                            if (stage) {
+                                stage.inputLog({ code: Index_1.ComponentEvent.DRAG_END,
+                                    level: 'info',
+                                    target: target,
+                                    data: [target.parent, target.x, target.y],
+                                    message: 'parent,end pos'
+                                });
                             }
                         }
                         target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
@@ -3005,10 +3045,22 @@ var UIBaseDrag = /** @class */ (function () {
                 }
                 item.dragOption.$targetParent = parent_1;
             }
+            if (Utils_1.debug) { //debug 模式下，日志信息
+                var stage = target.stage;
+                if (stage) {
+                    stage.inputLog({ code: Index_1.ComponentEvent.DRAG_TARGET,
+                        level: 'info',
+                        target: item,
+                        data: [target.parent, item.x, item.y],
+                        message: 'drag target,item pos'
+                    });
+                }
+            }
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
     };
     UIBaseDrag.prototype.load = function () {
+        //
     };
     UIBaseDrag.prototype.release = function () {
         this.clearDraggable();
@@ -7494,6 +7546,7 @@ exports.TweenEvent = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
  *
@@ -7611,7 +7664,7 @@ var ClickEvent = /** @class */ (function () {
         this.onPress && this.onPress.call(this.obj, e, this.obj, true), this.obj;
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onPress, e, true);
         if (this.obj.listenerCount(TouchMouseEvent_1.TouchMouseEvent.onDown) > 0) {
-            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onDown, e);
+            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onDown, e, true);
         }
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp, this);
@@ -7634,15 +7687,16 @@ var ClickEvent = /** @class */ (function () {
         }
         e.data.originalEvent.preventDefault();
     };
-    ClickEvent.prototype.emitTouchEvent = function (event, e) {
-        var _a;
-        var args = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            args[_i - 2] = arguments[_i];
+    ClickEvent.prototype.emitTouchEvent = function (event, e, args) {
+        if (Utils_1.debug) {
+            var stage = this.obj.stage;
+            if (stage && event !== TouchMouseEvent_1.TouchMouseEvent.onMove) {
+                stage.inputLog({ code: event, level: 'info', target: this.obj, data: [args] });
+            }
         }
         if (this.isOpenEmitEvent) {
             e.type = event.toString();
-            (_a = this.obj).emit.apply(_a, [e.type, e, this.obj].concat(args));
+            this.obj.emit(e.type, e, this.obj, args);
         }
     };
     ClickEvent.prototype._mouseUpAll = function (e) {
@@ -7660,7 +7714,7 @@ var ClickEvent = /** @class */ (function () {
         }
         this.onPress && this.onPress.call(this.obj, e, this.obj, false);
         if (this.obj.listenerCount(TouchMouseEvent_1.TouchMouseEvent.onUp) > 0) {
-            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onUp, e);
+            this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onUp, e, false);
         }
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onPress, e, false);
     };
@@ -12186,10 +12240,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.10.1.1.10.1.1.10) ==1.1.10.1.1.10.1.1.10;
+//     return this.lastIndexOf(word, pos1.1.11.1.1.11.1.1.11) ==1.1.11.1.1.11.1.1.11;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.10";
+window.gui.version = "1.1.11";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

@@ -1541,6 +1541,10 @@ declare module 'core/Stage' {
 	    release(): void;
 	    releaseAll(): void;
 	    resize(): void;
+	    /**
+	     * 虚接口，子类可以扩充
+	     */
+	    inputLog(msg: TAny): void;
 	}
 
 }
@@ -2483,6 +2487,10 @@ declare module 'utils/Utils' {
 	import { DisplayObject } from 'core/DisplayObject';
 	import { Stage } from 'core/Stage';
 	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
+	/**
+	 * 是否调试模式
+	 */
+	export let debug: boolean;
 	/**
 	 * 工具类
 	 */

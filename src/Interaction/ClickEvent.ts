@@ -136,7 +136,7 @@ export class ClickEvent {
         this.onPress && this.onPress.call(this.obj, e,this.obj, true),this.obj;
         this.emitTouchEvent(TouchMouseEvent.onPress,e,true);
         if(this.obj.listenerCount(TouchMouseEvent.onDown)>0){
-            this.emitTouchEvent(TouchMouseEvent.onDown,e);
+            this.emitTouchEvent(TouchMouseEvent.onDown,e,true);
         }
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
@@ -162,17 +162,17 @@ export class ClickEvent {
         e.data.originalEvent.preventDefault();
     }
 
-    private emitTouchEvent(event: string | symbol,e: InteractionEvent, ... args: unknown[]){
+    private emitTouchEvent(event: string | symbol,e: InteractionEvent, args?: boolean){
         if(debug){
             const stage = this.obj.stage;
             if(stage && event !== TouchMouseEvent.onMove){
-                stage.inputLog({code:event, level:'info', target:this.obj, data:args});
+                stage.inputLog({code:event, level:'info', target:this.obj, data:[args]});
             }
            
         }
         if(this.isOpenEmitEvent){
             e.type = event.toString();
-            this.obj.emit(e.type,e,this.obj,... args);
+            this.obj.emit(e.type,e,this.obj,args);
         }
         
     }
@@ -193,7 +193,7 @@ export class ClickEvent {
         }
         this.onPress && this.onPress.call(this.obj, e,this.obj, false);
         if(this.obj.listenerCount(TouchMouseEvent.onUp)>0){
-            this.emitTouchEvent(TouchMouseEvent.onUp,e);
+            this.emitTouchEvent(TouchMouseEvent.onUp,e,false);
         }
         this.emitTouchEvent(TouchMouseEvent.onPress,e,false);
     }
