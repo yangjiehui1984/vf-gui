@@ -333,6 +333,8 @@ exports.Event = Event;
  */
 var Enum = __webpack_require__(/*! ./enum/Index */ "./src/enum/Index.ts");
 exports.Enum = Enum;
+var Scheduler_1 = __webpack_require__(/*! ./core/Scheduler */ "./src/core/Scheduler.ts");
+exports.Scheduler = Scheduler_1.Scheduler;
 
 
 /***/ }),
@@ -2491,6 +2493,157 @@ exports.DisplayObjectAbstract = DisplayObjectAbstract;
 
 /***/ }),
 
+/***/ "./src/core/Scheduler.ts":
+/*!*******************************!*\
+  !*** ./src/core/Scheduler.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
+/**
+ * Schedule anything
+ *
+ * @author 8088
+ */
+var Scheduler = /** @class */ (function (_super) {
+    __extends(Scheduler, _super);
+    function Scheduler(_timeout, _interval) {
+        if (_timeout === void 0) { _timeout = Infinity; }
+        if (_interval === void 0) { _interval = 0; }
+        var _this = _super.call(this) || this;
+        _this.interval = 0;
+        _this.timeout = Infinity;
+        _this.start = 0;
+        _this.lastTick = -1;
+        _this.elapsedTimeAtPause = 0;
+        _this.lastVisited = -1;
+        _this._running = false;
+        _this._lastExecuted = 0;
+        _this._id = Math.random();
+        _this.TIMEOUT = 1000;
+        _this.endHandler = _this.noop;
+        _this.tickHandler = _this.noop;
+        _this.timeout = _timeout;
+        _this.interval = _interval;
+        _this.restart();
+        return _this;
+    }
+    Object.defineProperty(Scheduler.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Scheduler.setInterval = function (time, listener) {
+        var scheduler = new Scheduler(Infinity, time);
+        scheduler.addListener("tick" /* TICK */, listener);
+        return scheduler;
+    };
+    Scheduler.setTimeout = function (time, listener) {
+        var scheduler = new Scheduler(time, Infinity);
+        scheduler.addListener("end" /* END */, listener, scheduler);
+        return scheduler;
+    };
+    Scheduler.prototype.restart = function () {
+        this.elapsedTimeAtPause = 0;
+        this.start = Scheduler.clock();
+        this._lastExecuted = this.start;
+        this._running = true;
+        Scheduler.ticker.addUpdateEvent(this.run, this);
+    };
+    Scheduler.prototype.stop = function () {
+        this.elapsedTimeAtPause = 0;
+        this._running = false;
+        Scheduler.ticker.removeUpdateEvent(this.run, this);
+    };
+    Scheduler.prototype.pause = function () {
+        if (this._running) {
+            this.stop();
+            this.elapsedTimeAtPause = Scheduler.clock() - this.start;
+        }
+    };
+    Scheduler.prototype.resume = function () {
+        var _t;
+        if (!this._running) {
+            _t = this.elapsedTimeAtPause;
+            this.restart();
+            this.start = this.start - _t;
+        }
+    };
+    Scheduler.prototype.seek = function (time) {
+        this.elapsedTimeAtPause = time;
+    };
+    Scheduler.prototype.isTickable = function (num) {
+        return num - this.lastTick >= this.interval;
+    };
+    Scheduler.prototype.noop = function (evt) {
+        if (evt === void 0) { evt = null; }
+        return;
+    };
+    // Internals
+    //
+    Scheduler.prototype.run = function () {
+        var elapsed;
+        var t = Scheduler.clock();
+        var timeElapsed = t - this._lastExecuted;
+        this._lastExecuted = t;
+        if (timeElapsed >= this.TIMEOUT) {
+            return false; // init Scheduler
+        }
+        if (this.lastVisited <= t) {
+            this.lastVisited = t;
+            elapsed = t - this.start;
+            if (this.isTickable(t)) {
+                this.lastTick = t;
+                var info = {
+                    code: "tick" /* TICK */,
+                    level: "status" /* STATUS */,
+                    target: this,
+                    elapsed: elapsed,
+                };
+                this.emit("tick" /* TICK */, info);
+            }
+            if (elapsed >= this.timeout) {
+                this.stop();
+                var info = {
+                    code: "end" /* END */,
+                    level: "status" /* STATUS */,
+                    target: this,
+                    elapsed: elapsed,
+                };
+                this.emit("end" /* END */, info);
+            }
+            // ..
+        }
+        return false;
+    };
+    Scheduler.clock = Date.now;
+    Scheduler.ticker = UI_1.TickerShared;
+    return Scheduler;
+}(PIXI.utils.EventEmitter));
+exports.Scheduler = Scheduler;
+
+
+/***/ }),
+
 /***/ "./src/core/Stage.ts":
 /*!***************************!*\
   !*** ./src/core/Stage.ts ***!
@@ -2613,7 +2766,7 @@ var Stage = /** @class */ (function (_super) {
      */
     Stage.prototype.inputLog = function (msg) {
         //
-        console.log(msg);
+        //console.log(msg);
     };
     return Stage;
 }(DisplayLayoutAbstract_1.DisplayLayoutAbstract));
@@ -12240,10 +12393,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.11.1.1.11.1.1.11) ==1.1.11.1.1.11.1.1.11;
+//     return this.lastIndexOf(word, pos1.1.12.1.1.12.1.1.12) ==1.1.12.1.1.12.1.1.12;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.11";
+window.gui.version = "1.1.12";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

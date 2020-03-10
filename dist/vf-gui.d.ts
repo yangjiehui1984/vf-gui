@@ -3646,12 +3646,113 @@ declare module 'display/Sound' {
 	}
 
 }
+declare module 'event/SchedulerEvent' {
+	export const enum SchedulerEvent {
+	    /**
+	     * 心跳
+	     */
+	    TICK = "tick",
+	    /**
+	     * 启动/开始
+	     */
+	    START = "start",
+	    /**
+	     * 更新
+	     */
+	    UPDATE = "update",
+	    /**
+	     * 结束
+	     */
+	    END = "end"
+	}
+
+}
 declare module 'event/Index' {
 	import * as ComponentEvent from 'event/ComponentEvent';
 	import { InteractionEvent } from 'event/InteractionEvent';
 	import { TouchMouseEvent } from 'event/TouchMouseEvent';
 	import { TweenEvent } from 'event/TweenEvent';
-	export { ComponentEvent, InteractionEvent, TouchMouseEvent, TweenEvent, };
+	import { SchedulerEvent } from 'event/SchedulerEvent';
+	export { ComponentEvent, InteractionEvent, TouchMouseEvent, TweenEvent, SchedulerEvent };
+
+}
+declare module 'event/EventLevel' {
+	/**
+	 * status: 状态变化
+	 *
+	 * command: 执行操作
+	 *
+	 * ----------------------
+	 *
+	 * Info: 默认的等级
+	 *
+	 * Warn: 表示可能对系统有损害的情况
+	 *
+	 * 表示非常严重的错误等级，记录极有可能导致应用程序终止运行的致命错误信息；
+	 */
+	export const enum EventLevel {
+	    /**
+	     * 状态
+	     */
+	    STATUS = "status",
+	    /**
+	     * 命令
+	     */
+	    COMMAND = "command",
+	    /**
+	     * 默认的等级
+	     */
+	    INFO = "info",
+	    /**
+	     * 警告
+	     */
+	    WARNING = "warning",
+	    /**
+	     * 错误
+	     */
+	    ERROR = "error",
+	    /**
+	     * 原生
+	     */
+	    NATIVE = "native"
+	}
+
+}
+declare module 'core/Scheduler' {
+	/// <reference types="pixi.js" />
+	/**
+	 * Schedule anything
+	 *
+	 * @author 8088
+	 */
+	export class Scheduler extends PIXI.utils.EventEmitter {
+	    readonly id: number;
+	    static clock: () => number;
+	    static ticker: TAny;
+	    static setInterval(time: number, listener: () => void): Scheduler;
+	    static setTimeout(time: number, listener: () => void): Scheduler;
+	    interval: number;
+	    timeout: number;
+	    protected start: number;
+	    protected lastTick: number;
+	    protected endHandler: () => void;
+	    protected elapsedTimeAtPause: number;
+	    protected lastVisited: number;
+	    protected tickHandler: () => void;
+	    private _running;
+	    private _lastExecuted;
+	    private _id;
+	    private TIMEOUT;
+	    constructor(_timeout?: number, _interval?: number);
+	    restart(): void;
+	    stop(): void;
+	    pause(): void;
+	    resume(): void;
+	    seek(time: number): void;
+	    isTickable(num: number): boolean;
+	    protected noop(evt?: TAny): void;
+	    private run;
+	}
 
 }
 declare module 'UI' {
@@ -3866,8 +3967,9 @@ declare module 'UI' {
 	 * 枚举
 	 */
 	import * as Enum from 'enum/Index';
+	import { Scheduler } from 'core/Scheduler';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum };
+	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
 
 }
 declare module 'vf-gui' {
