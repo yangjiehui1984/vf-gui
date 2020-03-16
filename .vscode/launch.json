@@ -6,6 +6,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "edge",
+            "version": "stable",
+            "request": "launch",
+            "name": "针对 localhost 启动 Edge",
+            "url": "http://localhost:5501/",
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${webRoot}/node_modules/*",       // Example: "webpack:///./~/querystring/index.js" -> "/Users/me/project/node_modules/querystring/index.js"
+                "webpack:///./*":   "${webRoot}/*",                    // Example: "webpack:///./src/app.js" -> "/Users/me/project/src/app.js",
+                "webpack:///*":     "*",                               // Example: "webpack:///project/app.ts" -> "/project/app.ts"
+            }
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "port": 9222,
