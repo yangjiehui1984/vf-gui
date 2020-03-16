@@ -1,6 +1,6 @@
 import { TickerShared } from "../UI";
+import { EventType } from "../event/EventType";
 import { EventLevel } from "../event/EventLevel";
-import { SchedulerEvent } from "../event/Index";
 
 /**
  * Schedule anything
@@ -16,45 +16,45 @@ export class Scheduler extends PIXI.utils.EventEmitter {
 
     public static clock: () => number = Date.now;
 
-    public static ticker: TAny = TickerShared;
+    public static ticker: any = TickerShared;
 
     public static setInterval(time: number, listener: () => void): Scheduler {
         const scheduler: Scheduler = new Scheduler(Infinity, time);
-        scheduler.addListener(SchedulerEvent.TICK, listener);
+        scheduler.addListener(EventType.TICK, listener);
         return scheduler;
     }
 
     public static setTimeout(time: number, listener: () => void): Scheduler {
         const scheduler: Scheduler = new Scheduler(time, Infinity);
-        scheduler.addListener(SchedulerEvent.END, listener, scheduler);
+        scheduler.addListener(EventType.END, listener, scheduler);
         return scheduler;
     }
 
-    public interval = 0;
+    public interval: number = 0;
 
-    public timeout = Infinity;
+    public timeout: number = Infinity;
 
-    protected start = 0;
+    protected start: number = 0;
 
-    protected lastTick = -1;
+    protected lastTick: number = -1;
 
     protected endHandler: () => void;
 
-    protected elapsedTimeAtPause = 0;
+    protected elapsedTimeAtPause: number = 0;
 
-    protected lastVisited = -1;
+    protected lastVisited: number = -1;
 
     protected tickHandler: () => void;
 
-    private _running = false;
+    private _running: boolean = false;
 
-    private _lastExecuted = 0;
+    private _lastExecuted: number = 0;
 
     private _id: number = Math.random();
 
-    private TIMEOUT = 1000;
+    private TIMEOUT: number = 1000;
 
-    constructor(_timeout = Infinity, _interval = 0) {
+    constructor(_timeout: number = Infinity, _interval: number = 0) {
         super();
         this.endHandler = this.noop;
         this.tickHandler = this.noop;
@@ -101,7 +101,7 @@ export class Scheduler extends PIXI.utils.EventEmitter {
         return num - this.lastTick >= this.interval;
     }
 
-    protected noop(evt: TAny = null): void {
+    protected noop(evt: any = null): void {
         return;
     }
 
@@ -112,7 +112,7 @@ export class Scheduler extends PIXI.utils.EventEmitter {
     private run(): boolean {
         let elapsed: number;
         const t: number = Scheduler.clock();
-        const timeElapsed: TAny = t - this._lastExecuted;
+        const timeElapsed: any = t - this._lastExecuted;
         this._lastExecuted = t;
 
         if (timeElapsed >= this.TIMEOUT) {
@@ -125,22 +125,22 @@ export class Scheduler extends PIXI.utils.EventEmitter {
             if (this.isTickable(t)) {
                 this.lastTick = t;
                 const info = {
-                    code: SchedulerEvent.TICK,
+                    code: EventType.TICK,
                     level: EventLevel.STATUS,
                     target: this,
                     elapsed,
                 };
-                this.emit(SchedulerEvent.TICK, info);
+                this.emit(EventType.TICK, info);
             }
             if (elapsed >= this.timeout) {
                 this.stop();
                 const info = {
-                    code: SchedulerEvent.END,
+                    code: EventType.END,
                     level: EventLevel.STATUS,
                     target: this,
                     elapsed,
                 };
-                this.emit(SchedulerEvent.END, info);
+                this.emit(EventType.END, info);
             }
             // ..
         }
