@@ -1,6 +1,6 @@
 {
   "name": "vf-gui",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "[https://vipkid-edu.github.io/vf-gui-docs/](https://vipkid-edu.github.io/vf-gui-docs/)",
   "main": "dist/vf-gui.js",
   "types": "dist/vf-gui.d.ts",
@@ -38,7 +38,7 @@
     "@typescript-eslint/parser": "^2.14.0",
     "dts-generator": "^3.0.0",
     "emoji-regex": "^8.0.0",
-    "eslint": "^6.3.0",
+    "eslint": "^6.8.0",
     "eslint-plugin-typescript": "^0.14.0",
     "pixi-sound": "3.0.3",
     "pixi.js": "5.2.0",
