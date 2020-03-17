@@ -2664,6 +2664,15 @@ declare module 'utils/Utils' {
 	}): number;
 
 }
+declare module 'core/Filter' {
+	/// <reference types="pixi.js" />
+	export class Filter extends PIXI.Filter {
+	    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {
+	        [key: string]: any;
+	    });
+	}
+
+}
 declare module 'display/Container' {
 	import { DisplayObject } from 'core/DisplayObject';
 	/**
@@ -3805,6 +3814,8 @@ declare module 'UI' {
 	import { DisplayObject } from 'core/DisplayObject';
 	/** 心跳，需要在初始化完成后，启动心跳更新 */
 	import { shared as TickerShared } from 'core/Ticker';
+	/** 滤镜的基础类 */
+	import { Filter } from 'core/Filter';
 	/**
 	 * 基础容器
 	 *
@@ -4010,21 +4021,12 @@ declare module 'UI' {
 	import * as Enum from 'enum/Index';
 	import { Scheduler } from 'core/Scheduler';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
+	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
 
 }
 declare module 'vf-gui' {
 	import * as vfgui from 'UI';
 	export default vfgui;
-
-}
-declare module 'core/Filter' {
-	/// <reference types="pixi.js" />
-	export class Filter extends PIXI.Filter {
-	    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {
-	        [key: string]: any;
-	    });
-	}
 
 }
 declare type TAny = any;

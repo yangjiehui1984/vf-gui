@@ -1,12 +1,13 @@
 /** 工具类 */
 import * as Utils from "./utils/Utils";
 /** UI舞台，最顶级的层 展示所有UI组件 */
-import {Stage} from "./core/Stage";
+import { Stage } from "./core/Stage";
 /** UI基础显示对象，一般不会直接使用，只作为类型推断 */
-import {DisplayObject} from "./core/DisplayObject";
+import { DisplayObject } from "./core/DisplayObject";
 /** 心跳，需要在初始化完成后，启动心跳更新 */
-import {shared as TickerShared} from "./core/Ticker";
-
+import { shared as TickerShared } from "./core/Ticker";
+/** 滤镜的基础类 */
+import { Filter } from './core/Filter';
 /**
  * 基础容器
  * 
@@ -18,7 +19,7 @@ import {shared as TickerShared} from "./core/Ticker";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestContainer
  */
-import {Container} from "./display/Container";
+import { Container } from "./display/Container";
 /**
  * 滚动容器
  * 
@@ -28,7 +29,7 @@ import {Container} from "./display/Container";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
-import {ScrollingContainer} from "./display/ScrollingContainer";
+import { ScrollingContainer } from "./display/ScrollingContainer";
 /**
  * 图片
  * 
@@ -38,7 +39,7 @@ import {ScrollingContainer} from "./display/ScrollingContainer";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestImage
  */
-import {Image} from "./display/Image";
+import { Image } from "./display/Image";
 /**
  * 序列图动画
  * 
@@ -50,7 +51,7 @@ import {Image} from "./display/Image";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSpriteAnimated
  */
-import {SpriteAnimated} from "./display/SpriteAnimated";
+import { SpriteAnimated } from "./display/SpriteAnimated";
 /**
  * 文本
  * 
@@ -64,7 +65,7 @@ import {SpriteAnimated} from "./display/SpriteAnimated";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
  */
-import {Label} from "./display/Label";
+import { Label } from "./display/Label";
 /**
  * 文本输入
  * 
@@ -74,7 +75,7 @@ import {Label} from "./display/Label";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTextInput
  */
-import {TextInput} from "./display/TextInput";
+import { TextInput } from "./display/TextInput";
 /**
  * 滑动条/进度条
  * 
@@ -84,7 +85,7 @@ import {TextInput} from "./display/TextInput";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSlider
  */
-import {Slider} from "./display/Slider";
+import { Slider } from "./display/Slider";
 /**
  * 按钮
  * 
@@ -94,7 +95,7 @@ import {Slider} from "./display/Slider";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestButton
  */
-import {Button} from "./display/Button";
+import { Button } from "./display/Button";
 
 /**
  * 单选\复选框
@@ -107,7 +108,7 @@ import {Button} from "./display/Button";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCheckBox
  */
-import {CheckBox} from "./display/CheckBox";
+import { CheckBox } from "./display/CheckBox";
 /**
  * 绘制矩形或圆角矩形
  * 
@@ -117,7 +118,7 @@ import {CheckBox} from "./display/CheckBox";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
-import {Rect} from "./display/Rect";
+import { Rect } from "./display/Rect";
 /**
  * 绘制矩形或圆角矩形
  * 
@@ -127,7 +128,7 @@ import {Rect} from "./display/Rect";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
  */
-import {Circle} from "./display/Circle";
+import { Circle } from "./display/Circle";
 /**
  * 矢量绘制
  * 
@@ -137,7 +138,7 @@ import {Circle} from "./display/Circle";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
-import {Graphics} from "./display/Graphics";
+import { Graphics } from "./display/Graphics";
 /**
  * 跟随划线（鼠标或触摸按下时）
  * 
@@ -147,7 +148,7 @@ import {Graphics} from "./display/Graphics";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
-import {FollowLine} from "./display/FollowLine";
+import { FollowLine } from "./display/FollowLine";
 /**
  * 连线组件
  * 
@@ -158,7 +159,7 @@ import {FollowLine} from "./display/FollowLine";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestConnectLine
  */
-import {ConnectLine} from "./display/ConnectLine";
+import { ConnectLine } from "./display/ConnectLine";
 /**
  * 音频播放组件
  * 
@@ -168,7 +169,7 @@ import {ConnectLine} from "./display/ConnectLine";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSound
  */
-import {Sound} from "./display/Sound";
+import { Sound } from "./display/Sound";
 /**
  * 完整的缓动曲线列表
  * 
@@ -178,7 +179,7 @@ import {Sound} from "./display/Sound";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
  */
-import {Easing} from "./tween/Easing";
+import { Easing } from "./tween/Easing";
 /**
  * 缓动动画
  * 
@@ -188,7 +189,7 @@ import {Easing} from "./tween/Easing";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
  */
-import {Tween} from "./tween/Tween";
+import { Tween } from "./tween/Tween";
 /**
  * 基于帧的时间轴控制类
  * 
@@ -198,7 +199,7 @@ import {Tween} from "./tween/Tween";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
-import {Timeline} from "./tween/Timeline";
+import { Timeline } from "./tween/Timeline";
 
 /**
  * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
@@ -214,8 +215,10 @@ import * as Event from "./event/Index";
  */
 import * as Enum from './enum/Index';
 
-import {Scheduler} from './core/Scheduler';
+import { Scheduler } from './core/Scheduler';
 /** 请不要在编写UI组件内部使用本类 */
-export {Utils,Stage,Container,ScrollingContainer,Slider,
-    Label,TextInput,Button,CheckBox,Rect,Circle,Graphics,FollowLine,ConnectLine,Interaction,
-    DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum,Scheduler};
+export {
+    Filter, Utils, Stage, Container, ScrollingContainer, Slider,
+    Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction,
+    DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler
+};
