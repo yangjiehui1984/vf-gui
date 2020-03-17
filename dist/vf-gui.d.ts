@@ -4018,6 +4018,15 @@ declare module 'vf-gui' {
 	export default vfgui;
 
 }
+declare module 'core/Filter' {
+	/// <reference types="pixi.js" />
+	export class Filter extends PIXI.Filter {
+	    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {
+	        [key: string]: any;
+	    });
+	}
+
+}
 declare type TAny = any;
 interface Window {
     readonly clipboardData: DataTransfer | null;
