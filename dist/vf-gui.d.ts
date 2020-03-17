@@ -3676,6 +3676,47 @@ declare module 'event/Index' {
 	export { ComponentEvent, InteractionEvent, TouchMouseEvent, TweenEvent, SchedulerEvent };
 
 }
+declare module 'event/EventType' {
+	export const enum EventType {
+	    /**
+	     * 状态变化 ：IVFData -> VFStateCode
+	     */
+	    STATUS = "status",
+	    /**
+	     * 推送消息到外部
+	     */
+	    MESSAGE = "message",
+	    /**
+	     * 接收外部消息
+	     */
+	    ONMESSAGE = "onMessage",
+	    /**
+	     * 通用状态变化
+	     */
+	    STATE = "state",
+	    /**
+	     * 启动/开始
+	     */
+	    START = "start",
+	    /**
+	     * 心跳
+	     */
+	    TICK = "tick",
+	    /**
+	     * 更新
+	     */
+	    UPDATE = "update",
+	    /**
+	     * 已改变
+	     */
+	    CHANGED = "changed",
+	    /**
+	     * 结束
+	     */
+	    END = "end"
+	}
+
+}
 declare module 'event/EventLevel' {
 	/**
 	 * status: 状态变化
@@ -3728,7 +3769,7 @@ declare module 'core/Scheduler' {
 	export class Scheduler extends PIXI.utils.EventEmitter {
 	    readonly id: number;
 	    static clock: () => number;
-	    static ticker: TAny;
+	    static ticker: any;
 	    static setInterval(time: number, listener: () => void): Scheduler;
 	    static setTimeout(time: number, listener: () => void): Scheduler;
 	    interval: number;
@@ -3750,7 +3791,7 @@ declare module 'core/Scheduler' {
 	    resume(): void;
 	    seek(time: number): void;
 	    isTickable(num: number): boolean;
-	    protected noop(evt?: TAny): void;
+	    protected noop(evt?: any): void;
 	    private run;
 	}
 
