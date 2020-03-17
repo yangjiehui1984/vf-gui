@@ -34,8 +34,13 @@ export function updateBasicDisplayList(target: DisplayObject|undefined,unscaledW
         return;
     //console.log(target.container.name);
     const values = target.$values;
-    const parentWidth = target.parent?target.parent.$values[UIKeys.width]:1;
-    const parentHeight = target.parent?target.parent.$values[UIKeys.height]:1;
+    const parentValues =  target.parent ? target.parent.$values : undefined;
+    let parentWidth =  1;
+    let parentHeight = 1;
+    if(parentValues){
+        parentWidth = parentValues[UIKeys.width] || parentValues[UIKeys.explicitWidth] || 1;
+        parentHeight = parentValues[UIKeys.height] || parentValues[UIKeys.explicitHeight] || 1;
+    }
     const hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
     const vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
     const left = formatRelative(values[UIKeys.left], parentWidth || 1);

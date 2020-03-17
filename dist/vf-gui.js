@@ -8592,8 +8592,13 @@ function updateBasicDisplayList(target, unscaledWidth, unscaledHeight) {
         return;
     //console.log(target.container.name);
     var values = target.$values;
-    var parentWidth = target.parent ? target.parent.$values[UIKeys.width] : 1;
-    var parentHeight = target.parent ? target.parent.$values[UIKeys.height] : 1;
+    var parentValues = target.parent ? target.parent.$values : undefined;
+    var parentWidth = 1;
+    var parentHeight = 1;
+    if (parentValues) {
+        parentWidth = parentValues[UIKeys.width] || parentValues[UIKeys.explicitWidth] || 1;
+        parentHeight = parentValues[UIKeys.height] || parentValues[UIKeys.explicitHeight] || 1;
+    }
     var hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
     var vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
     var left = formatRelative(values[UIKeys.left], parentWidth || 1);
@@ -12393,10 +12398,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.12.1.1.12.1.1.12) ==1.1.12.1.1.12.1.1.12;
+//     return this.lastIndexOf(word, pos1.1.14.1.1.14.1.1.14) ==1.1.14.1.1.14.1.1.14;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.12";
+window.gui.version = "1.1.14";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
