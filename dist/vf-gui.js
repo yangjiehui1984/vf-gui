@@ -2524,6 +2524,7 @@ var Filter = /** @class */ (function (_super) {
     function Filter(vertexSrc, fragmentSrc, uniforms) {
         return _super.call(this, vertexSrc, fragmentSrc, uniforms) || this;
     }
+    Filter.defaultFilterVertex = PIXI.defaultFilterVertex;
     return Filter;
 }(PIXI.Filter));
 exports.Filter = Filter;
