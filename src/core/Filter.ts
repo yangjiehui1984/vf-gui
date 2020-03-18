@@ -1,7 +1,8 @@
-export class Filter extends PIXI.Filter{
+export class Filter extends PIXI.Filter {
 
-   constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {[key: string]: any})
-   {
-       super(vertexSrc, fragmentSrc,uniforms);
-   }
+    public static defaultFilterVertex = PIXI.defaultFilterVertex;
+
+    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: { [key: string]: TAny }) {
+        super(vertexSrc, fragmentSrc, uniforms);
+    }
 }
