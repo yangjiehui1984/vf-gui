@@ -211,7 +211,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      * 参数类型为 number, 接收一个百分比值，然后再将其转换为小数
      */
     private grayscaleFilter?: PIXI.filters.ColorMatrixFilter;
-    private grayscaleFilterValue: number = 0;
+    private grayscaleFilterValue = 0;
     public set filterGrayscale(value: number) {
         const container = this.container;
         if (this.grayscaleFilter === undefined) {
