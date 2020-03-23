@@ -56,8 +56,9 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         deepCopy(value, dragOption);
     }
 
+
     /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
-    public get isClick() {
+    public get interactabled() {
         const click = this.plugs.get(UIClick.key) as UIClick;
         if (click) {
             return true;
@@ -65,7 +66,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         return false;
     }
 
-    public set isClick(value: boolean) {
+    public set interactabled(value: boolean) {
         const click = this.plugs.get(UIClick.key) as UIClick;
         if (value) {
             if (!click) {
@@ -76,6 +77,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
                 click.release();
             }
         }
+    }
+
+    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+    public get isClick() {
+        console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+        return this.interactabled;
+    }
+
+    public set isClick(value: boolean) {
+        console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+        this.interactabled = value;
     }
 
     /**
@@ -183,8 +195,6 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         }
         return this._filterProxy;
     }
-
-
 
     /**
      * 设置Blur XY的模糊强度

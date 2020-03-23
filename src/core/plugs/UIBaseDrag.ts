@@ -119,7 +119,7 @@ export class UIBaseDrag implements Lifecycle {
         return this._dragContainer;
     }
     public set dragContainer(value) {
-        this._dragContainer = getDisplayObject(value,this.target);
+        this._dragContainer = getDisplayObject(value, this.target);
     }
 
     /**
@@ -140,7 +140,7 @@ export class UIBaseDrag implements Lifecycle {
         return this._droppableReparent;
     }
     public set droppableReparent(value) {
-        this._droppableReparent = getDisplayObject(value,this.target);
+        this._droppableReparent = getDisplayObject(value, this.target);
     }
     /**
      * 接收拖动掉落的分组名
@@ -176,11 +176,11 @@ export class UIBaseDrag implements Lifecycle {
                 }
                 const target = this.target;
                 this.$targetParent = target.parent;
-                
-                if(this._dragContainer == undefined && !this.dragBoundary){
+
+                if (this._dragContainer == undefined && !this.dragBoundary) {
                     this._dragContainer = this.target.stage;
-                }    
-                
+                }
+
                 const added = DragDropController.add(target, e);
                 if (!this.dragging && added) {
                     target.emit(ComponentEvent.DRAG_START_BEFORE, target, e);
@@ -196,21 +196,23 @@ export class UIBaseDrag implements Lifecycle {
                             //_this.container._recursivePostUpdateTransform();
                             stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
                             c.addChild(target);
-                            stageOffset.set(stageOffset.x/target.parent.scaleX,stageOffset.y/target.parent.scaleY);
+                            stageOffset.set(stageOffset.x / target.parent.scaleX, stageOffset.y / target.parent.scaleY);
                         }
                     } else {
                         stageOffset.set(0);
                     }
-                    if(debug){ //debug 模式下，日志信息
+                    if (debug) { //debug 模式下，日志信息
                         const stage = target.stage;
-                        if(stage){
-                            stage.inputLog({code:ComponentEvent.DRAG_START, 
-                                level:'info', target:target, 
-                                data:[target.parent,containerStart.x - stageOffset.x,containerStart.y - stageOffset.y],
-                                message:'parent,start,offset pos',
+                        if (stage) {
+                            stage.inputLog({
+                                code: ComponentEvent.DRAG_START,
+                                level: 'info', target: target,
+                                data: [target.parent, containerStart.x - stageOffset.x, containerStart.y - stageOffset.y],
+                                action: e.type,
+                                message: 'parent,start,offset pos',
                             });
                         }
-                       
+
                     }
                     target.emit(ComponentEvent.DRAG_START, target, e);
                 }
@@ -223,8 +225,8 @@ export class UIBaseDrag implements Lifecycle {
                 }
                 const target = this.target;
                 if (this.dragging && target.stage) {
-                    const x = containerStart.x + (offset.x/target.stage.scaleX) - stageOffset.x;
-                    const y = containerStart.y + (offset.y/target.stage.scaleY) - stageOffset.y;
+                    const x = containerStart.x + (offset.x / target.stage.scaleX) - stageOffset.x;
+                    const y = containerStart.y + (offset.y / target.stage.scaleY) - stageOffset.y;
                     const dragPosition = this._dragPosition;
                     if (this.dragRestrictAxis == "x") {
                         dragPosition.set(x, containerStart.y - stageOffset.y);
@@ -239,17 +241,19 @@ export class UIBaseDrag implements Lifecycle {
                         dragPosition.y = Math.max(0, dragPosition.y);
                         dragPosition.y = Math.min(dragPosition.y, target.parent.height - target.height);
                     }
-                    if(debug){//debug 模式下，日志信息
+                    if (debug) {//debug 模式下，日志信息
                         const stage = target.stage;
-                        if(stage){
-                            stage.inputLog({code:ComponentEvent.DRAG_MOVE, 
-                                level:'info', 
-                                target:target, 
-                                data:[target.parent,dragPosition.x,dragPosition.y],
-                                message:'parent,move pos'
+                        if (stage) {
+                            stage.inputLog({
+                                code: ComponentEvent.DRAG_MOVE,
+                                level: 'info',
+                                target: target,
+                                data: [target.parent, dragPosition.x, dragPosition.y],
+                                action: e.type,
+                                message: 'parent,move pos'
                             });
                         }
-                       
+
                     }
                     target.setPosition(this._dragPosition.x, this._dragPosition.y);
                     target.emit(ComponentEvent.DRAG_MOVE, target, e);
@@ -285,17 +289,19 @@ export class UIBaseDrag implements Lifecycle {
                                 target.y = this._containerStart.y;
                             }
                         }
-                        if(debug){//debug 模式下，日志信息
+                        if (debug) {//debug 模式下，日志信息
                             const stage = target.stage;
-                            if(stage){
-                                stage.inputLog({code:ComponentEvent.DRAG_END, 
-                                    level:'info', 
-                                    target:target, 
-                                    data:[target.parent,target.x,target.y],
-                                    message:'parent,end pos'
+                            if (stage) {
+                                stage.inputLog({
+                                    code: ComponentEvent.DRAG_END,
+                                    level: 'info',
+                                    target: target,
+                                    data: [target.parent, target.x, target.y],
+                                    action: e.type,
+                                    message: 'parent,end pos'
                                 });
                             }
-                           
+
                         }
                         target.emit(ComponentEvent.DRAG_END, target, e);
 
@@ -355,17 +361,19 @@ export class UIBaseDrag implements Lifecycle {
                 }
                 item.dragOption.$targetParent = parent;
             }
-            if(debug){//debug 模式下，日志信息
+            if (debug) {//debug 模式下，日志信息
                 const stage = target.stage;
-                if(stage){
-                    stage.inputLog({code:ComponentEvent.DRAG_TARGET, 
-                        level:'info', 
-                        target:item, 
-                        data:[target.parent,item.x,item.y],
-                        message:'drag target,item pos'
+                if (stage) {
+                    stage.inputLog({
+                        code: ComponentEvent.DRAG_TARGET,
+                        level: 'info',
+                        target: item,
+                        data: [target.parent, item.x, item.y],
+                        action: e.type,
+                        message: 'drag target,item pos'
                     });
                 }
-               
+
             }
             item.emit(ComponentEvent.DRAG_TARGET, item, e);
         }

@@ -473,34 +473,13 @@ export class CSSStyle {
 
     /**
      * 设置滤镜
-     *
-     * 支持 blur(number)
      */
-    private _filter?: string;
     public get filter() {
-        return this._filter;
+        return this.parent.filter;
     }
-    public set filter(value: string | undefined) {
-        if (value === this._filter) {
-            return;
-        }
-        this._filter = value;
-        if (value === undefined || value === 'none') {
-            this.parent.container.filters = [];
-            return;
-        }
-        const target = getStringFunctionParam(value);
-        switch (target.key) {
-            case "blur":
-                this.parent.filterBlur = target.value;
-                break;
-            case "grayscale":
-                this.parent.filterGrayscale = target.value;
-                break;
-            case "outline":
-                //this.parent.filterOutline = value;
-                break;
-        }
+
+    public set filter(value: TAny) {
+        console.error('[VF LOG] 只读属性 filter!')
     }
 
 
