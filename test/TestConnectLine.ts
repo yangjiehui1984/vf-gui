@@ -8,22 +8,21 @@ export default class TestConnectLine {
 
     private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
+        
         // =========  示例1，自定义坐标 ============== //
-
         let connectLine1 = new gui.ConnectLine;
         connectLine1.isAnimation = true;
-        connectLine1.sourcePostion = [50,30]; // 设置源坐标
-        connectLine1.targetPostion = [400,30];// 设置目标坐标
+        connectLine1.sourcePostion = [15,15]; // 设置源坐标
+        connectLine1.targetPostion = [350,15];// 设置目标坐标
         connectLine1.lineColor = 0xffffff; // 线条颜色
         connectLine1.lineWidth = 2;// 线条宽度
         uiStage.addChild(connectLine1);
 
         // =========  示例2，手动触发画线 ============== //
-
         let connectLine2 = new gui.ConnectLine;
         connectLine2.isAnimation = true;
-        connectLine2.sourcePostion = [50,80]; 
-        connectLine2.targetPostion = [400,80];
+        connectLine2.sourcePostion = [15,40]; 
+        connectLine2.targetPostion = [350,40];
         connectLine2.lineColor = 0xffff00; 
         connectLine2.lineWidth = 2;
         connectLine2.autoPlay = false; // 是否自动播放 ，默认自动播放
@@ -35,12 +34,12 @@ export default class TestConnectLine {
 
         // =========  示例3，绑定到容器 ============== //
         const container = new gui.Container();
-        container.x = 50;
-        container.y = 160;
+        container.x = 10;
+        container.y = 100;
         uiStage.addChild(container);
 
         const rect1 = this.getNewRect(container);
-        const rect2 = this.getNewRect(container,400,0);
+        const rect2 = this.getNewRect(container,240,0);
 
         let connectLine3 = new gui.ConnectLine;
         connectLine3.isAnimation = true;
@@ -53,17 +52,17 @@ export default class TestConnectLine {
         uiStage.addChild(connectLine3);
 
         // =========  示例4 点击矩形进行连线 ============== //
-        const e4_rect1 = this.getNewRect(container,0,240);
-        const e4_rect2 = this.getNewRect(container,200,320);
+        const e4_rect1 = this.getNewRect(container,0,160);
+        const e4_rect2 = this.getNewRect(container,240,280);
 
         const e4_line1 = this.getNewConnectLine(container,e4_rect1,e4_rect2);
 
         e4_rect1.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
-            e4_line1.clear();
+            e4_line1.isClear = true;
             e4_line1.play = 2;
         });
         e4_rect2.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
-            e4_line1.clear();
+            e4_line1.isClear = true;
             e4_line1.play = 1;
         });
     }

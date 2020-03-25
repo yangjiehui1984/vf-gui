@@ -8,45 +8,45 @@ export default class TestFollowLine {
 
     private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
+        
         let messageList:string[] = [];
 
-
         /** 测试影响点击区域 */
-        let rect = new gui.Rect();
-        rect.lineWidth = 3;
-        rect.lineColor = 0x00ffcc;
-        rect.width = 600;
-        rect.height = 300;
-        rect.x = 100;
-        rect.y = 50;
-        uiStage.addChild(rect);
+        // let rect = new gui.Rect();
+        // rect.lineWidth = 3;
+        // rect.lineColor = 0x00ffcc;
+        // rect.width = 340;
+        // rect.height = 200;
+        // rect.x = 15;
+        // rect.y = 50;
+        // uiStage.addChild(rect);
 
         let eraseBtn = new gui.Button();
-        eraseBtn.x = 0
-        eraseBtn.y = 100;
+        eraseBtn.x = 15
+        eraseBtn.y = 15;
         eraseBtn.text = '擦除 false';
         uiStage.addChild(eraseBtn);
 
         let restorBtn = new gui.Button();
-        restorBtn.x = 0
-        restorBtn.y = 100;
+        restorBtn.x = 130
+        restorBtn.y = 15;
         restorBtn.text = '重置';
         uiStage.addChild(restorBtn);
 
         let followLineTop = new gui.FollowLine(uiStage as any);
-        followLineTop.x = 100;
+        followLineTop.x = 15;
         followLineTop.y = 50;
-        followLineTop.width = 600;
-        followLineTop.height = 300;
+        followLineTop.width = 340;
+        followLineTop.height = 200;
         followLineTop.style.backgroundColor = 0xffffff;
         followLineTop.role = gui.Enum.FollowLineEnum.Role.teacher;
         uiStage.addChild(followLineTop);
 
         let followLineDown = new gui.FollowLine();
-        followLineDown.x = 100;
-        followLineDown.y = 400;
-        followLineDown.width = 600;
-        followLineDown.height = 300;
+        followLineDown.x = 15;
+        followLineDown.y = 270;
+        followLineDown.width = 340;
+        followLineDown.height = 200;
         followLineDown.style.backgroundColor = 0xffffff;
         followLineDown.role = gui.Enum.FollowLineEnum.Role.student;
         uiStage.addChild(followLineDown);
@@ -56,10 +56,10 @@ export default class TestFollowLine {
         slider.thumb = "assets/skin/Slider/thumb.png";
         slider.track = "assets/skin/Slider/track.png";
         slider.tracklight = "assets/skin/Slider/tracklight.png";
-        slider.width = 600;
+        slider.width = 340;
         slider.height = 10;
-        slider.x = 100;
-        slider.y = 730;
+        slider.x = 15;
+        slider.y = 480;
         slider.value = 0; 
         slider.maxValue = messageList.length;
         uiStage.addChild(slider);

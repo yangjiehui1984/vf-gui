@@ -11,7 +11,7 @@ export default class TestCircle {
 
         /** 绘制矩形 */
         const circle = new gui.Circle();
-        circle.style.left = 100;
+        circle.style.left = 150;
         circle.style.top = 120;
         circle.color = 0xffffff;
         circle.lineColor = 0xff00cc;
@@ -21,7 +21,7 @@ export default class TestCircle {
 
         /** 绘制透明矩形 */
         const circle1 = new gui.Circle();
-        circle1.style.left = 100;
+        circle1.style.left = 150;
         circle1.style.top = 350;
         //circle1.color = undefined;
         circle1.lineColor = 0xff00cc;

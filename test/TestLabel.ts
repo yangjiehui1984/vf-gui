@@ -10,31 +10,31 @@ export default class TestLabel {
 
         /** 基础文本展示 */
         let basicText = new gui.Label();
-        basicText.style.left = 100;
-        basicText.style.top = 100;
+        basicText.style.left = 15;
+        basicText.style.top = 50;
         basicText.style.color = 0xffffff;
         basicText.text = "Basic text in vf-gui 33434"
         uiStage.addChild(basicText);
 
         /** 手动换行文本展示 "\n" */
         let nText = new gui.Label();
-        nText.style.left = 100;
-        nText.style.top = 200;
+        nText.style.left = 15;
+        nText.style.top = 100;
         nText.style.color =[0xffffff,0xffcc00];
         nText.text = "你好，\n世界！"
         uiStage.addChild(nText);
 
         /** 高级样式文本,换行的宽度为 fields.wordWrapWidth = 600; */
         let richText = new gui.Label();
-        richText.style.left = 100
-        richText.style.top = 300;
+        richText.style.left = 15
+        richText.style.top = 180;
         richText.fontCssStyle = this.getFontCssStyle();
         richText.text = '包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件';
         uiStage.addChild(richText);
 
         /** 限定宽度 */
         let wText = new gui.Label();
-        wText.style.left = 100;
+        wText.style.left = 5;
         wText.style.top = 500;
         wText.style.color =[0xffffff,0xffcc00];
         wText.style.width = 500;

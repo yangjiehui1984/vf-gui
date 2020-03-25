@@ -10,7 +10,7 @@ export default class TestTextInput {
 
         /** 单行输入 TextInput(false) */
         let textInput = new gui.TextInput(false);
-        textInput.style.left = 100;
+        textInput.style.left = 15;
         textInput.style.top = 100;
         textInput.style.width = 300;
         textInput.style.height = 30;
@@ -30,7 +30,7 @@ export default class TestTextInput {
         /** 多行输入 TextInput(true) */
         let multilineInput = new gui.TextInput(true);
         multilineInput.style.top = 200;
-        multilineInput.style.left = 100;
+        multilineInput.style.left = 15;
         multilineInput.style.width = 300;
         multilineInput.style.height = 150;
         multilineInput.style.fontSize = 24;//"32px"
