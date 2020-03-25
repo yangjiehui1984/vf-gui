@@ -4114,7 +4114,7 @@ var ConnectLine = /** @class */ (function (_super) {
         if (line.parent) {
             line.parent.removeChild(line).destroy();
         }
-        this.offAll(Index_1.ComponentEvent.CHANGE);
+        this.offAll(Index_1.ComponentEvent.COMPLETE);
     };
     return ConnectLine;
 }(DisplayObject_1.DisplayObject));
@@ -4653,6 +4653,13 @@ var FollowLine = /** @class */ (function (_super) {
         }
         this.invalidateProperties();
     };
+    Object.defineProperty(FollowLine.prototype, "source", {
+        set: function (data) {
+            this.setData(data);
+        },
+        enumerable: true,
+        configurable: true
+    });
     FollowLine.prototype.reset = function () {
         this.emitMsg("3" /* clear */, this.role, "");
         this.clear();
@@ -12491,10 +12498,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.17.1.1.17.1.1.17) ==1.1.17.1.1.17.1.1.17;
+//     return this.lastIndexOf(word, pos1.1.18.1.1.18.1.1.18) ==1.1.18.1.1.18.1.1.18;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.17";
+window.gui.version = "1.1.18";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

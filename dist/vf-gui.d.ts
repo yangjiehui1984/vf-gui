@@ -3488,7 +3488,8 @@ declare module 'display/FollowLine' {
 	    private removeLine;
 	    clear(): void;
 	    setData(data: string | string[]): void;
-	    reset(): any;
+	    source: string | string[];
+	    reset(): TAny;
 	}
 
 }
