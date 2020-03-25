@@ -22,13 +22,13 @@ export default class TestFollowLine {
         uiStage.addChild(rect);
 
         let eraseBtn = new gui.Button();
-        eraseBtn.x = 150
+        eraseBtn.x = 0
         eraseBtn.y = 100;
         eraseBtn.text = '擦除 false';
         uiStage.addChild(eraseBtn);
 
         let restorBtn = new gui.Button();
-        restorBtn.x = 250
+        restorBtn.x = 0
         restorBtn.y = 100;
         restorBtn.text = '重置';
         uiStage.addChild(restorBtn);
@@ -38,7 +38,7 @@ export default class TestFollowLine {
         followLineTop.y = 50;
         followLineTop.width = 600;
         followLineTop.height = 300;
-        //followLineTop.style.backgroundColor = 0xffffff;
+        followLineTop.style.backgroundColor = 0xffffff;
         followLineTop.role = gui.Enum.FollowLineEnum.Role.teacher;
         uiStage.addChild(followLineTop);
 
