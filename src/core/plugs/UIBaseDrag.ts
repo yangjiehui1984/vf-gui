@@ -9,7 +9,7 @@ import { getDisplayObject, debug } from "../../utils/Utils";
 /**
  *  组件的拖拽操作
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestDrop
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestDrop
  */
 export class UIBaseDrag implements Lifecycle {
     /**

@@ -17,7 +17,7 @@ export const play = Symbol("play");
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestConnectLine
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestConnectLine
  */
 export class ConnectLine extends DisplayObject {
 

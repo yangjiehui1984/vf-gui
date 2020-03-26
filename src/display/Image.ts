@@ -10,7 +10,7 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestImage
  */
 export class Image extends DisplayObject implements MaskSprite{
 

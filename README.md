@@ -8,9 +8,9 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
 ## 学习(Learn) 
 
-* [示例(Examples)](https://vipkid-edu.github.io/vf-gui-docs/play)
+* [示例(Examples)](https://vipkid-edu.github.io/vf-gui/play)
 
-* [API](https://vipkid-edu.github.io/vf-gui-docs/api)
+* [API](https://vipkid-edu.github.io/vf-gui/api)
 
 * [源码(Github)](https://github.com/vipkid-edu/vf-gui/)
 
@@ -57,7 +57,7 @@ Master:
 
 ## 组件(Component)
 
-使用示例：https://vipkid-edu.github.io/vf-gui-docs/play
+使用示例：https://vipkid-edu.github.io/vf-gui/play
 
 可使用组件：
 

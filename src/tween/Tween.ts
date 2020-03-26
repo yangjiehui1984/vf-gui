@@ -13,7 +13,7 @@ const defaultEasing = Easing.Linear.None;
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */
 export class Tween extends PIXI.utils.EventEmitter {
 

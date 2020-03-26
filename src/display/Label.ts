@@ -15,7 +15,7 @@ import * as UIKeys from "../core/DisplayLayoutKeys";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
  */
 export class Label extends DisplayObject {
 

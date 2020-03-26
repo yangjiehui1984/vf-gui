@@ -12,7 +12,7 @@ import { Easing } from "../tween/Easing";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSlider
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
  */
 export class Slider extends DisplayObject{
 

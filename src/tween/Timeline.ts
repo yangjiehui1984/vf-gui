@@ -42,7 +42,7 @@ class Node {
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
 export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 

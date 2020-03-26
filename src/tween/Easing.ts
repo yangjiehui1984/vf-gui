@@ -5,7 +5,7 @@
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */
 export const Easing = {
     Linear: {

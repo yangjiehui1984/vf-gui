@@ -10,7 +10,7 @@ import {MaskSprite} from "../core/MaskSprite";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCircle
  */
 export class Circle extends DisplayObject implements MaskSprite{
     public constructor(){

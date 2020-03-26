@@ -17,7 +17,7 @@ import { DisplayObjectAbstract } from "../core/DisplayObjectAbstract";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
  */
 export class ScrollingContainer extends Container {
     public constructor() {

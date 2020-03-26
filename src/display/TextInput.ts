@@ -13,7 +13,7 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTextInput
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTextInput
  */
 export class TextInput extends InputBase {
 
