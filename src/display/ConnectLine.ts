@@ -302,6 +302,6 @@ export class ConnectLine extends DisplayObject {
         if (line.parent) {
             line.parent.removeChild(line).destroy();
         }
-        this.offAll(ComponentEvent.CHANGE);
+        this.offAll(ComponentEvent.COMPLETE);
     }
 }

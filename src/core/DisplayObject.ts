@@ -5,6 +5,7 @@ import { updateDisplayLayout } from "../layout/CSSLayout";
 import { UIBaseDrag } from "./plugs/UIBaseDrag";
 import { deepCopy } from "../utils/Utils";
 import { UIClick } from "./plugs/UIClick";
+import { Filter } from "../UI";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -55,17 +56,18 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         deepCopy(value, dragOption);
     }
 
+
     /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
-    public get isClick() {
-        let click = this.plugs.get(UIClick.key) as UIClick;
+    public get interactabled() {
+        const click = this.plugs.get(UIClick.key) as UIClick;
         if (click) {
             return true;
         }
         return false;
     }
 
-    public set isClick(value: boolean) {
-        let click = this.plugs.get(UIClick.key) as UIClick;
+    public set interactabled(value: boolean) {
+        const click = this.plugs.get(UIClick.key) as UIClick;
         if (value) {
             if (!click) {
                 new UIClick(this);
@@ -75,6 +77,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
                 click.release();
             }
         }
+    }
+
+    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+    public get isClick() {
+        console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+        return this.interactabled;
+    }
+
+    public set isClick(value: boolean) {
+        console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+        this.interactabled = value;
     }
 
     /**
@@ -144,6 +157,45 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         });
     }
 
+    private _filterProxy: TAny = {};
+    private _filterMap = new Map<string,Filter>();
+    private _filterCount = 0;
+    public get filter() {
+        if (this._filterCount !== Filter.list.size) {
+
+            this._filterCount = Filter.list.size;
+            const {_filterProxy,_filterMap} = this;
+
+            if(this.container.filters == null){
+                this.container.filters = [];
+            }
+            const containerFilters = this.container.filters;
+
+            Filter.list.forEach((cls: TAny, key: string) => {
+                if(!_filterMap.has(key)){
+                    const filter = new cls();
+                    _filterMap.set(key,filter);
+                    containerFilters.push(filter);
+                    Object.defineProperty(_filterProxy, key, {
+                        get: function () {
+                            return filter;
+                        },
+                        set(val) {
+                            if(val == null || val == ''){
+                                const index = containerFilters.indexOf(filter);
+                                if(index>=0){
+                                    containerFilters.splice(index,1);
+                                }
+                                _filterMap.delete(key);
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        return this._filterProxy;
+    }
+
     /**
      * 设置Blur XY的模糊强度
      *
@@ -169,7 +221,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      * 参数类型为 number, 接收一个百分比值，然后再将其转换为小数
      */
     private grayscaleFilter?: PIXI.filters.ColorMatrixFilter;
-    private grayscaleFilterValue: number = 0;
+    private grayscaleFilterValue = 0;
     public set filterGrayscale(value: number) {
         const container = this.container;
         if (this.grayscaleFilter === undefined) {
@@ -185,36 +237,6 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         return this.grayscaleFilterValue * 100;
     }
 
-
-    // /**
-    //  * 给图片的透明区域增加一个边框
-    //  *
-    //  * 参数类型为 字符串, 如：outline(10, 0xFF0000), 其中 10 代表边框宽度，为 0 时不显示，0xFF0000 为颜色值
-    //  */
-    // private outlineFilter?: OutlineFilter;
-    // public set filterOutline(value: string | undefined) {
-    //     if (!value) return;
-
-    //     const container = this.container;
-    //     value = value.substring(value.indexOf('(') + 1, value.indexOf(')'))
-    //     const parsedValue: [number, number] = value.split(',') as any;
-
-    //     if(this.outlineFilter === undefined){
-    //         this.outlineFilter = new OutlineFilter(0, 0xffffff, 1);
-    //         container.filters = [ this.outlineFilter ];
-    //     }
-
-    //     this.outlineFilter.color = parsedValue[1];
-    //     this.outlineFilter.thickness = parsedValue[0];
-    // }
-
-    // public get filterOutline() {
-    //     if (!this.outlineFilter) return;
-
-    //     const color = this.outlineFilter.color;
-    //     const thickness = this.outlineFilter.thickness;
-    //     return `outline(${thickness},${color})`;
-    // }
     /**
      * 私有样式代理
      * */
@@ -265,7 +287,10 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
 
     public release() {
 
-        const { container, $mask, $background } = this;
+        const { container, $mask, $background,_filterMap } = this;
+
+        container.filters = [];
+        _filterMap.clear();
 
         if (this._style) {
             this._style.release();

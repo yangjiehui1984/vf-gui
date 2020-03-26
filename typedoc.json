@@ -4,7 +4,7 @@
     "src": [
         "./src/"
     ],
-    "out": "./docs",
+    "out": "./docs/api",
     "excludePrivate": true,
     "excludeProtected": true,
     "excludeExternals": true,
@@ -13,5 +13,5 @@
         "**/*.d.ts",
         "**/*+(index|.spec|.e2e).ts"
     ],
-    "json":"./docs/json/out.json"
+    "json":"./docs/api/json/out.json"
 }

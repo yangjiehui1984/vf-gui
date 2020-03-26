@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>vf-gui playground</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+</head>
+
+<body>
+        
+    <script src="https://cdn.jsdelivr.net/npm/url-search-params@1.1.0/build/url-search-params.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard-polyfill@2.4.7/build/clipboard-polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.15.6/min/vs/loader.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js-legacy@5.2.0/dist/pixi-legacy.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi-sound@3.0.3/dist/pixi-sound.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vf-gui/dist/vf-gui.min.js"></script>
+
+    <script>
+        if (location.href.indexOf("#example") === -1 && location.href.indexOf("#code") === -1) {
+            location.hash  = 'example/TestContainer';
+            location.reload();
+        }
+        const params = new URLSearchParams(location.search);
+        //console.log("baseUrl",baseUrl)
+        const baseUrl =  location.protocol + "//" + location.host + location.pathname.substr(0,location.pathname.lastIndexOf("/")) + "/";
+        window.CONFIG = {
+            baseUrl: baseUrl,
+            TSVersion: "3.3.3",
+            MonacoVersion: "0.16.1",
+            VFUIVersion: "1.1.18",
+            CurExampleName: null,
+            extraLibs: [],
+            lineNumbers:true
+        };
+        const libs = [
+            // `${baseUrl}lib/${window.CONFIG.VFUIVersion}/vf-gui.d.ts`,
+            `https://cdn.jsdelivr.net/npm/vf-gui@${window.CONFIG.VFUIVersion}/dist/vf-gui.d.ts`,
+            "https://cdn.jsdelivr.net/npm/pixi.js@5.2.0/pixi.js.d.ts"
+        ];
+        window.CONFIG.extraLibs = params.has("lib") ? params.get("lib").split(",") : libs;
+        console.log("window.CONFIG", window.CONFIG);
+        require.config({
+            paths: Object.assign(
+                {
+                    vs: `https://cdn.jsdelivr.net/npm/monaco-editor@${window.CONFIG.MonacoVersion}/min/vs`,
+                }
+            ),
+            ignoreDuplicateModules: ["vs/editor/editor.main"],
+        });
+    </script>
+    <div id="app">
+        <div class="flash flash--hidden">
+            <span class="flash__message"></span>
+        </div>
+
+        <header id="header">
+            <div class="header-item" style="display: flex; flex-direction: row; align-items: center;">
+                <div class="spinner" style="margin-left: -0.5em; margin-right: 0.5em;"></div>
+                <p>vf-gui</p>
+            </div>
+
+            <div style="opacity: 0;" id="version">
+                <p class="popup-header" id="version-current">?</p>
+                <div class="popup" id="version-popup" style="font-size: 100%;">
+                    <p></p>
+                </div>
+                <script>
+                    (function(){
+                        var children = document.getElementById("version-popup").children;
+                        for(var i=0;i<children.length;i++){
+                            children[i].onclick = function(){
+                                window.location.href = "index.html#example/"+this.innerHTML+"/TestContainer";
+                                window.location.reload();
+                            }
+                        }
+                    }());
+                    function gotoExampleVsrsion(){
+
+                    } 
+                    if (window.frames.length != parent.frames.length) {
+                        document.getElementById('header').style.display = 'none';
+                        window.CONFIG.lineNumbers = false;
+                    }
+                </script>
+            </div>
+
+            <div style="margin-left: 1em;" class="header-item header-item--extra-padding popup-on-hover" id="examples">
+                <p class="popup-header">Examples</p>
+                <div class="popup" style="min-width: 20em;width: 60em;">
+                    <ul>
+                        <li class="" style="color: darkgray;">布局</li>
+                        <li class="button" data-example="TestGridLayout">grid布局</li>
+                        <li class="button" data-example="TestDrag">拖拽</li>
+                        <li class="button" data-example="TestMouseCursor">鼠标状态</li>
+                    </ul>
+                    <ul>
+                        <li class="" style="color: darkgray;">控件</li>
+                        <li class="button" data-example="TestLabel">Label - 文本</li>
+                        <li class="button" data-example="TestImage">Image - 图片</li>
+                        <li class="button" data-example="TestButton">Button - 按钮</li>
+                        <li class="button" data-example="TestCheckBox">CheckBox - 单选复选框</li>
+                        <li class="button" data-example="TestRect">Rect - 矩形</li>
+                        <li class="button" data-example="TestCircle">Circle - 圆形</li>
+                        <li class="button" data-example="TestTextInput">TextInput - 输入文本</li>
+                        <li class="button" data-example="TestSlider">Slider - 滑动条</li>
+                        <li class="button" data-example="TestFollowLine">FollowLine - 画板线</li>
+                        <li class="button" data-example="TestConnectLine">ConnectLine - 连线</li>
+                        <li class="button" data-example="TestSpriteAnimated">SpriteAnimated - 序列图</li>
+                    </ul>
+                    <ul>
+                        <li class="" style="color: darkgray;">容器(VF不可用)</li>
+                        <li class="button" data-example="TestContainer">Container - 基础容器</li>
+                        <li class="button" data-example="TestScrollingContainer">ScrollingContainer - 滑动容器</li>
+                    </ul>
+                    <ul>
+                        <li class="" style="color: darkgray;">动画(VF不可用)</li>
+                        
+                        <li class="button" data-example="TestTween">Tween - 缓动</li>
+                        <li class="button" data-example="TestTimeLine">TimeLine - 帧动画</li>
+                        <li class="button" data-example="TestTicker">Ticker - 心跳</li>
+                    </ul>
+                    <ul>
+                        <li class="" style="color: darkgray;">媒体(VF不可用)</li>
+                        <li class="button" data-example="TestSound">Sound - 音频</li>
+                    </ul>
+                </div>
+            </div>
+            <script>
+                document
+                    .querySelector("#examples")
+                    .addEventListener("click", event => {
+                        if (event.target.matches("[data-example]")) {
+                            const exampleName = event.target.dataset.example;
+                            UI.selectExample(exampleName);
+                        }
+                    });
+            </script>
+
+            <div class="header-item header-item--extra-padding popup-on-hover" id="run">
+                <p class="popup-header">Run</p>
+                <div class="popup" id="run-popup" style="min-width: 20em;">
+                    <script>
+                        const isMac = navigator.userAgent.indexOf("Mac OS X") != -1;
+                        const CMDCtrl = isMac ? "⌘" : "Ctrl";
+                        const OptionAlt = isMac ? "⌥" : "Alt";
+
+                        document.write(`<div>运行 <kbd>${CMDCtrl} + Enter</kbd></div>`);
+
+                        document.write(`<div style="margin-top: 2em;">保存代码 <kbd>${CMDCtrl} + S</kbd></div>`);
+
+                    </script>
+                </div>
+            </div>
+
+            <p style="margin-left: auto; margin-right: 1em;" id="docs">
+                <a style="border: none;" target="_blank" href="../api/">API</a>
+            </p>
+            <p style="margin-right: 2em;">
+                <a style="border: none;" target="_blank" href="https://github.com/vipkid-edu/vf-gui/">GITHUB</a>
+            </p>
+        </header>
+        <main id="playground">
+            <section id="input"></section>
+            <section id="output" style="display: none"></section>
+            <section id="outscene"></section>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="./lib/TestApplication.js"></script>
+    <script>
+        require(["vs/editor/editor.main"], main);
+    </script>
+
+</body>
+
+</html>

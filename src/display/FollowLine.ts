@@ -503,7 +503,11 @@ export class FollowLine extends DisplayObject {
         this.invalidateProperties();
     }
 
-    public reset(): any {
+    public set source(data: string | string[]){
+        this.setData(data);
+    }
+
+    public reset(): TAny {
         this.emitMsg(FollowLineEnum.Operate.clear, this.role, "");
         this.clear();
     }

@@ -109,6 +109,9 @@ exports.DisplayObject = DisplayObject_1.DisplayObject;
 /** 心跳，需要在初始化完成后，启动心跳更新 */
 var Ticker_1 = __webpack_require__(/*! ./core/Ticker */ "./src/core/Ticker.ts");
 exports.TickerShared = Ticker_1.shared;
+/** 滤镜的基础类 */
+var Filter_1 = __webpack_require__(/*! ./core/Filter */ "./src/core/Filter.ts");
+exports.Filter = Filter_1.Filter;
 /**
  * 基础容器
  *
@@ -1975,6 +1978,7 @@ var CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/C
 var UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
 var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 var UIClick_1 = __webpack_require__(/*! ./plugs/UIClick */ "./src/core/plugs/UIClick.ts");
+var UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -1998,6 +2002,9 @@ var DisplayObject = /** @class */ (function (_super) {
         _this.dragThreshold = 0;
         /** 拖动时，事件流是否继续传输 */
         _this.dragStopPropagation = true;
+        _this._filterProxy = {};
+        _this._filterMap = new Map();
+        _this._filterCount = 0;
         _this.grayscaleFilterValue = 0;
         /**
         *  在不同分辨率下保持像素稳定
@@ -2028,7 +2035,7 @@ var DisplayObject = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(DisplayObject.prototype, "isClick", {
+    Object.defineProperty(DisplayObject.prototype, "interactabled", {
         /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
         get: function () {
             var click = this.plugs.get(UIClick_1.UIClick.key);
@@ -2049,6 +2056,19 @@ var DisplayObject = /** @class */ (function (_super) {
                     click.release();
                 }
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "isClick", {
+        /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+        get: function () {
+            console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+            return this.interactabled;
+        },
+        set: function (value) {
+            console.error('[VF LOG] isClick 已弃用，请使用 interactabled 替换!');
+            this.interactabled = value;
         },
         enumerable: true,
         configurable: true
@@ -2115,6 +2135,42 @@ var DisplayObject = /** @class */ (function (_super) {
                     childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
                 }
             });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "filter", {
+        get: function () {
+            if (this._filterCount !== UI_1.Filter.list.size) {
+                this._filterCount = UI_1.Filter.list.size;
+                var _a = this, _filterProxy_1 = _a._filterProxy, _filterMap_1 = _a._filterMap;
+                if (this.container.filters == null) {
+                    this.container.filters = [];
+                }
+                var containerFilters_1 = this.container.filters;
+                UI_1.Filter.list.forEach(function (cls, key) {
+                    if (!_filterMap_1.has(key)) {
+                        var filter_1 = new cls();
+                        _filterMap_1.set(key, filter_1);
+                        containerFilters_1.push(filter_1);
+                        Object.defineProperty(_filterProxy_1, key, {
+                            get: function () {
+                                return filter_1;
+                            },
+                            set: function (val) {
+                                if (val == null || val == '') {
+                                    var index = containerFilters_1.indexOf(filter_1);
+                                    if (index >= 0) {
+                                        containerFilters_1.splice(index, 1);
+                                    }
+                                    _filterMap_1.delete(key);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            return this._filterProxy;
         },
         enumerable: true,
         configurable: true
@@ -2192,7 +2248,9 @@ var DisplayObject = /** @class */ (function (_super) {
         _super.prototype.load.call(this);
     };
     DisplayObject.prototype.release = function () {
-        var _a = this, container = _a.container, $mask = _a.$mask, $background = _a.$background;
+        var _a = this, container = _a.container, $mask = _a.$mask, $background = _a.$background, _filterMap = _a._filterMap;
+        container.filters = [];
+        _filterMap.clear();
         if (this._style) {
             this._style.release();
             this._style = undefined;
@@ -2489,6 +2547,44 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
     return DisplayObjectAbstract;
 }(PIXI.utils.EventEmitter));
 exports.DisplayObjectAbstract = DisplayObjectAbstract;
+
+
+/***/ }),
+
+/***/ "./src/core/Filter.ts":
+/*!****************************!*\
+  !*** ./src/core/Filter.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Filter = /** @class */ (function (_super) {
+    __extends(Filter, _super);
+    function Filter(vertexSrc, fragmentSrc, uniforms) {
+        return _super.call(this, vertexSrc, fragmentSrc, uniforms) || this;
+    }
+    Filter.isFilter = true;
+    Filter.defaultFilterVertex = PIXI.defaultFilterVertex;
+    Filter.list = new Map();
+    return Filter;
+}(PIXI.Filter));
+exports.Filter = Filter;
 
 
 /***/ }),
@@ -3061,9 +3157,11 @@ var UIBaseDrag = /** @class */ (function () {
                     if (Utils_1.debug) { //debug 模式下，日志信息
                         var stage = target.stage;
                         if (stage) {
-                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_START,
+                            stage.inputLog({
+                                code: Index_1.ComponentEvent.DRAG_START,
                                 level: 'info', target: target,
                                 data: [target.parent, containerStart_1.x - stageOffset_1.x, containerStart_1.y - stageOffset_1.y],
+                                action: e.type,
                                 message: 'parent,start,offset pos',
                             });
                         }
@@ -3098,10 +3196,12 @@ var UIBaseDrag = /** @class */ (function () {
                     if (Utils_1.debug) { //debug 模式下，日志信息
                         var stage = target.stage;
                         if (stage) {
-                            stage.inputLog({ code: Index_1.ComponentEvent.DRAG_MOVE,
+                            stage.inputLog({
+                                code: Index_1.ComponentEvent.DRAG_MOVE,
                                 level: 'info',
                                 target: target,
                                 data: [target.parent, dragPosition.x, dragPosition.y],
+                                action: e.type,
                                 message: 'parent,move pos'
                             });
                         }
@@ -3139,10 +3239,12 @@ var UIBaseDrag = /** @class */ (function () {
                         if (Utils_1.debug) { //debug 模式下，日志信息
                             var stage = target.stage;
                             if (stage) {
-                                stage.inputLog({ code: Index_1.ComponentEvent.DRAG_END,
+                                stage.inputLog({
+                                    code: Index_1.ComponentEvent.DRAG_END,
                                     level: 'info',
                                     target: target,
                                     data: [target.parent, target.x, target.y],
+                                    action: e.type,
                                     message: 'parent,end pos'
                                 });
                             }
@@ -3201,10 +3303,12 @@ var UIBaseDrag = /** @class */ (function () {
             if (Utils_1.debug) { //debug 模式下，日志信息
                 var stage = target.stage;
                 if (stage) {
-                    stage.inputLog({ code: Index_1.ComponentEvent.DRAG_TARGET,
+                    stage.inputLog({
+                        code: Index_1.ComponentEvent.DRAG_TARGET,
                         level: 'info',
                         target: item,
                         data: [target.parent, item.x, item.y],
+                        action: e.type,
                         message: 'drag target,item pos'
                     });
                 }
@@ -4010,7 +4114,7 @@ var ConnectLine = /** @class */ (function (_super) {
         if (line.parent) {
             line.parent.removeChild(line).destroy();
         }
-        this.offAll(Index_1.ComponentEvent.CHANGE);
+        this.offAll(Index_1.ComponentEvent.COMPLETE);
     };
     return ConnectLine;
 }(DisplayObject_1.DisplayObject));
@@ -4549,6 +4653,13 @@ var FollowLine = /** @class */ (function (_super) {
         }
         this.invalidateProperties();
     };
+    Object.defineProperty(FollowLine.prototype, "source", {
+        set: function (data) {
+            this.setData(data);
+        },
+        enumerable: true,
+        configurable: true
+    });
     FollowLine.prototype.reset = function () {
         this.emitMsg("3" /* clear */, this.role, "");
         this.clear();
@@ -7844,7 +7955,13 @@ var ClickEvent = /** @class */ (function () {
         if (Utils_1.debug) {
             var stage = this.obj.stage;
             if (stage && event !== TouchMouseEvent_1.TouchMouseEvent.onMove) {
-                stage.inputLog({ code: event, level: 'info', target: this.obj, data: [args] });
+                stage.inputLog({
+                    code: event,
+                    level: 'info',
+                    target: this.obj,
+                    data: [args],
+                    action: e.type
+                });
             }
         }
         if (this.isOpenEmitEvent) {
@@ -9080,7 +9197,6 @@ exports.color = color;
 Object.defineProperty(exports, "__esModule", { value: true });
 var CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
 var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 function formatRelative(value) {
     if (value == undefined) {
         return { percent: NaN, value: NaN };
@@ -9631,30 +9747,14 @@ var CSSStyle = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CSSStyle.prototype, "filter", {
+        /**
+         * 设置滤镜
+         */
         get: function () {
-            return this._filter;
+            return this.parent.filter;
         },
         set: function (value) {
-            if (value === this._filter) {
-                return;
-            }
-            this._filter = value;
-            if (value === undefined || value === 'none') {
-                this.parent.container.filters = [];
-                return;
-            }
-            var target = Utils_1.getStringFunctionParam(value);
-            switch (target.key) {
-                case "blur":
-                    this.parent.filterBlur = target.value;
-                    break;
-                case "grayscale":
-                    this.parent.filterGrayscale = target.value;
-                    break;
-                case "outline":
-                    //this.parent.filterOutline = value;
-                    break;
-            }
+            console.error('[VF LOG] 只读属性 filter!');
         },
         enumerable: true,
         configurable: true
@@ -12398,10 +12498,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.14.1.1.14.1.1.14) ==1.1.14.1.1.14.1.1.14;
+//     return this.lastIndexOf(word, pos1.1.18.1.1.18.1.1.18) ==1.1.18.1.1.18.1.1.18;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.14";
+window.gui.version = "1.1.18";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

@@ -2117,11 +2117,8 @@ declare module 'layout/CSSStyle' {
 	    maskSize: number[] | undefined;
 	    /**
 	     * 设置滤镜
-	     *
-	     * 支持 blur(number)
 	     */
-	    private _filter?;
-	    filter: string | undefined;
+	    filter: TAny;
 	    /**
 	     * 设置鼠标样式
 	     */
@@ -2419,6 +2416,8 @@ declare module 'core/DisplayObject' {
 	     */
 	    dragOption: UIBaseDrag;
 	    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+	    interactabled: boolean;
+	    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
 	    isClick: boolean;
 	    /**
 	     * 分组
@@ -2437,6 +2436,10 @@ declare module 'core/DisplayObject' {
 	     */
 	    private _blendMode;
 	    blendMode: PIXI.BLEND_MODES | undefined;
+	    private _filterProxy;
+	    private _filterMap;
+	    private _filterCount;
+	    readonly filter: any;
 	    /**
 	     * 设置Blur XY的模糊强度
 	     *
@@ -2662,6 +2665,18 @@ declare module 'utils/Utils' {
 	    x: number;
 	    y: number;
 	}): number;
+
+}
+declare module 'core/Filter' {
+	/// <reference types="pixi.js" />
+	export class Filter extends PIXI.Filter {
+	    static isFilter: boolean;
+	    static defaultFilterVertex: string;
+	    static list: Map<string, boolean>;
+	    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {
+	        [key: string]: TAny;
+	    });
+	}
 
 }
 declare module 'display/Container' {
@@ -3473,7 +3488,8 @@ declare module 'display/FollowLine' {
 	    private removeLine;
 	    clear(): void;
 	    setData(data: string | string[]): void;
-	    reset(): any;
+	    source: string | string[];
+	    reset(): TAny;
 	}
 
 }
@@ -3805,6 +3821,8 @@ declare module 'UI' {
 	import { DisplayObject } from 'core/DisplayObject';
 	/** 心跳，需要在初始化完成后，启动心跳更新 */
 	import { shared as TickerShared } from 'core/Ticker';
+	/** 滤镜的基础类 */
+	import { Filter } from 'core/Filter';
 	/**
 	 * 基础容器
 	 *
@@ -4010,7 +4028,7 @@ declare module 'UI' {
 	import * as Enum from 'enum/Index';
 	import { Scheduler } from 'core/Scheduler';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
+	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
 
 }
 declare module 'vf-gui' {

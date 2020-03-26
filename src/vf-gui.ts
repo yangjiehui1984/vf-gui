@@ -7,10 +7,10 @@ import * as vfgui from "./UI";
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.14.1.1.14.1.1.14) ==1.1.14.1.1.14.1.1.14;
+//     return this.lastIndexOf(word, pos1.1.18.1.1.18.1.1.18) ==1.1.18.1.1.18.1.1.18;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.14";
+window.gui.version = "1.1.18";
 export default vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
