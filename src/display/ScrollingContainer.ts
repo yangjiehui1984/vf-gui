@@ -280,9 +280,9 @@ export class ScrollingContainer extends Container {
         this._stop = true;
         if (this.scrollX) this.updateDirection("x", delta);
         if (this.scrollY) this.updateDirection("y", delta);
-        if (stop) {
+        //if (this._stop) {
             this.animating = false;
-        }
+        //}
     }
 
     protected updateDirection(direction: "x" | "y", delta: number) {
