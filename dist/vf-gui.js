@@ -5515,9 +5515,9 @@ var ScrollingContainer = /** @class */ (function (_super) {
             this.updateDirection("x", delta);
         if (this.scrollY)
             this.updateDirection("y", delta);
-        if (stop) {
-            this.animating = false;
-        }
+        //if (this._stop) {
+        this.animating = false;
+        //}
     };
     ScrollingContainer.prototype.updateDirection = function (direction, delta) {
         delta = delta * 0.001;
@@ -12498,10 +12498,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.19.1.1.19.1.1.19) ==1.1.19.1.1.19.1.1.19;
+//     return this.lastIndexOf(word, pos1.1.20.1.1.20.1.1.20) ==1.1.20.1.1.20.1.1.20;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.19";
+window.gui.version = "1.1.20";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
