@@ -8,54 +8,45 @@ export default class TestDrag {
 
     private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
-        //拖动示例
-        //let rect = new gui.Rect();
-        //rect.dragOption.draggable = true;
-
+        
         let c1 = this.getNewContainer("自由拖动");
-        c1.container.x = 100;
-        c1.container.y = 100;
+        c1.container.x = 15;
+        c1.container.y = 15;
         uiStage.addChild(c1.container);
         c1.rect.dragOption.draggable = true;
         c1.rect.dragOption.dragContainer = uiStage; //拖动时，移动对象到舞台，防止遮挡
 
-
         let c2 = this.getNewContainer("限定X轴移动");
-        c2.container.x = 250;
-        c2.container.y = 100;
+        c2.container.x = 150;
+        c2.container.y = 15;
         uiStage.addChild(c2.container);
         c2.rect.dragOption.draggable = true;
         c2.rect.dragOption.dragRestrictAxis = "x";
 
-
         let c3 = this.getNewContainer("限定Y轴移动");
-        c3.container.x = 100;
-        c3.container.y = 250;
+        c3.container.x = 15;
+        c3.container.y = 130;
         uiStage.addChild(c3.container);
         c3.rect.dragOption.draggable = true;
         c3.rect.dragOption.dragRestrictAxis = "y";
 
-
         let c4 = this.getNewContainer("限定边界");
-        c4.container.x = 250;
-        c4.container.y = 250;
+        c4.container.x = 150;
+        c4.container.y = 130;
         uiStage.addChild(c4.container);
         c4.rect.dragOption.draggable = true;
         c4.rect.dragOption.dragBoundary = true;//限定边界
 
-
         let c5 = this.getNewContainer("拖动回弹");
-        c5.container.x = 100;
-        c5.container.y = 400;
+        c5.container.x = 15;
+        c5.container.y = 250;
         uiStage.addChild(c5.container);
         c5.rect.dragOption.draggable = true;
         c5.rect.dragOption.dragBounces = true;//回弹
 
-
-
         let c7 = this.getNewContainer("接收容器",undefined,false);
-        c7.container.x = 100;
-        c7.container.y = 550;
+        c7.container.x = 150;
+        c7.container.y = 360;
         c7.container.name = "c7";
         c7.container.style.display = "grid";
         c7.container.style.gridTemplateColumns =  ["repeat",3,30];
@@ -74,8 +65,8 @@ export default class TestDrag {
 
         let c6 = this.getNewContainer("拖动到\n接收容器",undefined,false);
         c6.container.name = "c6";
-        c6.container.x = 250;
-        c6.container.y = 400;
+        c6.container.x = 150;
+        c6.container.y = 250;
         uiStage.addChild(c6.container);
         // ----------   绘制矩形设置可拖动 ---------- //
         let rect:gui.Rect;
