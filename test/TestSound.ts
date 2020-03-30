@@ -3,7 +3,7 @@ import gui from "../src/vf-gui";
 export default class TestSound {
 
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
 
         let sound = new gui.Sound();
         sound.x = 100;
@@ -58,7 +58,7 @@ export default class TestSound {
         });
     }
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         
         const loader = PIXI.Loader.shared;
 

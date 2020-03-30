@@ -9,7 +9,7 @@ class Index{
         if(param){
             type = param;
         }
-        new TestApplication(this,(app: PIXI.Application, uiStage: gui.Stage) => {
+        new TestApplication(this,(app: gui.Application, uiStage: gui.Stage) => {
             import(`./${type}`).then(value=>{
                 console.log("create->",type);
                 new value.default(app,uiStage);

@@ -2,11 +2,11 @@ import gui from "../src/vf-gui";
 
 export default class TestScrollingContainer {
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
 
         /** 滚动容器 水平拖动 */
         let scX = this.addSc(uiStage, 50, 40, "水平拖动");

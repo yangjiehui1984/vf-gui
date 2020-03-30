@@ -2,11 +2,11 @@ import gui from "../src/vf-gui";
 
 export default class TestLabel {
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
 
         /** 基础文本展示 */
         let basicText = new gui.Label();
@@ -35,9 +35,9 @@ export default class TestLabel {
         /** 限定宽度 */
         let wText = new gui.Label();
         wText.style.left = 5;
-        wText.style.top = 500;
+        wText.style.top = 400;
         wText.style.color =[0xffffff,0xffcc00];
-        wText.style.width = 500;
+        wText.style.width = 300;
         wText.style.textAlign = "right";
         wText.text = "我限定了宽度与位置"
         uiStage.addChild(wText);
