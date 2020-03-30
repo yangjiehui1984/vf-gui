@@ -2,11 +2,11 @@ import gui from "../src/vf-gui";
 
 export default class TestButton {
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         this.onLoad(app, uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
         /** UI组件 按钮 */
         let button1 = new gui.Button;
         button1.style.left = 100;

@@ -3,7 +3,7 @@ import gui from "../src/vf-gui";
 export default
     class TestSpriteAnimated {
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
 
 		/** 序列帧动画，设置spritesheet方式填充，或[texture1,textures2]方式 */
         let sheetAnimated = new gui.SpriteAnimated();
@@ -48,7 +48,7 @@ export default
         });
     }
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         
         const loader = PIXI.Loader.shared;
 

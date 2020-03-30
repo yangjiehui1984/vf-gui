@@ -216,6 +216,9 @@ import * as Event from "./event/Index";
 import * as Enum from './enum/Index';
 
 import { Scheduler } from './core/Scheduler';
+
+export declare type Application = PIXI.Application;
+
 /** 请不要在编写UI组件内部使用本类 */
 export {
     Filter, Utils, Stage, Container, ScrollingContainer, Slider,

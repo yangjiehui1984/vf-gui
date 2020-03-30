@@ -2,11 +2,11 @@ import gui from "../src/vf-gui";
 
 export default class TestTween2 {
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+    public constructor(app: gui.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: gui.Application, uiStage: gui.Stage) {
 
         /** 基础文本展示 */
         const basicText = new gui.Label();
