@@ -3813,6 +3813,7 @@ declare module 'core/Scheduler' {
 
 }
 declare module 'UI' {
+	/// <reference types="pixi.js" />
 	/** 工具类 */
 	import * as Utils from 'utils/Utils';
 	/** UI舞台，最顶级的层 展示所有UI组件 */
@@ -4027,6 +4028,7 @@ declare module 'UI' {
 	 */
 	import * as Enum from 'enum/Index';
 	import { Scheduler } from 'core/Scheduler';
+	export type Application = PIXI.Application;
 	/** 请不要在编写UI组件内部使用本类 */
 	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
 
