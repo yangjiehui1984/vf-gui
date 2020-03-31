@@ -1,5 +1,5 @@
 {
-  "name": "vf-gui",
+  "name": "@vf.js/gui",
   "version": "1.1.21",
   "description": "[https://vipkid-edu.github.io/vf-gui/](https://vipkid-edu.github.io/vf-gui/)",
   "main": "dist/vf-gui.js",
@@ -10,7 +10,7 @@
     "watch": "webpack --watch --config ./webpack_config/webpack.config.js",
     "start": "webpack-dev-server --open --config ./webpack_config/webpack.config.js",
     "prod": "webpack --config ./webpack_config/publish-webpack.config",
-    "npmPublish": "npm publish -registry=https://registry.npmjs.org",
+    "npmPublish": "npm publish --access public -registry=https://registry.npmjs.org",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
     "dts": "dts-generator --project  ./  --out ./dist/vf-gui.d.ts"

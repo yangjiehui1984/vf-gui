@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/pixi.js-legacy@5.2.0/dist/pixi-legacy.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi-sound@3.0.3/dist/pixi-sound.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vf-gui/dist/vf-gui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vf.js/gui/dist/vf-gui.min.js"></script>
 
     <script>
         if (location.href.indexOf("#example") === -1 && location.href.indexOf("#code") === -1) {
@@ -38,7 +38,7 @@
         };
         const libs = [
             // `${baseUrl}lib/${window.CONFIG.VFUIVersion}/vf-gui.d.ts`,
-            `https://cdn.jsdelivr.net/npm/vf-gui@${window.CONFIG.VFUIVersion}/dist/vf-gui.d.ts`,
+            `https://cdn.jsdelivr.net/npm/@vf.js/gui@${window.CONFIG.VFUIVersion}/dist/vf-gui.d.ts`,
             "https://cdn.jsdelivr.net/npm/pixi.js@5.2.0/pixi.js.d.ts"
         ];
         window.CONFIG.extraLibs = params.has("lib") ? params.get("lib").split(",") : libs;

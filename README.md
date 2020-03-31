@@ -21,21 +21,21 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
 ### NPM Install
 
-    npm install vf-gui
+    npm i @vf.js/gui --save-dev
 
 ### CDN Install
     
 Version:
 
-    <script src="http://unpkg.com/vf-gui@1.1.2/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/@vf.js/gui@1.1.21/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/vf-gui@01.1.2/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/@vf.js/gui@01.1.21/dist/vf-gui.min.js"></script>
 
 Master:
 
-    <script src="http://unpkg.com/vf-gui/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/@vf.js/gui/dist/vf-gui.js"></script>
 
-    <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/@vf.js/gui/dist/vf-gui.min.js"></script>
 
 ### 创建方式(Usage)：
 
