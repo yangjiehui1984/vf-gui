@@ -8,7 +8,7 @@ import tickerShared  from "./Ticker";
 class DepthBin {
     public map: { [key: number]: boolean } = {};
     public items: DisplayLayoutAbstract[] = [];
-    public length: number = 0;
+    public length = 0;
 
     public insert(client: DisplayLayoutAbstract): void {
         const hashCode = client.uuid;
@@ -61,20 +61,20 @@ class DepthQueue {
     /**
      * 最小深度
      */
-    private minDepth: number = 0;
+    private minDepth = 0;
 
     /**
      * 最大深度
      */
-    private maxDepth: number = -1;
+    private maxDepth = -1;
 
     /** 
      * 移除所有
      */
     public removeAll(){
-        let depthBins = this.depthBins;
-        for(let key in depthBins){
-            let item:DepthBin = depthBins[key];
+        const depthBins = this.depthBins;
+        for(const key in depthBins){
+            const item: DepthBin = depthBins[key];
             item.items = [];
             item.map = {};
             item.length = 0;
@@ -182,13 +182,13 @@ class DepthQueue {
                         bin.remove(client);
                         return client;
                     }
-                }else if((client as TAny)["isContainer"]) {
+                }else if((client as any)["isContainer"]) {
 
                     const items = bin.items;
                     const length = bin.length;
                     for (let i = 0; i < length; i++) {
-                        const value = items[i] as TAny;
-                        if ((client as TAny).contains(value)) {
+                        const value = items[i] as any;
+                        if ((client as any).contains(value)) {
                             bin.remove(value);
                             return value;
                         }
@@ -229,12 +229,12 @@ class DepthQueue {
                         return client;
                     }
                 }
-                else if ((client as TAny)["isContainer"]) {
+                else if ((client as any)["isContainer"]) {
                     const items = bin.items;
                     const length = bin.length;
                     for (let i = 0; i < length; i++) {
-                        const value = items[i] as TAny;
-                        if ((client as TAny).contains(value)) {
+                        const value = items[i] as any;
+                        if ((client as any).contains(value)) {
                             bin.remove(value);
                             return value;
                         }
@@ -272,7 +272,7 @@ class DepthQueue {
  * @private
  * 失效验证管理器
  */
-class UIValidator extends PIXI.utils.EventEmitter {
+class UIValidator extends vf.utils.EventEmitter {
     /**
      * @private
      * 创建一个Validator对象
@@ -337,12 +337,12 @@ class UIValidator extends PIXI.utils.EventEmitter {
     /**
      * @private
      */
-    private invalidateSizeFlag: boolean = false;
+    private invalidateSizeFlag = false;
 
     /**
      * @private
      */
-    private invalidateClientSizeFlag: boolean = false;
+    private invalidateClientSizeFlag = false;
 
     /**
      * @private
@@ -385,7 +385,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
     /**
      * @private
      */
-    private invalidateDisplayListFlag: boolean = false;
+    private invalidateDisplayListFlag = false;
 
     /**
      * @private
@@ -426,7 +426,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
      * @private
      * 是否已经添加了事件监听
      */
-    private listenersAttached: boolean = false;
+    private listenersAttached = false;
 
     /**
      * @private

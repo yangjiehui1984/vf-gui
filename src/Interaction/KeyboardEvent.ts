@@ -8,7 +8,7 @@ class KeyboardSelectEvent {
      * document的键盘事件
     */
     public constructor() {
-
+        //
     }
 
     private obj: DisplayObject|undefined;
@@ -20,11 +20,11 @@ class KeyboardSelectEvent {
 
     private isAddEvent = false;
 
-    private keyDownEventBind: TAny;
-    private keyUpEventBind: TAny;
-    private pasteEventBind: TAny;
-    private copyEventBind: TAny;
-    private cutEventBind: TAny;
+    private keyDownEventBind: any;
+    private keyUpEventBind: any;
+    private pasteEventBind: any;
+    private copyEventBind: any;
+    private cutEventBind: any;
 
     private addEvent(){
         if(this.isAddEvent){
@@ -166,7 +166,7 @@ class KeyboardSelectEvent {
 
         if (e.defaultPrevented)
             return;
-        const clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || (window as any).clipboardData;
         this.obj.emit(KeyEvent.copy, e,this.obj,clipboardData);
         e.preventDefault();
     }
@@ -177,7 +177,7 @@ class KeyboardSelectEvent {
         this.obj.emit(KeyEvent.cut, e,this.obj);
         if (e.defaultPrevented)
             return;
-        const clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || (window as any).clipboardData;
         this.obj.emit(KeyEvent.cut, e,this.obj,clipboardData);
         e.preventDefault();
     }
@@ -190,7 +190,7 @@ class KeyboardSelectEvent {
         this.obj.emit(KeyEvent.paste, e,this.obj);
         if (e.defaultPrevented)
             return;
-        const clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || (window as any).clipboardData;
         this.obj.emit(KeyEvent.paste, e,this.obj,clipboardData);
         e.preventDefault();
     }

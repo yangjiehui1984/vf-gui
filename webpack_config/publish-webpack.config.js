@@ -21,8 +21,9 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'vf-gui.min.js',
-        library: "vfgui",
+        filename: 'gui.min.js',
+        //library: 'vf.gui',
+        libraryTarget: 'umd',
         path: path.resolve(__dirname, '../dist')
     },
     devServer: {

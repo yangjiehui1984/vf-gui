@@ -4,10 +4,7 @@ import { ComponentEvent } from "../interaction/Index";
 import { uid, getStage } from "../utils/Utils";
 import { DisplayObject } from "./DisplayObject";
 
-/**
- * 
- */
-export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements LifecycleHook,Lifecycle {
+export class DisplayObjectAbstract extends vf.utils.EventEmitter implements LifecycleHook,Lifecycle {
 
     public constructor() {
         super();
@@ -66,7 +63,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
             item.parent.removeChild(item);
         }
 
-        item.parent = this as TAny;       
+        item.parent = this as any;       
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
         if(!item.initialized){
@@ -101,7 +98,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
         }
-        return item as TAny;
+        return item as any;
     }
 
     public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined) {
@@ -205,7 +202,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
     }
 
     protected checkInvalidateFlag(){
-
+        //
     }
 
     load(): void {
@@ -223,9 +220,13 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
         this.emit(ComponentEvent.CREATION_COMPLETE,this);
     }
 
-    $onLoad(){}
+    $onLoad(){
+        //
+    }
 
-    $onRelease(){}
+    $onRelease(){
+        //
+    }
 
     $onAddStage(){
         this.checkInvalidateFlag();

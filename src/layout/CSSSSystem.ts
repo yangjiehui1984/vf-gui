@@ -13,7 +13,7 @@ export function backgroundColor(target: DisplayObject){
         return;
     }
     if (target.$background === undefined) {
-        target.$background = new PIXI.Graphics();
+        target.$background = new vf.Graphics();
         target.$background.name = "background";
         target.container.addChildAt(target.$background, 0);
     }
@@ -24,9 +24,9 @@ export function backgroundPositionSize(target: DisplayObject){
         return;
     }
     if (target.$background && target.$background.children.length > 0) {
-        const sprite = target.$background.getChildAt(0) as PIXI.Sprite;
+        const sprite = target.$background.getChildAt(0) as vf.Sprite;
         const style = target.style;
-        if (sprite instanceof PIXI.TilingSprite) {
+        if (sprite instanceof vf.TilingSprite) {
             sprite.tilePosition.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
         } else {
             if (style.backgroundSize) {
@@ -46,25 +46,25 @@ export function backgroundRepeat(target: DisplayObject){
     if (style.backgroundImage && target.$background) {
         target.$background.removeChildren();
 
-        let backgroundImage: PIXI.Texture | undefined;
-        if (style.backgroundImage instanceof PIXI.Texture) {
+        let backgroundImage: vf.Texture | undefined;
+        if (style.backgroundImage instanceof vf.Texture) {
             backgroundImage = style.backgroundImage;
         } else if (typeof style.backgroundImage === "string") {
             backgroundImage = getTexture(style.backgroundImage);
         }
         if (backgroundImage) {
-            let sprite: PIXI.TilingSprite | PIXI.NineSlicePlane | PIXI.Sprite;
+            let sprite: vf.TilingSprite | vf.NineSlicePlane | vf.Sprite;
             if (style.backgroundRepeat === undefined) {
                 style.backgroundRepeat = "no-repeat";
             }
             if (style.backgroundRepeat === "repeat") {
-                sprite = new PIXI.TilingSprite(backgroundImage);
+                sprite = new vf.TilingSprite(backgroundImage);
             } else {
-                sprite = new PIXI.Sprite(backgroundImage);
+                sprite = new vf.Sprite(backgroundImage);
             }
 
             target.$background.addChild(sprite);
-            const maskGraphics = new PIXI.Graphics();
+            const maskGraphics = new vf.Graphics();
             target.$background.addChild(maskGraphics);
             target.$background.mask = maskGraphics;
         }
@@ -73,7 +73,7 @@ export function backgroundRepeat(target: DisplayObject){
 
 export function backgroundImage(target: DisplayObject){
     if (target.$background === undefined) {
-        target.$background = new PIXI.Graphics();
+        target.$background = new vf.Graphics();
         target.$background.name = "background";
         target.container.addChildAt(target.$background, 0);
     }
@@ -116,7 +116,7 @@ export function maskSize(target: DisplayObject){
 
         target.$mask.width = style.maskSize[0];
         target.$mask.height = style.maskSize[1];
-        if(target.$mask instanceof PIXI.Graphics){
+        if(target.$mask instanceof vf.Graphics){
             //target.$mask.clone
         }
         if(!(target.$mask instanceof DisplayObject))
@@ -128,7 +128,7 @@ export function maskImage(target: DisplayObject){
     if(target.style == undefined){
         return;
     }
-    target.container.mask = null;
+    target.container.mask = null as any;
     if (target.$mask && target.$mask.parent) {
         if (target.$mask instanceof DisplayObject) {
             target.removeChild(target.$mask);
@@ -147,13 +147,13 @@ export function maskImage(target: DisplayObject){
     target.$mask = undefined;
     const style = target.style;
     const container = target.container;
-    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | PIXI.Graphics | string;
+    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | vf.Graphics | string;
 
     if(maskdisplay == null || maskdisplay === ''){
         return;
     }
 
-    if (maskdisplay instanceof PIXI.Graphics) {
+    if (maskdisplay instanceof vf.Graphics) {
         target.$mask = maskdisplay;
         container.mask = target.$mask;
         container.addChild(target.$mask);
@@ -162,14 +162,14 @@ export function maskImage(target: DisplayObject){
         if((maskdisplay as MaskSprite).maskSprite){
             target.$mask = maskdisplay;//gui组件
             target.$mask.name = "maskImage";
-            container.mask = maskdisplay.maskSprite() || null;//pixi组件
+            container.mask = maskdisplay.maskSprite() || null;//vf组件
             if(maskdisplay.parent == undefined){
                 target.addChild(maskdisplay);
             }
                 
         }
     } else {
-        target.$mask = PIXI.Sprite.from(getTexture(style.maskImage));
+        target.$mask = vf.Sprite.from(getTexture(style.maskImage));
         container.mask = target.$mask;
         container.addChild(target.$mask);
     }
@@ -181,14 +181,14 @@ export function maskImage(target: DisplayObject){
 
 
 /** ===================== font  ===================== */
-export function updateFontStyle(target: TAny,key: string,value: TAny){
+export function updateFontStyle(target: any,key: string,value: any){
     if(target.setInputStyle){
         target.setInputStyle(key, value);
     }else{
         target.sprite.style[key] =value;
     } 
 }
-export function color(target: TAny,key: string,value: TAny){
+export function color(target: any,key: string,value: any){
     if(target.setInputStyle){
         target.setInputStyle(key, value);
     }else{

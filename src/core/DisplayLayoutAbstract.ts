@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as UIKeys from "./DisplayLayoutKeys";
 import validatorShared from "./DisplayLayoutValidator";
 import { ComponentEvent } from "../interaction/Index";
 import { formatRelative } from "../utils/Utils";
 import { DisplayObjectAbstract } from "./DisplayObjectAbstract";
 
-export const $tempLocalBounds = new PIXI.Rectangle();
+export const $tempLocalBounds = new vf.Rectangle();
 /**
  * UI 布局的基础属性类
  */
@@ -20,7 +21,7 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
     /**
      * @private
      */
-    public $values: TAny = {};
+    public $values: any = {};
 
     public includeInLayout = true;
     /**
@@ -261,7 +262,7 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * 获取组件的首选尺寸,常用于父级的measure()方法中
      * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
      */
-    public getPreferredBounds(bounds: PIXI.Rectangle) {
+    public getPreferredBounds(bounds: vf.Rectangle) {
         this.measureSizes();
         bounds.width = this.getPreferredUWidth();
         bounds.height = this.getPreferredUHeight();
@@ -426,11 +427,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 距父级容器离左边距离
      */
-    public get left(): TAny {
+    public get left(): any {
         return this.$values[UIKeys.left];
     }
 
-    public set left(value: TAny) {
+    public set left(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }
@@ -449,11 +450,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 距父级容器右边距离
      */
-    public get right(): TAny {
+    public get right(): any {
         return this.$values[UIKeys.right];
     }
 
-    public set right(value: TAny) {
+    public set right(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }
@@ -471,11 +472,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 距父级容器顶部距离
      */
-    public get top(): TAny {
+    public get top(): any {
         return this.$values[UIKeys.top];
     }
 
-    public set top(value: TAny) {
+    public set top(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }
@@ -493,11 +494,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 距父级容器底部距离
      */
-    public get bottom(): TAny {
+    public get bottom(): any {
         return this.$values[UIKeys.bottom];
     }
 
-    public set bottom(value: TAny) {
+    public set bottom(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }
@@ -516,11 +517,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 在父级容器中距水平中心位置的距离
      */
-    public get horizontalCenter(): TAny {
+    public get horizontalCenter(): any {
         return this.$values[UIKeys.horizontalCenter];
     }
 
-    public set horizontalCenter(value: TAny) {
+    public set horizontalCenter(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }
@@ -538,11 +539,11 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * @private
      * 在父级容器中距竖直中心位置的距离
      */
-    public get verticalCenter(): TAny {
+    public get verticalCenter(): any {
         return this.$values[UIKeys.verticalCenter];
     }
 
-    public set verticalCenter(value: TAny) {
+    public set verticalCenter(value: any) {
         if (!value || typeof value == "number") {
             value = +value;
         }

@@ -20,6 +20,27 @@ const version = `
  */
 `;
 
+////////////////////////
+let dtsOut =  execSync("npm run dts",{encoding:"utf8"});
+console.log(dtsOut);
+let dtsFile = fs.readFileSync("./dist/gui.d.ts","utf8");
+
+if(dtsFile.indexOf('module \'src/')!==-1){
+    dtsFile += `
+    declare namespace vf.gui{
+        export * from "src/UI";
+    }
+    `;
+}else{
+    dtsFile += `
+    declare namespace vf.gui{
+        export * from "UI";
+    }
+    `;
+}
+
+fs.writeFileSync("./dist/gui.d.ts",dtsFile);
+////////////////////////
 
 let content = fs.readFileSync("./src/vf-gui.ts","utf8");
 const versionRegExp = /\d+(\.\d+){0,3}/g;
@@ -30,23 +51,3 @@ let buildOut =  execSync("npm run build",{encoding:"utf8"});
 console.log(buildOut);
 let publishOut =  execSync("npm run prod",{encoding:"utf8"});
 console.log(publishOut);
-let dtsOut =  execSync("npm run dts",{encoding:"utf8"});
-console.log(dtsOut);
-let dtsFile = fs.readFileSync("./dist/vf-gui.d.ts","utf8");
-
-dtsFile += `
-declare namespace gui{
-    export * from "UI";
-}
-`;
-fs.writeFileSync("./dist/vf-gui.d.ts",dtsFile);
-
-
-const pixiLegacy = fs.readFileSync('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js',"utf8");
-const pixiSound = fs.readFileSync('./node_modules/pixi-sound/dist/pixi-sound.js',"utf8");
-const vfgui = fs.readFileSync('./dist/vf-gui.min.js',"utf8");
-const es6 = `
-    export {PIXI,vfgui}
-`;
-
-fs.writeFileSync(`./dist/vf-gui-all.min.js`,version+ '\n'+ pixiLegacy+ '\n'+ pixiSound+ '\n'+ vfgui + '\n'+ es6);

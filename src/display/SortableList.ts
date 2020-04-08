@@ -102,9 +102,9 @@
 //                 item.y = y;
 //             }
 //             y += item.height;
-//             const itemTany = item as TAny;//设置单独项目的背景或
-//             if (typeof itemTany.altering === "function")
-//                 itemTany.altering(alt);
+//             const itemany = item as any;//设置单独项目的背景或
+//             if (typeof itemany.altering === "function")
+//                 itemany.altering(alt);
 //         }
     
 //         //force it to update parents when sort animation is done (prevent scrolling container bug)

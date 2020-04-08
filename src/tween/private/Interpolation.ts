@@ -2,12 +2,11 @@ import { isRGBColor, RGBA, STRING_PROP } from './constants'
 
 /**
  * 差值计算列表
- * @namespace TWEEN.Interpolation
  * @example
  *
- * let bezier = gui.tween.Interpolation.Bezier
- * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
- * @memberof gui.tween
+ * let bezier = vf.gui.tween.Interpolation.Bezier
+ * new vf.gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+ * @memberof vf.gui.tween
  */
 export const Interpolation = {
     Linear(v: any, k: number, value: any) {
@@ -27,11 +26,11 @@ export const Interpolation = {
 
     Bezier(v: any, k: number, value: any) {
         let b = Interpolation.Utils.Reset(value)
-        let n = v.length - 1
-        let pw = Math.pow
-        let fn = Interpolation.Utils.Bernstein
+        const n = v.length - 1
+        const pw = Math.pow
+        const fn = Interpolation.Utils.Bernstein
 
-        let isBArray = Array.isArray(b)
+        const isBArray = Array.isArray(b)
 
         for (let i = 0; i <= n; i++) {
             if (typeof b === 'number') {
@@ -45,7 +44,7 @@ export const Interpolation = {
                     }
                 }
             } else if (typeof b === 'object') {
-                for (let p in b) {
+                for (const p in b) {
                     if (typeof b[p] === 'number') {
                         b[p] += pw(1 - k, n - i) * pw(k, i) * v[i][p] * fn(n, i)
                     } else {
@@ -54,8 +53,8 @@ export const Interpolation = {
                 }
             } else if (typeof b === 'string') {
                 let STRING_BUFFER = ''
-                let idx = Math.round(n * k)
-                let vCurr = v[idx]
+                const idx = Math.round(n * k)
+                const vCurr = v[idx]
                 for (let ks = 1, len = vCurr.length; ks < len; ks++) {
                     STRING_BUFFER += vCurr[ks]
                 }
@@ -139,7 +138,7 @@ export const Interpolation = {
                 }
                 return value
             } else if (typeof value === 'object') {
-                for (let i in value) {
+                for (const i in value) {
                     value[i] = Interpolation.Utils.Reset(value[i])
                 }
                 return value

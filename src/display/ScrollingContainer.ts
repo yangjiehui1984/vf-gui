@@ -13,9 +13,8 @@ import { DisplayObjectAbstract } from "../core/DisplayObjectAbstract";
 /**
  * 可滚动的容器
  * 
- * @example let scrollingContainer = new gui.ScrollingContainer();
+ * @example let scrollingContainer = new vf.gui.ScrollingContainer();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
  */
@@ -26,7 +25,7 @@ export class ScrollingContainer extends Container {
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
 
-        const _graphics = new PIXI.Graphics();
+        const _graphics = new vf.Graphics();
         _graphics.clear();
         _graphics.beginFill(0xffcc00);   
         _graphics.drawRoundedRect(0,0,200,200,0);
@@ -43,7 +42,7 @@ export class ScrollingContainer extends Container {
             }
         };
 
-        this.dragEvent.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
+        this.dragEvent.onDragMove = (e: InteractionEvent, offset: vf.Point) => {
             if (this.scrollX)
                 this._targetPosition.x = this._containerStart.x + offset.x;
             if (this.scrollY)
@@ -57,8 +56,8 @@ export class ScrollingContainer extends Container {
             }
         };
 
-        const scrollSpeed = new PIXI.Point();
-        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta: PIXI.Point) => {
+        const scrollSpeed = new vf.Point();
+        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta: vf.Point) => {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
             this.setScrollPosition(scrollSpeed);
         };
@@ -120,7 +119,7 @@ export class ScrollingContainer extends Container {
     /**
      * 内容的宽高
      */
-    public innerBounds = new PIXI.Rectangle();
+    public innerBounds = new vf.Rectangle();
     /** 
      * 拖动处理类
      */
@@ -143,11 +142,11 @@ export class ScrollingContainer extends Container {
 
     private _isInitScrolling = false;
 
-    private _containerStart = new PIXI.Point();
-    private _targetPosition = new PIXI.Point();
-    private _lastPosition = new PIXI.Point();
-    private _Position = new PIXI.Point();
-    private _Speed = new PIXI.Point();
+    private _containerStart = new vf.Point();
+    private _targetPosition = new vf.Point();
+    private _lastPosition = new vf.Point();
+    private _Position = new vf.Point();
+    private _Speed = new vf.Point();
     private _stop = false;
 
 
@@ -164,7 +163,7 @@ export class ScrollingContainer extends Container {
         }
     }
 
-    protected setScrollPosition(speed?: PIXI.Point) {
+    protected setScrollPosition(speed?: vf.Point) {
         if (speed) {
             this._Speed = speed;
         }
@@ -184,13 +183,13 @@ export class ScrollingContainer extends Container {
             item.parent.removeChild(item);
         }
 
-        item.parent = this as TAny;    
+        item.parent = this as any;    
         index = Math.min(this._innerContainer.children.length,index);
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.getInnerBounds(true);
         
-        return item as TAny;
+        return item as any;
     }
 
     protected getInnerBounds(force?: boolean) {
@@ -240,7 +239,7 @@ export class ScrollingContainer extends Container {
     }
 
     /** 根据焦点设置位置 */
-    public focusPosition(pos: PIXI.Point) {
+    public focusPosition(pos: vf.Point) {
         const bounds = this.getInnerBounds();
 
         let dif;

@@ -29,7 +29,6 @@ module.exports = {
     },
     output: {
         filename: 'test.js',
-        library: 'example',
         libraryTarget: 'umd',
         path: path.resolve(__dirname, '../dist')
     },

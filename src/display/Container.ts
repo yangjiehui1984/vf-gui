@@ -5,9 +5,8 @@ import {DisplayObject} from "../core/DisplayObject";
  * 
  * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
  * 
- * @example let container = new gui.Container();
+ * @example let container = new vf.gui.Container();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestContainer
  */

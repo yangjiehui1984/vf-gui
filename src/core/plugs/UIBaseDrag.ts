@@ -42,11 +42,11 @@ export class UIBaseDrag implements Lifecycle {
      * 位置 
      * 
      */
-    private _dragPosition = new PIXI.Point();
+    private _dragPosition = new vf.Point();
     /**
      * 开始位置
      */
-    private _containerStart: PIXI.Point | undefined;
+    private _containerStart: vf.Point | undefined;
 
     /** 
      * 是否拖动中
@@ -162,8 +162,8 @@ export class UIBaseDrag implements Lifecycle {
         if (!this.dragInitialized) {
 
             this.dragInitialized = true;
-            const containerStart = new PIXI.Point();
-            const stageOffset = new PIXI.Point();
+            const containerStart = new vf.Point();
+            const stageOffset = new vf.Point();
             this._containerStart = containerStart;
             this._dragPosition.set(0, 0);
 
@@ -219,7 +219,7 @@ export class UIBaseDrag implements Lifecycle {
             };
 
 
-            this.drag.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
+            this.drag.onDragMove = (e: InteractionEvent, offset: vf.Point) => {
                 if (this.target == undefined) {
                     return;
                 }

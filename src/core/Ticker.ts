@@ -3,7 +3,7 @@ import * as tween from "../tween/private/index";
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
  */
-class Ticker extends PIXI.utils.EventEmitter{
+class Ticker extends vf.utils.EventEmitter{
     /**
      * 心跳构造函数
      * @param autoStart 是否自动开启心跳，默认false
