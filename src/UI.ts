@@ -13,9 +13,8 @@ import { Filter } from './core/Filter';
  * 
  * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
  * 
- * @example let container = new gui.Container();
+ * @example let container = new vf.gui.Container();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestContainer
  */
@@ -23,9 +22,8 @@ import { Container } from "./display/Container";
 /**
  * 滚动容器
  * 
- * @example let scrollingContainer = new gui.ScrollingContainer();
+ * @example let scrollingContainer = new vf.gui.ScrollingContainer();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
  */
@@ -33,9 +31,8 @@ import { ScrollingContainer } from "./display/ScrollingContainer";
 /**
  * 图片
  * 
- * @example let image = new gui.Image();
+ * @example let image = new vf.gui.Image();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestImage
  */
@@ -45,9 +42,8 @@ import { Image } from "./display/Image";
  * 
  * 支持使用texturepacker导出以及处理轴点
  * 
- * @example let spriteAnimated = new gui.SpriteAnimated();
+ * @example let spriteAnimated = new vf.gui.SpriteAnimated();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSpriteAnimated
  */
@@ -59,9 +55,8 @@ import { SpriteAnimated } from "./display/SpriteAnimated";
  * 
  * 文本没有宽高，自适应
  * 
- * @example let label = new gui.Label();
+ * @example let label = new vf.gui.Label();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
  */
@@ -69,9 +64,8 @@ import { Label } from "./display/Label";
 /**
  * 文本输入
  * 
- * @example let textInput = new gui.TextInput(true|false);//单行或多行
+ * @example let textInput = new vf.gui.TextInput(true|false);//单行或多行
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTextInput
  */
@@ -79,9 +73,8 @@ import { TextInput } from "./display/TextInput";
 /**
  * 滑动条/进度条
  * 
- * @example let slider = new gui.Slider();
+ * @example let slider = new vf.gui.Slider();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
  */
@@ -89,9 +82,8 @@ import { Slider } from "./display/Slider";
 /**
  * 按钮
  * 
- * @example let button = new gui.Button();
+ * @example let button = new vf.gui.Button();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestButton
  */
@@ -102,9 +94,8 @@ import { Button } from "./display/Button";
  * 
  * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
  * 
- * @example let checkBox = new gui.CheckBox();
+ * @example let checkBox = new vf.gui.CheckBox();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCheckBox
  */
@@ -112,9 +103,8 @@ import { CheckBox } from "./display/CheckBox";
 /**
  * 绘制矩形或圆角矩形
  * 
- * @example let rect = new gui.Rect();
+ * @example let rect = new vf.gui.Rect();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
  */
@@ -122,9 +112,8 @@ import { Rect } from "./display/Rect";
 /**
  * 绘制矩形或圆角矩形
  * 
- * @example let rect = new gui.Circle();
+ * @example let rect = new vf.gui.Circle();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCircle
  */
@@ -132,9 +121,8 @@ import { Circle } from "./display/Circle";
 /**
  * 矢量绘制
  * 
- * @example let graphics = new gui.Graphics();
+ * @example let graphics = new vf.gui.Graphics();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
@@ -142,9 +130,8 @@ import { Graphics } from "./display/Graphics";
 /**
  * 跟随划线（鼠标或触摸按下时）
  * 
- * @example let graphics = new gui.FollowLine();
+ * @example let graphics = new vf.gui.FollowLine();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
@@ -153,29 +140,17 @@ import { FollowLine } from "./display/FollowLine";
  * 连线组件
  * 
  * 
- * @example let connectLine = new gui.ConnectLine();
+ * @example let connectLine = new vf.gui.ConnectLine();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestConnectLine
  */
 import { ConnectLine } from "./display/ConnectLine";
 /**
- * 音频播放组件
- * 
- * @example let sound = new gui.Sound();
- * 
- * @namespace gui
- * 
- * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSound
- */
-import { Sound } from "./display/Sound";
-/**
  * 完整的缓动曲线列表
  * 
- * @example gui.Easing.Linear.None;
+ * @example vf.gui.Easing.Linear.None;
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */
@@ -183,9 +158,8 @@ import { Easing } from "./tween/Easing";
 /**
  * 缓动动画
  * 
- * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+ * @example let tween = new vf.gui.Tween(myObject).to({width:'300px'}, 2000).start()
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */
@@ -193,9 +167,8 @@ import { Tween } from "./tween/Tween";
 /**
  * 基于帧的时间轴控制类
  * 
- * @example let timeline = new gui.Timeline();
+ * @example let timeline = new vf.gui.Timeline();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
@@ -217,11 +190,11 @@ import * as Enum from './enum/Index';
 
 import { Scheduler } from './core/Scheduler';
 
-export declare type Application = PIXI.Application;
+export declare type Application = vf.Application;
 
 /** 请不要在编写UI组件内部使用本类 */
 export {
     Filter, Utils, Stage, Container, ScrollingContainer, Slider,
     Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction,
-    DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler
+    DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler
 };

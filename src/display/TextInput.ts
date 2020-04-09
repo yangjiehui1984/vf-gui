@@ -9,9 +9,8 @@ import { ComponentEvent } from "../interaction/Index";
 /**
  * 文本输入
  * 
- * @example let textInput = new gui.TextInput(true|false);//单行或多行
+ * @example let textInput = new vf.gui.TextInput(true|false);//单行或多行
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTextInput
  */
@@ -35,7 +34,7 @@ export class TextInput extends InputBase {
             {
                 multiline: multiline
             }
-        ) as TAny;
+        ) as any;
 
         this.htmlInputShared = new HtmlInput(this._inputStyle.multiline);
         this.htmlInputShared.setStyle(this._inputStyle);
@@ -47,7 +46,7 @@ export class TextInput extends InputBase {
         this.img.scale9Grid = [3, 3, 3, 3];
         this.addChild(this.img);
 
-        this._textHitbox = new PIXI.Graphics();
+        this._textHitbox = new vf.Graphics();
         this._textHitbox.name = "_textHitbox";
         this._textHitbox.alpha = 0;
         this._textHitbox.interactive = true;
@@ -55,11 +54,11 @@ export class TextInput extends InputBase {
         this._textHitbox.on('pointerdown', this._ontextFocus, this);
         this.container.addChild(this._textHitbox);
 
-        this._textMask = new PIXI.Graphics();
+        this._textMask = new vf.Graphics();
         this._textMask.name = "_textMask";
         this.container.addChild(this._textMask);
 
-        this._text = new PIXI.Text('', {});
+        this._text = new vf.Text('', {});
         this._text.name = "_text";
         this._text.visible = false;
         this.container.addChild(this._text);
@@ -80,10 +79,10 @@ export class TextInput extends InputBase {
 
     protected htmlInputShared: HtmlInput;
 
-    protected _lastRenderer: PIXI.Renderer | undefined;
+    protected _lastRenderer: vf.Renderer | undefined;
     protected _resolution = 1;
     protected _canvasBounds: { top: number; left: number; width: number; height: number } | undefined;
-    protected _previous: { canvasBounds: TAny; worldTransform: TAny; worldAlpha: TAny; worldVisible: TAny } | TAny = {};
+    protected _previous: { canvasBounds: any; worldTransform: any; worldAlpha: any; worldVisible: any } | any = {};
 
     protected _inputStyle: InputStyle;
     /**
@@ -92,12 +91,12 @@ export class TextInput extends InputBase {
     protected placeholderColor = 0xa9a9a9;
     protected _domVisible = true;
 
-    protected _textHitbox: PIXI.Graphics;
-    protected _textMask: PIXI.Graphics;
-    protected _text: PIXI.Text;
+    protected _textHitbox: vf.Graphics;
+    protected _textMask: vf.Graphics;
+    protected _text: vf.Text;
 
 
-    protected _fontMetrics: PIXI.IFontMetrics | undefined;
+    protected _fontMetrics: vf.IFontMetrics | undefined;
     protected state = 'DEFAULT';
 
     /**
@@ -151,7 +150,7 @@ export class TextInput extends InputBase {
 
 
     // GETTERS & SETTERS
-    public updateSystem(renderer?: PIXI.Renderer) {
+    public updateSystem(renderer?: vf.Renderer) {
 
         if(renderer === undefined){
             return;
@@ -195,7 +194,7 @@ export class TextInput extends InputBase {
      * @param key 健
      * @param value 值
      */
-    public setInputStyle(key: TAny, value: TAny) {
+    public setInputStyle(key: any, value: any) {
         if (key === "fontSize") {
             value = value + "px";
         }
@@ -215,7 +214,7 @@ export class TextInput extends InputBase {
         }
         this._oldState = state;
         const img = this.img;
-        img.src = (this as TAny)[state];
+        img.src = (this as any)[state];
     }
 
     // SETUP
@@ -251,12 +250,12 @@ export class TextInput extends InputBase {
 
 
     // RENDER & UPDATE
-    // for pixi v5
-    public render(renderer: PIXI.Renderer) {
+    // for VF v5
+    public render(renderer: vf.Renderer) {
         this._renderInternal(renderer);
     }
 
-    private _renderInternal(renderer: PIXI.Renderer) {
+    private _renderInternal(renderer: vf.Renderer) {
         this._resolution = renderer.resolution;
         this._lastRenderer = renderer;
         this._canvasBounds = this._getCanvasBounds();
@@ -270,7 +269,7 @@ export class TextInput extends InputBase {
         if (!this._canvasBounds)
             return;
         const cb = this._canvasBounds;
-        const transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
+        const transform = this._vfMatrixToCSS(this._getDOMRelativeWorldTransform());
         this.htmlInputShared.updatePostion(cb.top, cb.left, transform, this.container.worldAlpha);
         this.htmlInputShared.visible = this.container.worldVisible && this._domVisible;
 
@@ -283,7 +282,7 @@ export class TextInput extends InputBase {
     // STATE COMPAIRSON (FOR PERFORMANCE BENEFITS)
     private _needsUpdate() {
         return (
-            !this._comparePixiMatrices(this.container.worldTransform, this._previous.worldTransform)
+            !this._comparevfMatrices(this.container.worldTransform, this._previous.worldTransform)
             || !this._compareClientRects(this._canvasBounds, this._previous.canvasBounds)
             || this.container.worldAlpha != this._previous.worldAlpha
             || this.container.worldVisible != this._previous.worldVisible
@@ -335,7 +334,7 @@ export class TextInput extends InputBase {
     }
 
     private _derivetextStyle() {
-        const style: TAny = new PIXI.TextStyle()
+        const style: any = new vf.TextStyle()
 
         for (const key in this._inputStyle) {
             switch (key) {
@@ -350,7 +349,7 @@ export class TextInput extends InputBase {
                     style[key] = this._inputStyle[key];
                     break
                 case 'letterSpacing':
-                    style.letterSpacing = parseFloat(this._inputStyle.letterSpacing as TAny);
+                    style.letterSpacing = parseFloat(this._inputStyle.letterSpacing as any);
                     break
             }
         }
@@ -399,7 +398,7 @@ export class TextInput extends InputBase {
     // private _updateFontMetrics() {
     //     const style = this._derivetextStyle();
     //     const font = style.toFontString();
-    //     this._fontMetrics = PIXI.TextMetrics.measureFont(font);
+    //     this._fontMetrics = vf.TextMetrics.measureFont(font);
     // }
 
     // HELPER FUNCTIONS
@@ -432,11 +431,11 @@ export class TextInput extends InputBase {
 
     }
 
-    private _pixiMatrixToCSS(m: TAny) {
+    private _vfMatrixToCSS(m: any) {
         return 'matrix(' + [m.a, m.b, m.c, m.d, m.tx, m.ty].join(',') + ')';
     }
 
-    private _comparePixiMatrices(m1: TAny, m2: TAny) {
+    private _comparevfMatrices(m1: any, m2: any) {
         if (!m1 || !m2) return false
         return (
             m1.a == m2.a
@@ -448,7 +447,7 @@ export class TextInput extends InputBase {
         )
     }
 
-    private _compareClientRects(r1: TAny, r2: TAny) {
+    private _compareClientRects(r1: any, r2: any) {
         if (!r1 || !r2) return false
         return (
             r1.left == r2.left

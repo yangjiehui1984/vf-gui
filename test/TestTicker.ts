@@ -1,30 +1,31 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
 export default class TestTicker {
 
-    public constructor(app: gui.Application, uiStage: gui.Stage) {
-        this.onLoad(app,uiStage)
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
+        this.onLoad(app, uiStage)
     }
 
-    private onLoad(app: gui.Application, uiStage: gui.Stage) {
-       
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
+
         //添加心跳
-        gui.TickerShared.addUpdateEvent(this.update, this);
+        vf.gui.TickerShared.addUpdateEvent(this.update, this);
 
         //两秒后卸载当前跳
         // setTimeout(() => {
         //     if(this.update)
-        //         gui.TickerShared.removeUpdateEvent(this.update,this);
+        //         vf.gui.TickerShared.removeUpdateEvent(this.update,this);
         // }, 2000);
 
         //两秒后关闭整个心跳，包含缓动组件等所有
         // setTimeout(() => {
         //     if(this.update)
-        //     gui.TickerShared.disabled = true;
+        //     vf.gui.TickerShared.disabled = true;
         // }, 2000);
     }
 
-    private update(n: number){
-
+    private update(n: number) {
+        //
     }
 }

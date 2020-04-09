@@ -31,7 +31,7 @@
 //         }
 //     }
 
-//     protected onThumbLoadComplete(rectangle: PIXI.Rectangle,source: Image){
+//     protected onThumbLoadComplete(rectangle: vf.Rectangle,source: Image){
 //         super.onThumbLoadComplete(rectangle,source);
 //         this.alignToContainer();
 //     }
@@ -70,16 +70,16 @@
 //             const xORy = this.vertical ? "y" : "x";
 //             const widthORheight = this.vertical ? "height" : "width";
 //             const topORleft = this.vertical ? "top" : "left";
-//             const scrollingContainer = this.scrollingContainer as TAny;
-//             const innerContainer = this.scrollingContainer.innerContainer as TAny;
+//             const scrollingContainer = this.scrollingContainer as any;
+//             const innerContainer = this.scrollingContainer.innerContainer as any;
 
 //             const _posAmt = !innerContainer[widthORheight] ? 0 : -(innerContainer[xORy] / innerContainer[widthORheight]);
 //             const sizeAmt = !innerContainer[widthORheight] ? 1 : scrollingContainer["_" + widthORheight] / innerContainer[widthORheight];
 //             //update amt
 //             const diff = innerContainer[widthORheight] - scrollingContainer["_" + widthORheight];
 //             this._amt = !scrollingContainer["_" + widthORheight] || !diff ? 0 : -(innerContainer[xORy] / diff);
-//             const self = this as TAny;
-//             const _thumb = this._thumb as TAny;
+//             const self = this as any;
+//             const _thumb = this._thumb as any;
 //             if (sizeAmt >= 1) {
 //                 size = self["_" + widthORheight];
 //                 _thumb[topORleft] = size * 0.5;

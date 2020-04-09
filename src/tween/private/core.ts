@@ -24,8 +24,7 @@ let handleLag = true;
 
 /**
  * 插件存储器
- * @namespace tween.Plugins
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
  * let num = Plugins.num = function (node, start, end) {
   * return t => start + (end - start) * t
@@ -33,19 +32,19 @@ let handleLag = true;
   *
   * @static
   */
-export const Plugins:TAny = {};
+export const Plugins: any = {};
 
 /**
  * 添加对象到缓动列表
  * @param {Tween} tween Tween 实例
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * let tween = new gui.tween.Tween({x:0})
+ * let tween = new vf.gui.tween.Tween({x:0})
  * tween.to({x:200}, 1000)
- * gui.tween.add(tween)
+ * vf.gui.tween.add(tween)
  */
 export function add(tween: Tween) {
-    let i = _tweens.indexOf(tween);
+    const i = _tweens.indexOf(tween);
 
     if (i > -1) {
         _tweens.splice(i, 1);
@@ -61,9 +60,9 @@ export function add(tween: Tween) {
 /**
  * 没有缓动后，设置运行多少帧后，停止
  * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * gui.tween.FrameThrottle(60)
+ * vf.gui.tween.FrameThrottle(60)
  */
 export function FrameThrottle(frameCount = 120) {
     powerModeThrottle = frameCount * 1.05;
@@ -72,9 +71,9 @@ export function FrameThrottle(frameCount = 120) {
 /**
  * 延时处理，针对插件、canvas、dom
  * @param {number} state=true 是否平滑处理
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * gui.tween.ToggleLagSmoothing(false)
+ * vf.gui.tween.ToggleLagSmoothing(false)
  */
 export function ToggleLagSmoothing(_state = true) {
     handleLag = _state;
@@ -82,8 +81,8 @@ export function ToggleLagSmoothing(_state = true) {
 
 /**
  * 获得所有缓动对象
- * @memberof gui.tween
- * gui.tween.getAll() 
+ * @memberof vf.gui.tween
+ * vf.gui.tween.getAll() 
  */
 export function getAll() {
     return _tweens;
@@ -91,8 +90,8 @@ export function getAll() {
 
 /**
  * 移除所有动画对象
- * @example  gui.tween.removeAll()
- * @memberof gui.tween
+ * @example  vf.gui.tween.removeAll()
+ * @memberof vf.gui.tween
  */
 export function removeAll() {
     _tweens.length = 0;
@@ -103,9 +102,9 @@ export function removeAll() {
  * 获取对象
  * @param {Tween} tween 缓动对象实例 
  * @return {Tween} 返回对象或null
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * gui.tween.get(tween)
+ * vf.gui.tween.get(tween)
  */
 export function get(tween: Tween) {
     for (let i = 0; i < _tweens.length; i++) {
@@ -116,23 +115,12 @@ export function get(tween: Tween) {
     return null;
 }
 
-export function removeDisplay(uuid:string){
-    for (let i = 0; i < _tweens.length; i++) {
-        if (_tweens[i].object.uuid && uuid === _tweens[i].object.uuid) {
-            _tweens[i].stop();
-            remove(_tweens[i]);
-            return;
-        }
-    }
-    return;
-}
-
 /**
  * 从缓动列表移除对象
  * @param {Tween} tween Tween instance
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * gui.tween.remove(tween)
+ * vf.gui.tween.remove(tween)
  */
 export function remove(tween: Tween) {
     const i = _tweens.indexOf(tween)
@@ -144,16 +132,28 @@ export function remove(tween: Tween) {
     }
 }
 
+
+export function removeDisplay(uuid: string) {
+    for (let i = 0; i < _tweens.length; i++) {
+        if (_tweens[i].object.uuid && uuid === _tweens[i].object.uuid) {
+            _tweens[i].stop();
+            remove(_tweens[i]);
+            return;
+        }
+    }
+    return;
+}
+
 /**
  * 按给定时间更新缓动
  * @param {number=} time 时间戳
  * @param {Boolean=} preserve 完成后，防止删除动画对象
- * @memberof gui.tween
+ * @memberof vf.gui.tween
  * @example
- * gui.tween.update(500)
+ * vf.gui.tween.update(500)
  */
 
-export function update(time:number, preserve = false) {
+export function update(time: number, preserve = false) {
     if (!isStarted) {
         return false;
     }
@@ -163,7 +163,7 @@ export function update(time:number, preserve = false) {
         emptyFrame = 0;
         return false;
     }
-    
+
     if (!_tweens.length) {
         emptyFrame++;
     }
@@ -187,8 +187,8 @@ export function update(time:number, preserve = false) {
 /**
  * 是否正在运行中
  * @return {Boolean} 只要还有缓动在运行，返回true
- * @memberof gui.tween
- * @example gui.tween.isRunning()
+ * @memberof vf.gui.tween
+ * @example vf.gui.tween.isRunning()
  */
 export function isRunning() {
     return isStarted;
@@ -197,8 +197,8 @@ export function isRunning() {
 /**
  * 返回是否开启延迟平滑状态
  * @return {Boolean} 
- * @memberof gui.tween
- * @example gui.tween.isRunning()
+ * @memberof vf.gui.tween
+ * @example vf.gui.tween.isRunning()
  */
 export function isLagSmoothing() {
     return handleLag;

@@ -379,7 +379,7 @@ export class CSSStyle {
     /**
      * 设置元素的背景图像。backgroundImage = "./xxx.png"
      * */
-    private _backgroundImage?: PIXI.Texture | string;
+    private _backgroundImage?: vf.Texture | string;
     public get backgroundImage() {
         return this._backgroundImage;
     }
@@ -439,7 +439,7 @@ export class CSSStyle {
     /**
      * 遮罩图
      */
-    private _maskImage?: string | PIXI.Graphics | PIXI.Texture | DisplayObject;
+    private _maskImage?: string | vf.Graphics | vf.Texture | DisplayObject;
     public get maskImage() {
         return this._maskImage;
     }
@@ -478,7 +478,7 @@ export class CSSStyle {
         return this.parent.filter;
     }
 
-    public set filter(value: TAny) {
+    public set filter(value: any) {
         console.error('[VF LOG] 只读属性 filter!')
     }
 
@@ -717,7 +717,7 @@ export class CSSStyle {
         }
         if (target.$background && target.$background.mask) {
             //console.log("onResize backgroundColor mask",this.backgroundColor)
-            const mask = target.$background.mask as PIXI.Graphics;
+            const mask = target.$background.mask as vf.Graphics;
             mask.clear();
             mask.beginFill(this.backgroundColor);
             mask.drawRoundedRect(0, 0, target.width, target.height, 0);

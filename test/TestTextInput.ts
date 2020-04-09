@@ -1,15 +1,16 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
 export default class TestTextInput {
 
-    public constructor(app: gui.Application, uiStage: gui.Stage) {
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: gui.Application, uiStage: gui.Stage) {
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
         /** 单行输入 TextInput(false) */
-        let textInput = new gui.TextInput(false);
+        const textInput = new vf.gui.TextInput(false);
         textInput.style.left = 15;
         textInput.style.top = 100;
         textInput.style.width = 300;
@@ -28,7 +29,7 @@ export default class TestTextInput {
         uiStage.addChild(textInput);
 
         /** 多行输入 TextInput(true) */
-        let multilineInput = new gui.TextInput(true);
+        const multilineInput = new vf.gui.TextInput(true);
         multilineInput.style.top = 200;
         multilineInput.style.left = 15;
         multilineInput.style.width = 300;

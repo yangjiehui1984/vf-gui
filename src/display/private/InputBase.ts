@@ -52,35 +52,35 @@ export class InputBase extends DisplayObject{
     /** 
      * 状态皮肤，
      */
-    public up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public up?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 状态皮肤，
      */
-    public down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public down?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 状态皮肤，
      */
-    public move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public move?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 状态皮肤，
      */
-    public disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public disabled?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 选中状态皮肤，
      */
-    public upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public upAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 选中状态皮肤，
      */
-    public downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public downAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 选中状态皮肤，
      */
-    public moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public moveAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 
      * 选中状态皮肤，
      */
-    public disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public disabledAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 
     protected onMove() {
 
@@ -141,7 +141,7 @@ export class InputBase extends DisplayObject{
         }    
     }
 
-    private keyDownEventBind: TAny;
+    private keyDownEventBind: any;
     protected _bindEvents() {
         if (this.stage) {
             this.stage.on("pointerdown", this.documentMouseDown,this);

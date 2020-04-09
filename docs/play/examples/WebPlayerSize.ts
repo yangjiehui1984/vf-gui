@@ -4,7 +4,7 @@ type ScaleMode = "noScale" | "showAll" | "noBorder" | "exactFit" | "fixedWidth" 
  * @private
  * 更新播放器视口尺寸
  */
-export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor = 1,isWebGl =true,scaleMode: ScaleMode): void {  
+export default function  updateViewSize(app: vf.Application,canvasScaleFactor = 1,isWebGl =true,scaleMode: ScaleMode): void {  
     let top = 0;
     let canvas = app.view;
     let boundingClientWidth = window.innerWidth;
@@ -53,7 +53,7 @@ export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor 
         canvasScaleY = Math.ceil(canvasScaleY);
     }
 
-    let m = new PIXI.Matrix();
+    let m = new vf.Matrix();
     m.identity();
     m.scale(scalex / canvasScaleX, scaley / canvasScaleY);
     m.rotate(rotation * Math.PI / 180);

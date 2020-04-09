@@ -7,10 +7,6 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /pixi.js/,
-                use: 'ts-loader'
-            },
-            {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: [/node_modules/]
@@ -21,9 +17,9 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'vf-gui.js',
-        library: "vfgui",
-        //libraryTarget: "umd",
+        filename: 'gui.js',
+        //library: "vfgui",
+        libraryTarget: "umd",
         path: path.resolve(__dirname, '../dist')
     },
     devServer: {

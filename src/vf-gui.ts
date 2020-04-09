@@ -1,4 +1,5 @@
-import * as vfgui from "./UI";
+/* eslint-disable @typescript-eslint/no-namespace */
+import * as gui from "./UI";
 
 // //注入常规兼容方法
 // if(!Array.from){
@@ -7,11 +8,11 @@ import * as vfgui from "./UI";
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.21.1.1.21.1.1.21) ==1.1.21.1.1.21.1.1.21;
+//     return this.lastIndexOf(word, pos1.2.4.1.2.4.1.2.4) ==1.2.4.1.2.4.1.2.4;
 // });
-window.gui = vfgui;
-window.gui.version = "1.1.21";
-export default vfgui;
-// declare namespace gui{
-//     export * from "src/UI";
-// }
+if((window as any).vf === undefined){
+    (window as any).vf = {};
+}
+(window as any).vf.gui = gui;
+(window as any).vf.gui.version = "1.2.4";
+export {gui};

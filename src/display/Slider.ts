@@ -8,9 +8,8 @@ import { Easing } from "../tween/Easing";
 /**
  * 滑动条/进度条
  * 
- * @example let slider = new gui.Slider();
+ * @example let slider = new vf.gui.Slider();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
  */
@@ -61,7 +60,7 @@ export class Slider extends DisplayObject{
 
     protected _startValue = 0;
     protected _maxPosition = 0;
-    protected _localMousePosition = new PIXI.Point();
+    protected _localMousePosition = new vf.Point();
     protected _lastChange = 0;
     protected _lastChanging = 0;
     
@@ -126,7 +125,7 @@ export class Slider extends DisplayObject{
     /** 
      * 背景
      */
-    private _track?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    private _track?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get track(){
         return this._track;
     }
@@ -139,7 +138,7 @@ export class Slider extends DisplayObject{
     /** 
      * 手柄
      */
-    private _thumb?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    private _thumb?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get thumb() {
         return this._thumb;
     }
@@ -152,7 +151,7 @@ export class Slider extends DisplayObject{
     /** 
      * 进度
      */
-    private _tracklight?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    private _tracklight?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get tracklight() {
         return this._tracklight;
     }
@@ -217,7 +216,7 @@ export class Slider extends DisplayObject{
             val = this._height * this._amt;
             if (soft) {
                 Tween.to({y:thumbImg.y,height:tracklightImg.height},{ y: val,height: val },300).easing(Easing.Linear.None)
-                    .on(Tween.Event.update, (obj: TAny) => {
+                    .on(Tween.Event.update, (obj: any) => {
                         thumbImg.y = obj.y;
                         tracklightImg.height = obj.height;
                     }) .start();
@@ -231,7 +230,7 @@ export class Slider extends DisplayObject{
             val = this._width* this._amt;
             if (soft) {
                 Tween.to({x:thumbImg.x,width:tracklightImg.width},{ x: val,width: val },300).easing(Easing.Linear.None)
-                    .on(Tween.Event.update, (obj: TAny
+                    .on(Tween.Event.update, (obj: any
                     ) => {
                         thumbImg.x = obj.x;
                         tracklightImg.width = obj.width;
@@ -260,7 +259,7 @@ export class Slider extends DisplayObject{
         }
     }
 
-    protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
+    protected onDragMove (event: InteractionEvent,offset: vf.Point) {
         if(this._thumbDrag.id == event.data.identifier){
             this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
@@ -279,7 +278,7 @@ export class Slider extends DisplayObject{
             this.triggerValueChange();
         }
     }
-    protected updatePositionToMouse (mousePosition: PIXI.Point, soft: boolean) {
+    protected updatePositionToMouse (mousePosition: vf.Point, soft: boolean) {
         this.trackImg.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
 
         const newPos = this.vertical ? this._localMousePosition.y  : this._localMousePosition.x;

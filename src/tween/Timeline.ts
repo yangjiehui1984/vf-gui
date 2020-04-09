@@ -13,9 +13,9 @@ class Node {
     }
     public parent: Node | undefined;
     public default = 0;
-    public start: TAny = 0;
-    public end: TAny = 0;
-    public easing: TAny;
+    public start: any = 0;
+    public end: any = 0;
+    public easing: any;
     public duration = 0;
     public startFrame = 0;
     public endFrame = 0;
@@ -31,25 +31,28 @@ class Node {
         this.prevTime = 0;
     }
 
-    load() { }
-    destroy() { }
+    load() {
+        //
+     }
+    destroy() { 
+        //
+    }
 }
 
 /**
  * 基于帧的时间轴控制类
  * 
- * @example let timeline = new gui.Timeline();
+ * @example let timeline = new vf.gui.Timeline();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
-export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
+export class Timeline extends vf.utils.EventEmitter implements Lifecycle {
 
     constructor() { super() }
 
-    public id: number = -1;
-    private _object: TAny;
+    public id = -1;
+    private _object: any;
     private _frames = new Array<Map<string, Node>>();
     private _frameCount = 0;
     private _elapsedMS = 16.66; //1000/60
@@ -59,7 +62,7 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
     private _isSetDefault = false;
     public loop = false;
 
-    public setDefault(object: TAny, _duration: number, fps: number) {
+    public setDefault(object: any, _duration: number, fps: number) {
 
         this._object = object;
         this._elapsedMS = 1000 / fps;
@@ -77,7 +80,7 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
         this._isSetDefault = true;
         return this;
     }
-    public addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: TAny) {
+    public addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: any) {
         if (endFrame > this._frameCount) {
             throw "Error Timeline.addProperty overflow frame";
         }

@@ -1,17 +1,16 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
 export default class TestContainer {
 
-    public constructor(app: gui.Application, uiStage: gui.Stage) {
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
         this.onLoad(app, uiStage)
     }
 
-    private onLoad(app: gui.Application, uiStage: gui.Stage) {
-
-        
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
         /** 单背景色 */
-        let container1 = new gui.Container();
+        const container1 = new vf.gui.Container();
         container1.style.display = "none";
         container1.name = "1";
         container1.x = 100;
@@ -23,7 +22,7 @@ export default class TestContainer {
         uiStage.addChild(container1);
 
         /** 不重复的背景 no-repeat */
-        let container2 = new gui.Container();
+        const container2 = new vf.gui.Container();
         container2.name = "2";
         container2.style.left = 240;
         container2.style.top = 100;
@@ -38,7 +37,7 @@ export default class TestContainer {
         uiStage.addChild(container2);
 
         /** 重复的背景 */
-        let container3 = new gui.Container();
+        const container3 = new vf.gui.Container();
         container3.name = "3";
         container3.style.left = 380;
         container3.style.top = 100;
@@ -52,19 +51,19 @@ export default class TestContainer {
         uiStage.addChild(container3);
 
         /** 百分比设置元素位置与宽高 */
-        let container4 = new gui.Container();
+        const container4 = new vf.gui.Container();
         container4.name = "4";
         container4.style.left = 100 / (uiStage.width / 100) + "%";
         container4.style.top = 250 / (uiStage.height / 100) + "%";
         container4.style.width = 100 / (uiStage.width / 100) + "%";
         container4.style.height = 100 / (uiStage.height / 100) + "%";
         container4.style.backgroundColor = 0xffffff;
-        console.log( container4.style.left,container4.style.top);
-        uiStage.addChild(container4,);
+        console.log(container4.style.left, container4.style.top);
+        uiStage.addChild(container4);
 
- 
+
         /** 百分比设置最大高度与宽度*/
-        let container5 = new gui.Container();
+        const container5 = new vf.gui.Container();
         container5.name = "5";
         container5.style.left = 240;
         container5.style.top = 250;
@@ -74,9 +73,9 @@ export default class TestContainer {
         container5.style.maxHeight = 100;
         container5.style.backgroundColor = 0xffffff;
         uiStage.addChild(container5);
-   
+
         /** 百分比设置最小高度与宽度,设置抽点 */
-        let container6 = new gui.Container();
+        const container6 = new vf.gui.Container();
         container6.name = "6";
         container6.style.left = 380;
         container6.style.top = 250;
@@ -90,7 +89,7 @@ export default class TestContainer {
         uiStage.addChild(container6);
 
         /** 顶部  白色 */
-        let containerTop = new gui.Container();
+        const containerTop = new vf.gui.Container();
         containerTop.name = "top";
         containerTop.style.alpha = 0.7;
         containerTop.style.top = 0;
@@ -101,7 +100,7 @@ export default class TestContainer {
         uiStage.addChild(containerTop);
 
         /** 左边  红色 */
-        let containerLeft = new gui.Container();
+        const containerLeft = new vf.gui.Container();
         containerLeft.name = "left";
         containerLeft.style.alpha = 0.7;
         containerLeft.style.left = 0;
@@ -112,7 +111,7 @@ export default class TestContainer {
         uiStage.addChild(containerLeft);
 
         /** 右边  蓝色 */
-        let containerRight = new gui.Container();
+        const containerRight = new vf.gui.Container();
         containerRight.name = "right";
         containerRight.style.alpha = 0.7;
         containerRight.style.top = 0;
@@ -123,7 +122,7 @@ export default class TestContainer {
         uiStage.addChild(containerRight);
 
         /** 底部  绿色 */
-        let containerBottom = new gui.Container();
+        const containerBottom = new vf.gui.Container();
         containerBottom.name = "bottom";
         containerBottom.style.alpha = 0.7;
         containerBottom.style.left = 0;
@@ -134,7 +133,7 @@ export default class TestContainer {
         uiStage.addChild(containerBottom);
 
 
-        gui.TickerShared.addUpdateEvent(() => {
+        vf.gui.TickerShared.addUpdateEvent(() => {
             container6.style.rotation += 1;
             //container6.rotation += 1;
         }, this);

@@ -7,9 +7,8 @@ import { ComponentEvent } from "../interaction/Index";
 /**
  * 按钮
  * 
- * @example let button = new gui.Button();
+ * @example let button = new vf.gui.Button();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestButton
  */
@@ -55,7 +54,7 @@ export class Button extends InputBase{
 
         super.updateDisplayList(unscaledWidth,unscaledHeight);
         
-        this.container.hitArea = new PIXI.Rectangle(0, 0, unscaledWidth, unscaledHeight);
+        this.container.hitArea = new vf.Rectangle(0, 0, unscaledWidth, unscaledHeight);
 
         const img = this.img;
         img.width = unscaledWidth;
@@ -88,6 +87,6 @@ export class Button extends InputBase{
             return;
         }
         this._oldState = state;
-        this.img.src = (this as TAny)[state + this._selectedStr];
+        this.img.src = (this as any)[state + this._selectedStr];
     }
 }

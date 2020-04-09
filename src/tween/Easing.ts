@@ -1,9 +1,8 @@
 /**
  * 完整的缓动曲线列表
  * 
- * @example gui.Easing.Linear.None;
+ * @example vf.gui.Easing.Linear.None;
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */

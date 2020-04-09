@@ -1,12 +1,9 @@
-// console.log = function(obj){
-//     //扩展后续页面
-// }
 var TestApplication =(function () {
     function TestApplication() {
         var w = document.getElementById("outscene").offsetWidth;
         var h = document.getElementById("outscene").offsetHeight
-        this.app = new PIXI.Application({ width: w, height:h ,antialias:true});
-        this.uiStage = new gui.Stage(this.app.view.width, this.app.view.height);
+        this.app = new vf.Application({ width: w, height:h ,antialias:true});
+        this.uiStage = new vf.gui.Stage(this.app.view.width, this.app.view.height);
         this.app.stage.addChild(this.uiStage.container);
         document.getElementById("outscene").appendChild(this.app.view);
         this.initTest();
@@ -38,7 +35,7 @@ var TestApplication =(function () {
         classStr += `window.${className} = ${className}`;
         eval(classStr);
         this.uiStage.releaseAll();
-        PIXI.Loader.shared.reset();
+        vf.Loader.shared.reset();
         new window[className](this.app,this.uiStage);
     };
     return TestApplication;

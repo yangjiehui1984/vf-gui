@@ -9,13 +9,12 @@ const defaultEasing = Easing.Linear.None;
 /**
  * 缓动动画
  * 
- * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+ * @example let tween = new vf.gui.Tween(myObject).to({width:'300px'}, 2000).start()
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
  */
-export class Tween extends PIXI.utils.EventEmitter {
+export class Tween extends vf.utils.EventEmitter {
 
     static core = { add, get, getAll, remove, removeAll, removeDisplay, update };
     static Event = TweenEvent;
@@ -25,38 +24,38 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      * @static
      */
-    static fromTo(object: TAny, to: TAny, duration?: number) {
+    static fromTo(object: any, to: any, duration?: number) {
         const tween = new Tween(object).to(to, duration);
         return tween;
     }
     /**
      * Easier way calling constructor only applies the `to` value, useful for CSS Animation
-     * @param {TAny} object object
+     * @param {any} object object
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.to(myObject, {x:200}, 1000)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      * @static
      */
-    static to(object: TAny | TAny[], to: TAny, duration?: number) {
+    static to(object: any | any[], to: any, duration?: number) {
         return Tween.fromTo(object, to, duration)
     }
     /**
      * Easier way calling constructor only applies the `from` value, useful for CSS Animation
-     * @param {TAny} object object
+     * @param {any} object object
      * @param {object} from - Initial value
      * @param {object} params - Options of tweens
      * @example Tween.from(myObject, {x:200}, 1000)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      * @static
      */
-    static from(object: TAny, from: TAny, duration?: number) {
+    static from(object: any, from: any, duration?: number) {
         return Tween.fromTo(object, from, duration)
     }
-    constructor(object?: TAny) {
+    constructor(object?: any) {
         super();
 
         this.id = uid();
@@ -67,13 +66,13 @@ export class Tween extends PIXI.utils.EventEmitter {
     }
 
     public id: number;
-    public object: TAny;
-    private _valuesEnd: TAny = null;
-    private _valuesStart: TAny;
+    public object: any;
+    private _valuesEnd: any = null;
+    private _valuesStart: any;
     protected _duration = 1000;
     private _easingFunction = defaultEasing;
     private _easingReverse = defaultEasing;
-    private _interpolationFunction: ((v: TAny, k: number, value: TAny) => TAny) | TAny;
+    private _interpolationFunction: ((v: any, k: number, value: any) => any) | any;
 
     protected _startTime = 0;
     protected _delayTime = 0;
@@ -90,10 +89,10 @@ export class Tween extends PIXI.utils.EventEmitter {
     private _rendered = false;
     private _reverseDelayTime = 0;
     /** 附加数据 */
-    public data: { [key: string]: TAny } = {};
+    public data: { [key: string]: any } = {};
 
 
-    public setObject(object: TAny){
+    public setObject(object: any){
         this.object = object;
         this._valuesStart = Array.isArray(object) ? [] : {};
     }
@@ -102,7 +101,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 是否在播放中
      * @return {boolean} 
      * @example tween.isPlaying()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public get isPlaying() {
         return this._isPlaying;
@@ -112,7 +111,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 是否开始播放
      * @return {boolean} 
      * @example tween.isStarted()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public get isStarted() {
         return this._onStartCallbackFired;
@@ -134,7 +133,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动时长
      * @param {number} amount 持续的毫秒值
      * @example tween.duration(2000)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      * @deprecated 不推荐使用这个方法，内部使用
      * @private
      */
@@ -149,7 +148,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 逆向缓动
      * @example tween.reverse()
      * @param {boolean=} state 是否逆向
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public reverse(state?: boolean) {
         const { _reversed } = this;
@@ -163,7 +162,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 当前动画是否逆转
      * @return {boolean}
      * @example tween.reversed() true逆向中
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public reversed() {
         return this._reversed;
@@ -172,7 +171,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 暂停缓动
      * @example tween.pause()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public pause() {
         if (!this._isPlaying) {
@@ -189,7 +188,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 播放或恢复播放
      * @example tween.play()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public play() {
         if (this._isPlaying) {
@@ -207,10 +206,10 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
-     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
-     * @memberof gui.Tween
+     * @example let tween = new vf.gui.Tween({x:0}).to({x:100}, 2000)
+     * @memberof vf.gui.Tween
      */
-    public to(properties: TAny, duration = 1000) {
+    public to(properties: any, duration = 1000) {
         this._valuesEnd = properties;
         this._duration = duration;
         return this;
@@ -241,7 +240,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 开始执行缓动
      * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public start(time?: number) {
         this._startTime = time !== undefined ? time : 0;
@@ -258,7 +257,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 停止缓动
      * @example tween.stop()
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public stop() {
         const { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
@@ -286,7 +285,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置延迟执行时间
      * @param {number} amount 延迟等待的时间，毫秒
      * @example tween.delay(500)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public delay(amount: number) {
         this._delayTime = amount;
@@ -297,7 +296,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置重复执行的次数
      * @param {number} amount 重复次数
      * @example tween.repeat(5)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public repeat(amount: number) {
         this._repeat = !this._duration ? 0 : amount;
@@ -311,7 +310,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置每个重复执行过程的延迟时间，毫秒
      * @param {number} amount 延迟值
      * @example tween.reverseDelay(500)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public reverseDelay(amount: number) {
         this._reverseDelayTime = amount;
@@ -324,7 +323,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {boolean} state true启动
      * @param {Function=} _easingReverse 反向时的Easing function 
      * @example tween.yoyo(true)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number) {
         this._yoyo = typeof state === 'function' ? state(this._yoyo) : state === null ? this._yoyo : state;
@@ -344,9 +343,9 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动函数
      * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
      * @example tween.easing(Easing.Elastic.InOut)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
-    public easing(_easingFunction: ((k: number) => number) | TAny) {
+    public easing(_easingFunction: ((k: number) => number) | any) {
         this._easingFunction = _easingFunction;
 
         return this;
@@ -356,9 +355,9 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置差值
      * @param {Function} _interpolationFunction 差值的函数
      * @example tween.interpolation(Interpolation.Bezier)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
-    public interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny) {
+    public interpolation(_interpolationFunction: (v: any, k: number, value: any) => any) {
         if (typeof _interpolationFunction === 'function') {
             this._interpolationFunction = _interpolationFunction;
         }
@@ -399,7 +398,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
-     * @memberof gui.Tween
+     * @memberof vf.gui.Tween
      */
     public update(elapsedMS: number, preserve?: boolean, forceTime?: boolean) {
 
@@ -455,7 +454,7 @@ export class Tween extends PIXI.utils.EventEmitter {
             this._onStartCallbackFired = true;
         }
 
-        const currentEasing: TAny = _reversed ? _easingReverse || _easingFunction : _easingFunction;
+        const currentEasing: any = _reversed ? _easingReverse || _easingFunction : _easingFunction;
 
         for (property in _valuesEnd) {
             const start = _valuesStart[property]
@@ -470,7 +469,7 @@ export class Tween extends PIXI.utils.EventEmitter {
             } else {//颜色
                 recompose(property, object, _valuesStart, _valuesEnd, value, elapsed);
             }
-            // else if (Array.isArray(end) && !(end as TAny).isString && !Array.isArray(start)) {
+            // else if (Array.isArray(end) && !(end as any).isString && !Array.isArray(start)) {
             //     const _interpolationFunctionCall = _interpolationFunction[property]
             //     ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
             //     object[property] = _interpolationFunctionCall(end, value, object[property]);

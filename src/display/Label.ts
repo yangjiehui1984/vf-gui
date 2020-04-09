@@ -11,9 +11,8 @@ import * as UIKeys from "../core/DisplayLayoutKeys";
  * 
  * 当文本容器设置宽高后，可通过 style.textAlign 进行文字位置调整
  * 
- * @example let label = new gui.Label();
+ * @example let label = new vf.gui.Label();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
  */
@@ -21,12 +20,12 @@ export class Label extends DisplayObject {
 
     public constructor(text = "") {
         super();
-        this.sprite = new PIXI.Text(text,{breakWords : true,fill:"#ffffff"});
+        this.sprite = new vf.Text(text,{breakWords : true,fill:"#ffffff"});
         this.container.addChild(this.sprite);
 
     }
 
-    public readonly sprite: PIXI.Text;
+    public readonly sprite: vf.Text;
 
     /**
      * 设置分辨力比例
@@ -51,7 +50,7 @@ export class Label extends DisplayObject {
         this.emit(ComponentEvent.CHANGE,this);
     }
 
-    public set fontCssStyle(value: TAny){
+    public set fontCssStyle(value: any){
         if(value.color){
             value.fill = value.color;
         }

@@ -2,7 +2,7 @@ import { DisplayObject } from "../core/DisplayObject";
 import { updateGridLayout } from "./CSSGridLayout";
 import { updateBasicDisplayList } from "./CSSBasicLayout";
 
-export const $TempRectangle = new PIXI.Rectangle();
+export const $TempRectangle = new vf.Rectangle();
 
 function updateDisplayAlign(target: DisplayObject, parentWidth: number, parentHeight: number, marginTop = 0, marginLeft = 0) {
 

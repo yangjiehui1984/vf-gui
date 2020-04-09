@@ -1,27 +1,28 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
 export default class TestAlign {
 
-    public constructor(app: gui.Application, uiStage: gui.Stage) {
-        this.onLoad(app, uiStage)
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
+        this.onLoad(app, uiStage);
     }
 
-    private onLoad(app: gui.Application, uiStage: gui.Stage) {
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
-        let container = new gui.Container();
+        const container = new vf.gui.Container();
         container.width = 800;
 
-        let titleBg = new gui.Image();
+        const titleBg = new vf.gui.Image();
         titleBg.src = 'assets/titleBg.png';
-        
-        let titleBgcontainer = new gui.Container();
+
+        const titleBgcontainer = new vf.gui.Container();
         //titleBgcontainer.style.justifyContent = "center";
         titleBgcontainer.addChild(titleBg);
 
-        let btnbg = new gui.Image();
+        const btnbg = new vf.gui.Image();
         btnbg.src = 'assets/btnbg.png';
 
-        let btnbgcontainer = new gui.Container();
+        const btnbgcontainer = new vf.gui.Container();
         btnbgcontainer.name = "btnbgcontainer";
         btnbgcontainer.style.justifyContent = "center";
         btnbgcontainer.addChild(btnbg);

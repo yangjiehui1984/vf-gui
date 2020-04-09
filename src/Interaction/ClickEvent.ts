@@ -65,16 +65,16 @@ export class ClickEvent {
 
     private obj: DisplayObject;
     public id = 0;
-    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
+    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vf.gui.Interaction.TouchEvent */
     public isOpenEmitEvent = false;
     /** 是否开启本地坐标转换，开启后，事件InteractionEvent中的localX localY为本地坐标，false情况下为0 */
     public isOpenLocalPoint = false;
-    private localOffset = new PIXI.Point();
-    private offset = new PIXI.Point();
+    private localOffset = new vf.Point();
+    private offset = new vf.Point();
     private movementX = 0;
     private movementY = 0;
     private ishover = false;
-    private mouse = new PIXI.Point();
+    private mouse = new vf.Point();
     private bound = false;
     private right = false;
     private hover = true;
