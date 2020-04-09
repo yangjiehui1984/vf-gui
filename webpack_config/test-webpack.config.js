@@ -8,15 +8,10 @@ module.exports = {
     devtool: 'source-map',
     entry: './test/index.ts',
     plugins:[
-        new webpack.IgnorePlugin(/pixi.js/)
+
     ],
     module: {
-        noParse: /pixi.js/,
         rules: [
-            {
-                test: /pixi.js/,
-                use: 'ts-loader'
-            },
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',

@@ -8,16 +8,13 @@
 </head>
 
 <body>
-        
+    <script src="https://cdn.jsdelivr.net/npm/@vf.js/vf/dist/vf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vf.js/gui/dist/gui.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/url-search-params@1.1.0/build/url-search-params.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard-polyfill@2.4.7/build/clipboard-polyfill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.15.6/min/vs/loader.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pixi.js-legacy@5.2.0/dist/pixi-legacy.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pixi-sound@3.0.3/dist/pixi-sound.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@vf.js/gui/dist/vf-gui.min.js"></script>
 
     <script>
         if (location.href.indexOf("#example") === -1 && location.href.indexOf("#code") === -1) {
@@ -31,18 +28,17 @@
             baseUrl: baseUrl,
             TSVersion: "3.3.3",
             MonacoVersion: "0.16.1",
-            VFUIVersion: "1.1.21",
+            VFUIVersion: "1.2.4",
             CurExampleName: null,
             extraLibs: [],
             lineNumbers:true
         };
         const libs = [
-            // `${baseUrl}lib/${window.CONFIG.VFUIVersion}/vf-gui.d.ts`,
-            `https://cdn.jsdelivr.net/npm/@vf.js/gui@${window.CONFIG.VFUIVersion}/dist/vf-gui.d.ts`,
-            "https://cdn.jsdelivr.net/npm/pixi.js@5.2.0/pixi.js.d.ts"
+            `https://cdn.jsdelivr.net/npm/@vf.js/vf/vf.js.d.ts`,
+            `https://cdn.jsdelivr.net/npm/@vf.js/gui@${window.CONFIG.VFUIVersion}/dist/gui.d.ts`,
         ];
         window.CONFIG.extraLibs = params.has("lib") ? params.get("lib").split(",") : libs;
-        console.log("window.CONFIG", window.CONFIG);
+        //console.log("window.CONFIG", window.CONFIG);
         require.config({
             paths: Object.assign(
                 {
@@ -125,7 +121,6 @@
                     </ul>
                     <ul>
                         <li class="" style="color: darkgray;">媒体(VF不可用)</li>
-                        <li class="button" data-example="TestSound">Sound - 音频</li>
                     </ul>
                 </div>
             </div>

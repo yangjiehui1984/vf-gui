@@ -21,10 +21,11 @@ import { DisplayObjectAbstract } from "../core/DisplayObjectAbstract";
 export class ScrollingContainer extends Container {
     public constructor() {
         super();
+        
         this.container.addChild(this._innerContainer);
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
-
+        
         const _graphics = new vf.Graphics();
         _graphics.clear();
         _graphics.beginFill(0xffcc00);   
@@ -55,7 +56,7 @@ export class ScrollingContainer extends Container {
                 Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
             }
         };
-
+        
         const scrollSpeed = new vf.Point();
         this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta: vf.Point) => {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);

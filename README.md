@@ -3,7 +3,7 @@
 
 ## vf-gui
 
-vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
+vf-gui简称`gui`是基于VFJS引擎，使用TypeScript语言开发的开源UI库。 为VFJS提供提供基础可靠的UI组件。
 
 
 ## 学习(Learn) 
@@ -17,29 +17,13 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
 ## 安装(Setup) 
 
->使用gui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
+1. <script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script>
+2. <script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
 
-### NPM Install
-
-    npm i @vf.js/gui --save-dev
-
-### CDN Install
-    
-Version:
-
-    <script src="http://unpkg.com/@vf.js/gui@1.1.21/dist/vf-gui.js"></script>
-    
-    <script src="http://unpkg.com/@vf.js/gui@01.1.21/dist/vf-gui.min.js"></script>
-
-Master:
-
-    <script src="http://unpkg.com/@vf.js/gui/dist/vf-gui.js"></script>
-
-    <script src="http://unpkg.com/@vf.js/gui/dist/vf-gui.min.js"></script>
 
 ### 创建方式(Usage)：
 
-    let button = new  gui.Button();
+    let button = new  vf.gui.Button();
 
 
 ## 如何构建(How build)

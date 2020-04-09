@@ -12054,6 +12054,18 @@ function pointSignAngle(pointA, pointB) {
     return Math.atan2(num1, num2) * (360 / (Math.PI * 2));
 }
 exports.pointSignAngle = pointSignAngle;
+/**
+ *  根据类型获得具体的类定义
+ * @param type
+ */
+function getGuiClass(type) {
+    return vf.gui[type];
+}
+exports.getGuiClass = getGuiClass;
+function sayHello() {
+    vf.utils.versionPrint('gui' + vf.gui.version, 'https://vipkid-edu.github.io/vf-gui');
+}
+exports.sayHello = sayHello;
 
 
 /***/ }),
@@ -12078,13 +12090,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.2.0.1.2.0.1.2.0) ==1.2.0.1.2.0.1.2.0;
+//     return this.lastIndexOf(word, pos1.2.4.1.2.4.1.2.4) ==1.2.4.1.2.4.1.2.4;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.2.0";
+window.vf.gui.version = "1.2.4";
 
 
 /***/ })

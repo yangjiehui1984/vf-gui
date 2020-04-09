@@ -437,6 +437,7 @@ console.log(message);
             return;
         }
         setTimeout(() => {
+            console.log("sssssssss",CurExampleName);
             window.testApplication.loadClass(CurExampleName, State.jsScriptContent);
         }, 0);
     }

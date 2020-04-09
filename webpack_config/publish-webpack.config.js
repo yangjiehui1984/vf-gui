@@ -7,10 +7,6 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /pixi.js/,
-                use: 'ts-loader'
-            },
-            {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: [/node_modules/]

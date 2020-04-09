@@ -39,6 +39,7 @@ if(dtsFile.indexOf('module \'src/')!==-1){
     `;
 }
 
+dtsFile = dtsFile.replace(/\<reference/g," ");
 fs.writeFileSync("./dist/gui.d.ts",dtsFile);
 ////////////////////////
 

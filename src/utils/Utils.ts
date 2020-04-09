@@ -343,3 +343,15 @@ export function pointSignAngle(pointA: vf.Point | { x: number; y: number }, poin
     const num2 = (pointA.x * pointB.x) + (pointA.y * pointB.y);
     return Math.atan2(num1, num2) * (360 / (Math.PI * 2));
 }
+
+/**
+ *  根据类型获得具体的类定义
+ * @param type 
+ */
+export function getGuiClass(type: string) {
+    return (vf.gui as any)[type];
+}
+
+export function sayHello(){
+    vf.utils.versionPrint('gui'+(vf.gui as any).version,'https://vipkid-edu.github.io/vf-gui');
+}
