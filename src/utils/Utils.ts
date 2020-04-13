@@ -353,5 +353,5 @@ export function getGuiClass(type: string) {
 }
 
 export function sayHello(){
-    vf.utils.versionPrint('gui'+(vf.gui as any).version,'https://vipkid-edu.github.io/vf-gui');
+    vf.utils.versionPrint('gui '+(vf.gui as any).version,'https://vipkid-edu.github.io/vf-gui');
 }
