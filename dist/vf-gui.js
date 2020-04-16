@@ -12611,10 +12611,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.20.1.1.20.1.1.20) ==1.1.20.1.1.20.1.1.20;
+//     return this.lastIndexOf(word, pos1.1.21.1.1.21.1.1.21) ==1.1.21.1.1.21.1.1.21;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.20";
+window.gui.version = "1.1.21";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
