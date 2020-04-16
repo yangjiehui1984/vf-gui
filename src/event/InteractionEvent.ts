@@ -13,5 +13,7 @@ export class InteractionEvent extends PIXI.interaction.InteractionEvent {
         this.local = tempLocal;
     }
 
-    public local:PIXI.Point;
+    public local: PIXI.Point;
+    public path?: number[];
+    public signalling = false;
 }

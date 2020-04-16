@@ -34,6 +34,8 @@ declare module 'event/InteractionEvent' {
 	export class InteractionEvent extends PIXI.interaction.InteractionEvent {
 	    constructor();
 	    local: PIXI.Point;
+	    path?: number[];
+	    signalling: boolean;
 	}
 
 }
@@ -230,6 +232,7 @@ declare module 'interaction/DragEvent' {
 	     */
 	    dragRestrictAxis?: "x" | "y";
 	    startEvent(): void;
+	    executeAction(e: InteractionEvent): void;
 	    private _onDragStart;
 	    private _onDragMove;
 	    private _onDragEnd;
@@ -1594,6 +1597,8 @@ declare module 'core/DisplayObjectAbstract' {
 	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
 	    getChildAt(index: number): DisplayObjectAbstract;
+	    getChildUUID(uuid: number): DisplayObjectAbstract | undefined;
+	    pathToDisplayObject(uuid: number[]): DisplayObjectAbstract | undefined;
 	    /**
 	     * 移除已添加的UI组件
 	     * @param UIObject 要移除的UI组件
@@ -2346,11 +2351,20 @@ declare module 'core/plugs/UIBaseDrag' {
 	     * 接收拖动掉落的分组名
 	     */
 	    dropGroup: string | undefined;
+	    private _actionData;
+	    /**
+	     * 获取当前的操作数据
+	     */
+	    actionData: string;
 	    protected clearDraggable(): void;
 	    protected initDraggable(): void;
 	    protected clearDroppable(): void;
 	    protected initDroppable(): void;
 	    private onDrop;
+	    /**
+	     * 同步数据临时的方法
+	     */
+	    private executeDrop;
 	    load(): void;
 	    release(): void;
 	}
@@ -2518,6 +2532,12 @@ declare module 'utils/Utils' {
 	 * @param DisplayObject
 	 */
 	export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage): Stage | undefined;
+	/**
+	 * 获取显示对象的路径
+	 * @param target
+	 * @param ids
+	 */
+	export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage, ids?: number[]): number[];
 	/**
 	 * 快速设置矩形
 	 * @param sourcr

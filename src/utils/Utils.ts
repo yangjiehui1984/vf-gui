@@ -91,6 +91,23 @@ export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage):
     return undefined;
 }
 
+/**
+ * 获取显示对象的路径
+ * @param target 
+ * @param ids 
+ */
+export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage,ids: number[] = []): number[]{
+
+    ids.push(target.uuid);
+    if(target.parent){
+        if (target.parent instanceof Stage) {
+            return ids;
+        }
+        return getDisplayPathUUID(target.parent,ids);
+    }
+    return ids;
+}
+
 
 /**
  * 快速设置矩形

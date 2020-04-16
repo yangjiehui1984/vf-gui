@@ -3,7 +3,7 @@ import { DragEvent, DragDropController, InteractionEvent, ComponentEvent } from 
 import { TouchMouseEventEnum } from "../../interaction/TouchMouseEventEnum";
 import { DisplayObjectAbstract } from "../DisplayObjectAbstract";
 import { Stage } from "../Stage";
-import { getDisplayObject, debug } from "../../utils/Utils";
+import { getDisplayObject, debug, now, getDisplayPathUUID } from "../../utils/Utils";
 
 
 /**
@@ -147,6 +147,32 @@ export class UIBaseDrag implements Lifecycle {
      */
     public dropGroup: string | undefined;
 
+    private _actionData: {type: string;data: PIXI.interaction.InteractionData;offset?: PIXI.Point;path?: number[]} | undefined;
+    
+    /**
+     * 获取当前的操作数据
+     */
+    public get actionData(){
+        return JSON.stringify(this._actionData);
+    }
+    public set actionData(data: string){
+        const drag = this.drag;
+        const value = JSON.parse(data) as  {type: string;data: PIXI.interaction.InteractionData;offset?: PIXI.Point;path: number[]};
+        const e = new InteractionEvent();
+        e.type = value.type;
+        e.data = value.data;
+        e.data.identifier = value.data.identifier * 1000;
+        e.signalling = true;
+        if(drag){
+            if(value.type === ComponentEvent.DRAG_TARGET) {
+                this.executeDrop(e,value.path);
+            }else{
+                drag.executeAction(e);
+            }
+            
+        }
+        
+    }
 
     protected clearDraggable() {
         if (this.dragInitialized) {
@@ -169,6 +195,16 @@ export class UIBaseDrag implements Lifecycle {
 
             this.drag = new DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
+
+
+            // this.drag.onDragPress = (e: InteractionEvent,isPress: boolean) => {
+            //     if(isPress){
+            //         this._actionData = {type:ComponentEvent.DRAG_START,data: e.data};
+            //     }else{
+            //         this._actionData = {type:ComponentEvent.DRAG_START,data: e.data};
+            //     }
+                
+            // }
 
             this.drag.onDragStart = (e: InteractionEvent) => {
                 if (this.target == undefined) {
@@ -214,6 +250,7 @@ export class UIBaseDrag implements Lifecycle {
                         }
 
                     }
+                    this._actionData = {type:ComponentEvent.DRAG_START,data: e.data};
                     target.emit(ComponentEvent.DRAG_START, target, e);
                 }
             };
@@ -255,7 +292,9 @@ export class UIBaseDrag implements Lifecycle {
                         }
 
                     }
+                    
                     target.setPosition(this._dragPosition.x, this._dragPosition.y);
+                    this._actionData = {type:ComponentEvent.DRAG_MOVE,data: e.data,offset};
                     target.emit(ComponentEvent.DRAG_MOVE, target, e);
                 }
 
@@ -264,13 +303,11 @@ export class UIBaseDrag implements Lifecycle {
             this.drag.onDragEnd = (e: InteractionEvent) => {
                 if (this.dragging) {
                     this.dragging = false;
-
                     //如果没有可被放置掉落的容器，0秒后返回原容器
                     setTimeout(() => {
                         if (this.target == undefined) {
                             return;
                         }
-
                         //dragBounces
                         const target = this.target;
                         const parent = this.$targetParent;
@@ -303,6 +340,7 @@ export class UIBaseDrag implements Lifecycle {
                             }
 
                         }
+                        this._actionData = {type:ComponentEvent.DRAG_END,data: e.data};
                         target.emit(ComponentEvent.DRAG_END, target, e);
 
 
@@ -342,10 +380,11 @@ export class UIBaseDrag implements Lifecycle {
     }
 
     private onDrop(e: InteractionEvent) {
+
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
+        const target = this.target;
         const item = DragDropController.getEventItem(e, this.dropGroup);
         if (item && item.dragOption.dragging) {
             item.dragOption.dragging = false;
@@ -375,7 +414,30 @@ export class UIBaseDrag implements Lifecycle {
                 }
 
             }
+            item.dragOption._actionData = {type:ComponentEvent.DRAG_TARGET,data: e.data,path:getDisplayPathUUID(parent)};
             item.emit(ComponentEvent.DRAG_TARGET, item, e);
+            
+        }
+    }
+
+    /**
+     * 同步数据临时的方法
+     */
+    private executeDrop(e: InteractionEvent,parsentPath: number[]){
+        if(this.target && this.target.stage && parsentPath) {
+            const parent = this.target.stage.pathToDisplayObject(parsentPath);
+            const item = this.target;
+            if (parent) {
+                parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
+                item.x = this._dragPosition.x;
+                item.y = this._dragPosition.y;
+                if (parent != item.parent) {
+                    parent.addChild(item);
+                    parent.emit(ComponentEvent.DROP_TARGET, parent, item, e);
+                }
+                this.$targetParent = parent as DisplayObject;
+                item.emit(ComponentEvent.DRAG_TARGET, item, e);
+            }
         }
     }
 

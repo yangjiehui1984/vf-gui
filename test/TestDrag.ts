@@ -10,6 +10,7 @@ export default class TestDrag {
 
         
         let c1 = this.getNewContainer("自由拖动");
+        c1.rect.name = "c1";
         c1.container.x = 15;
         c1.container.y = 15;
         uiStage.addChild(c1.container);
@@ -97,6 +98,29 @@ export default class TestDrag {
             },this);
             c6.container.addChild(rect);
         }
+
+        const c8 = this.getNewContainer("自由拖动同步");
+        c8.rect.name = "c8";
+        c8.container.x = 265;
+        c8.container.y = 15;
+        uiStage.addChild(c8.container);
+        c8.rect.dragOption.draggable = true;
+        c8.rect.dragOption.dragContainer = uiStage; //拖动时，移动对象到舞台，防止遮挡
+        c8.rect.dragOption.dragBounces = true;
+        c8.rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
+        c1.rect.dragOption.dragGroup = "group1";
+        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_START,()=>{
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        },this);
+        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_MOVE,()=>{
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        },this);
+        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_END,()=>{
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        },this);
+        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_TARGET,()=>{
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        },this);
 
     }
 

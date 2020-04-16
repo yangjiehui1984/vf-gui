@@ -42,7 +42,7 @@
     "eslint-plugin-typescript": "^0.14.0",
     "pixi-sound": "3.0.3",
     "pixi.js": "5.2.0",
-    "pixi.js-legacy": "5.2.0",
+    "pixi.js-legacy": "^5.2.0",
     "ts-loader": "^6.1.0",
     "ts-node": "^8.3.0",
     "typedoc": "^0.15.0",
