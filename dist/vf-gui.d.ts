@@ -2293,6 +2293,15 @@ declare module 'core/plugs/UIBaseDrag' {
 	     */
 	    private drag;
 	    /**
+	     * 临时属性，为了解决同步时的动作补齐
+	     * 0 没有操作
+	     * 1 开始拖动
+	     * 2 拖动中
+	     * 3 拖动结束
+	     * 4 拖动到目标
+	     */
+	    private _dragState;
+	    /**
 	     * 位置
 	     *
 	     */

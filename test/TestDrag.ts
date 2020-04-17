@@ -109,19 +109,28 @@ export default class TestDrag {
         c8.rect.dragOption.dragBounces = true;
         c8.rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
         c1.rect.dragOption.dragGroup = "group1";
-        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_START,()=>{
-            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
-        },this);
-        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_MOVE,()=>{
-            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
-        },this);
-        c1.rect.on(gui.Interaction.ComponentEvent.DRAG_END,()=>{
-            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
-        },this);
+        // c1.rect.on(gui.Interaction.ComponentEvent.DRAG_START,()=>{
+        //     c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        // },this);
+        // c1.rect.on(gui.Interaction.ComponentEvent.DRAG_MOVE,()=>{
+        //     c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        // },this);
+        // c1.rect.on(gui.Interaction.ComponentEvent.DRAG_END,()=>{
+        //     c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        // },this);
         c1.rect.on(gui.Interaction.ComponentEvent.DRAG_TARGET,()=>{
+            console.log('gui.Interaction.ComponentEvent.DRAG_TARGET1');
             c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
         },this);
-
+        c8.rect.on(gui.Interaction.ComponentEvent.DRAG_TARGET,()=>{
+            console.log('gui.Interaction.ComponentEvent.DRAG_TARGET2');
+        },this);
+        c8.rect.on(gui.Interaction.ComponentEvent.DRAG_START,()=>{
+            console.log('gui.Interaction.ComponentEvent.DRAG_START');
+        },this);
+        c8.rect.on(gui.Interaction.ComponentEvent.DRAG_MOVE,()=>{
+            console.log('gui.Interaction.ComponentEvent.DRAG_MOVE');
+        },this);
     }
 
 

@@ -38,6 +38,15 @@ export class UIBaseDrag implements Lifecycle {
      * 拖动控制类 
      */
     private drag: DragEvent | undefined;
+    /**
+     * 临时属性，为了解决同步时的动作补齐
+     * 0 没有操作
+     * 1 开始拖动
+     * 2 拖动中
+     * 3 拖动结束
+     * 4 拖动到目标
+     */
+    private _dragState: 0 | 1 | 2 | 3 | 4 = 0;
     /** 
      * 位置 
      * 
@@ -159,13 +168,36 @@ export class UIBaseDrag implements Lifecycle {
         const drag = this.drag;
         const value = JSON.parse(data) as  {type: string;data: PIXI.interaction.InteractionData;offset?: PIXI.Point;path: number[]};
         const e = new InteractionEvent();
+        const dragState = this._dragState;
         e.type = value.type;
         e.data = value.data;
         e.data.identifier = value.data.identifier * 1000;
         e.signalling = true;
         if(drag){
             if(value.type === ComponentEvent.DRAG_TARGET) {
+                if(dragState !== 2){
+                    e.type = ComponentEvent.DRAG_START;
+                    e.data.global.x -=1;
+                    drag.executeAction(e);
+                    e.type = ComponentEvent.DRAG_MOVE;
+                    e.data.global.x += 1;
+                    drag.executeAction(e);
+                }
+                e.type = ComponentEvent.DRAG_TARGET;
+                this._dragPosition.set(e.data.tiltX,e.data.tiltX);
                 this.executeDrop(e,value.path);
+            }else if(value.type === ComponentEvent.DRAG_END) {
+                if(dragState !== 2){
+                    e.type = ComponentEvent.DRAG_START;
+                    e.data.global.x -= 1;
+                    drag.executeAction(e);
+                    e.type = ComponentEvent.DRAG_MOVE;
+                    drag.executeAction(e);
+                    e.data.global.x += 1;
+                }
+                e.type = ComponentEvent.DRAG_END;
+                this._dragPosition.set(e.data.tiltX,e.data.tiltX);
+                drag.executeAction(e);
             }else{
                 drag.executeAction(e);
             }
@@ -210,6 +242,7 @@ export class UIBaseDrag implements Lifecycle {
                 if (this.target == undefined) {
                     return;
                 }
+                this._dragState = 1;
                 const target = this.target;
                 this.$targetParent = target.parent;
 
@@ -292,7 +325,7 @@ export class UIBaseDrag implements Lifecycle {
                         }
 
                     }
-                    
+                    this._dragState = 2;
                     target.setPosition(this._dragPosition.x, this._dragPosition.y);
                     this._actionData = {type:ComponentEvent.DRAG_MOVE,data: e.data,offset};
                     target.emit(ComponentEvent.DRAG_MOVE, target, e);
@@ -313,13 +346,14 @@ export class UIBaseDrag implements Lifecycle {
                         const parent = this.$targetParent;
                         target.interactive = true;
                         const item = DragDropController.getItem(target);
+                        const dragPosition = this._dragPosition;
                         target.emit(ComponentEvent.DRAG_END_BEFORE, target, e);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
-                                parent.container.toLocal(target.container.position, target.container.parent, this._dragPosition);
+                                parent.container.toLocal(target.container.position, target.container.parent, dragPosition);
                                 parent.addChild(target);
-                                target.x = this._dragPosition.x;
-                                target.y = this._dragPosition.y;
+                                target.x = dragPosition.x;
+                                target.y = dragPosition.y;
                             }
                             if (this.dragBounces && this._containerStart) {
                                 target.x = this._containerStart.x;
@@ -340,6 +374,9 @@ export class UIBaseDrag implements Lifecycle {
                             }
 
                         }
+                        this._dragState = 3;
+                        e.data.tiltX = dragPosition.x;
+                        e.data.tiltY = dragPosition.y;
                         this._actionData = {type:ComponentEvent.DRAG_END,data: e.data};
                         target.emit(ComponentEvent.DRAG_END, target, e);
 
@@ -389,11 +426,12 @@ export class UIBaseDrag implements Lifecycle {
         if (item && item.dragOption.dragging) {
             item.dragOption.dragging = false;
             item.interactive = true;
+            const  dragPosition = this._dragPosition;
             const parent = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
             if (parent) {
-                parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
-                item.x = this._dragPosition.x;
-                item.y = this._dragPosition.y;
+                parent.container.toLocal(item.container.position, item.container.parent, dragPosition);
+                item.x = dragPosition.x;
+                item.y = dragPosition.y;
                 if (parent != item.parent) {
                     parent.addChild(item);
                     parent.emit(ComponentEvent.DROP_TARGET, parent, item, e);
@@ -414,6 +452,9 @@ export class UIBaseDrag implements Lifecycle {
                 }
 
             }
+            this._dragState = 4;
+            e.data.tiltX = dragPosition.x;
+            e.data.tiltY = dragPosition.y;
             item.dragOption._actionData = {type:ComponentEvent.DRAG_TARGET,data: e.data,path:getDisplayPathUUID(parent)};
             item.emit(ComponentEvent.DRAG_TARGET, item, e);
             
@@ -427,8 +468,9 @@ export class UIBaseDrag implements Lifecycle {
         if(this.target && this.target.stage && parsentPath) {
             const parent = this.target.stage.pathToDisplayObject(parsentPath);
             const item = this.target;
+            item.dragOption.dragging = false;
+            item.interactive = true;
             if (parent) {
-                parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
                 if (parent != item.parent) {

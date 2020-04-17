@@ -3016,6 +3016,15 @@ var UIBaseDrag = /** @class */ (function () {
         */
         this.dropInitialized = false;
         /**
+         * 临时属性，为了解决同步时的动作补齐
+         * 0 没有操作
+         * 1 开始拖动
+         * 2 拖动中
+         * 3 拖动结束
+         * 4 拖动到目标
+         */
+        this._dragState = 0;
+        /**
          * 位置
          *
          */
@@ -3137,13 +3146,37 @@ var UIBaseDrag = /** @class */ (function () {
             var drag = this.drag;
             var value = JSON.parse(data);
             var e = new Index_1.InteractionEvent();
+            var dragState = this._dragState;
             e.type = value.type;
             e.data = value.data;
             e.data.identifier = value.data.identifier * 1000;
             e.signalling = true;
             if (drag) {
                 if (value.type === Index_1.ComponentEvent.DRAG_TARGET) {
+                    if (dragState !== 2) {
+                        e.type = Index_1.ComponentEvent.DRAG_START;
+                        e.data.global.x -= 1;
+                        drag.executeAction(e);
+                        e.type = Index_1.ComponentEvent.DRAG_MOVE;
+                        e.data.global.x += 1;
+                        drag.executeAction(e);
+                    }
+                    e.type = Index_1.ComponentEvent.DRAG_TARGET;
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltX);
                     this.executeDrop(e, value.path);
+                }
+                else if (value.type === Index_1.ComponentEvent.DRAG_END) {
+                    if (dragState !== 2) {
+                        e.type = Index_1.ComponentEvent.DRAG_START;
+                        e.data.global.x -= 1;
+                        drag.executeAction(e);
+                        e.type = Index_1.ComponentEvent.DRAG_MOVE;
+                        drag.executeAction(e);
+                        e.data.global.x += 1;
+                    }
+                    e.type = Index_1.ComponentEvent.DRAG_END;
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltX);
+                    drag.executeAction(e);
                 }
                 else {
                     drag.executeAction(e);
@@ -3183,6 +3216,7 @@ var UIBaseDrag = /** @class */ (function () {
                 if (_this.target == undefined) {
                     return;
                 }
+                _this._dragState = 1;
                 var target = _this.target;
                 _this.$targetParent = target.parent;
                 if (_this._dragContainer == undefined && !_this.dragBoundary) {
@@ -3262,6 +3296,7 @@ var UIBaseDrag = /** @class */ (function () {
                             });
                         }
                     }
+                    _this._dragState = 2;
                     target.setPosition(_this._dragPosition.x, _this._dragPosition.y);
                     _this._actionData = { type: Index_1.ComponentEvent.DRAG_MOVE, data: e.data, offset: offset };
                     target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
@@ -3280,13 +3315,14 @@ var UIBaseDrag = /** @class */ (function () {
                         var parent = _this.$targetParent;
                         target.interactive = true;
                         var item = Index_1.DragDropController.getItem(target);
+                        var dragPosition = _this._dragPosition;
                         target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
-                                parent.container.toLocal(target.container.position, target.container.parent, _this._dragPosition);
+                                parent.container.toLocal(target.container.position, target.container.parent, dragPosition);
                                 parent.addChild(target);
-                                target.x = _this._dragPosition.x;
-                                target.y = _this._dragPosition.y;
+                                target.x = dragPosition.x;
+                                target.y = dragPosition.y;
                             }
                             if (_this.dragBounces && _this._containerStart) {
                                 target.x = _this._containerStart.x;
@@ -3306,6 +3342,9 @@ var UIBaseDrag = /** @class */ (function () {
                                 });
                             }
                         }
+                        _this._dragState = 3;
+                        e.data.tiltX = dragPosition.x;
+                        e.data.tiltY = dragPosition.y;
                         _this._actionData = { type: Index_1.ComponentEvent.DRAG_END, data: e.data };
                         target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
                     }, 0);
@@ -3347,11 +3386,12 @@ var UIBaseDrag = /** @class */ (function () {
         if (item && item.dragOption.dragging) {
             item.dragOption.dragging = false;
             item.interactive = true;
+            var dragPosition = this._dragPosition;
             var parent_1 = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
             if (parent_1) {
-                parent_1.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
-                item.x = this._dragPosition.x;
-                item.y = this._dragPosition.y;
+                parent_1.container.toLocal(item.container.position, item.container.parent, dragPosition);
+                item.x = dragPosition.x;
+                item.y = dragPosition.y;
                 if (parent_1 != item.parent) {
                     parent_1.addChild(item);
                     parent_1.emit(Index_1.ComponentEvent.DROP_TARGET, parent_1, item, e);
@@ -3371,6 +3411,9 @@ var UIBaseDrag = /** @class */ (function () {
                     });
                 }
             }
+            this._dragState = 4;
+            e.data.tiltX = dragPosition.x;
+            e.data.tiltY = dragPosition.y;
             item.dragOption._actionData = { type: Index_1.ComponentEvent.DRAG_TARGET, data: e.data, path: Utils_1.getDisplayPathUUID(parent_1) };
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
@@ -3382,8 +3425,9 @@ var UIBaseDrag = /** @class */ (function () {
         if (this.target && this.target.stage && parsentPath) {
             var parent_2 = this.target.stage.pathToDisplayObject(parsentPath);
             var item = this.target;
+            item.dragOption.dragging = false;
+            item.interactive = true;
             if (parent_2) {
-                parent_2.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
                 if (parent_2 != item.parent) {
@@ -12611,10 +12655,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.21.1.1.21.1.1.21) ==1.1.21.1.1.21.1.1.21;
+//     return this.lastIndexOf(word, pos1.1.22.1.1.22.1.1.22) ==1.1.22.1.1.22.1.1.22;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.21";
+window.gui.version = "1.1.22";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
