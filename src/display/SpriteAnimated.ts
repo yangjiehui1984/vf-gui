@@ -7,9 +7,8 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * 支持使用texturepacker导出以及处理轴点
  * 
- * @example let spriteAnimated = new gui.SpriteAnimated();
+ * @example let spriteAnimated = new vf.gui.SpriteAnimated();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSpriteAnimated
  */
@@ -20,7 +19,7 @@ export class SpriteAnimated extends DisplayObject{
     }
 
 
-    private _animatedSprites: Map<string,PIXI.AnimatedSprite>;
+    private _animatedSprites: Map<string,vf.AnimatedSprite>;
     private _lastAnimatedName = "";
     private _curFrameNumber = 0;
     private _setTimeoutId = -1;
@@ -42,11 +41,11 @@ export class SpriteAnimated extends DisplayObject{
     /**
      * 序列图路径，或序列图数组
      */
-    private _src: PIXI.Spritesheet | PIXI.Texture[] | undefined;
-    public get src(): PIXI.Spritesheet | PIXI.Texture[] | undefined {
+    private _src: vf.Spritesheet | vf.Texture[] | undefined;
+    public get src(): vf.Spritesheet | vf.Texture[] | undefined {
         return this._src;
     }
-    public set src(value: PIXI.Spritesheet | PIXI.Texture[] | undefined) {
+    public set src(value: vf.Spritesheet | vf.Texture[] | undefined) {
         this._src = value;
         if(value === undefined){
             this.releaseAnimate();
@@ -169,7 +168,7 @@ export class SpriteAnimated extends DisplayObject{
     /** 
      * 添加动画 
      */
-    public addAnimated(animationName: string,textures: PIXI.Texture[]){
+    public addAnimated(animationName: string,textures: vf.Texture[]){
         const sp = this._animatedSprites.get(animationName);
         if(sp){
             if(sp.parent)
@@ -177,7 +176,7 @@ export class SpriteAnimated extends DisplayObject{
             sp.removeAllListeners();
             sp.destroy();
         }
-        this._animatedSprites.set(animationName,new PIXI.AnimatedSprite(textures));
+        this._animatedSprites.set(animationName,new vf.AnimatedSprite(textures));
     }
 
     public release(){
@@ -206,7 +205,7 @@ export class SpriteAnimated extends DisplayObject{
         const src = getSheet(this.src);
         if(src){
             if(Array.isArray(src)){
-                const textures: PIXI.Texture[] = [];
+                const textures: vf.Texture[] = [];
                 src.forEach(value=>{
                     textures.push(getTexture(value));
                 });

@@ -1,20 +1,24 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 import TestApplication from "./TestApplication";
 
 
-class Index{
-    public static  init(){
+class Index {
+    public static init() {
         let type = "TestContainer";
-        let param = gui.Utils.getQueryVariable("type");
-        if(param){
+        const param = vf.gui.Utils.getQueryVariable("type");
+        if (param) {
             type = param;
         }
-        new TestApplication(this,(app: PIXI.Application, uiStage: gui.Stage) => {
-            import(`./${type}`).then(value=>{
-                console.log("create->",type);
-                new value.default(app,uiStage);
-            }); 
+        //console.group("VFJS Version");
+        new TestApplication(this, (app: vf.Application, uiStage: vf.gui.Stage) => {
+            import(`./${type}`).then(value => {
+                console.log("create->", type);
+                new value.default(app, uiStage);
+            });
         });
+        // vf.utils.versionPrint('gui '+(vf.gui as any).version);
+        // console.groupEnd();
     }
 }
 

@@ -1,5 +1,5 @@
 
-const tempLocal = new PIXI.Point(0,0);
+const tempLocal = new vf.Point(0,0);
 /**
  * 事件的基础类
  * 
@@ -7,13 +7,13 @@ const tempLocal = new PIXI.Point(0,0);
  * 
  * import InteractionEvent from "../interaction/InteractionEvent",
  */
-export class InteractionEvent extends PIXI.interaction.InteractionEvent {
+export class InteractionEvent extends vf.interaction.InteractionEvent {
     public constructor() {
         super();
         this.local = tempLocal;
     }
 
-    public local: PIXI.Point;
+    public local: vf.Point;
     public path?: number[];
     public signalling = false;
 }

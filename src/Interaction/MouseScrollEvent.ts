@@ -18,7 +18,7 @@ interface TWheelEvent extends WheelEvent{
  * ```
  *  可赋值方法:
  * ```
- * oonMouseScroll: ((e: WheelEvent,delta: PIXI.Point) => void) | undefined
+ * oonMouseScroll: ((e: WheelEvent,delta: vf.Point) => void) | undefined
  * ```
  * 
  * @example 可查看 `Slider` 源码
@@ -40,7 +40,7 @@ export class MouseScrollEvent{
     public  id= 0;
     private obj: DisplayObject
     private preventDefault: boolean;
-    private delta = new PIXI.Point();
+    private delta = new vf.Point();
     private mouseScrllBind: ((_e: TWheelEvent | Event) => void | undefined) | undefined;
     private isStop = true;
 
@@ -100,5 +100,5 @@ export class MouseScrollEvent{
         this.stopEvent();
     }
 
-    public onMouseScroll: ((e: WheelEvent,delta: PIXI.Point) => void) | undefined
+    public onMouseScroll: ((e: WheelEvent,delta: vf.Point) => void) | undefined
 }

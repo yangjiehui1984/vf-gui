@@ -14,7 +14,7 @@ import { DisplayObjectAbstract } from "./DisplayObjectAbstract";
 export class Stage extends DisplayLayoutAbstract{
 
 
-    public constructor(width: number, height: number,app?: PIXI.Application) {
+    public constructor(width: number, height: number,app?: vf.Application) {
         super(); 
         this.width = width;
         this.height = height;
@@ -22,7 +22,7 @@ export class Stage extends DisplayLayoutAbstract{
         this._stageWidth = height;
         this.setActualSize(width,height);
         this.container.name = "Stage";
-        this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
+        this.container.hitArea = new vf.Rectangle(0, 0, width, height);
         this.container.interactive = true;
         this.container.interactiveChildren = true;
         this.initialized = true;
@@ -30,7 +30,7 @@ export class Stage extends DisplayLayoutAbstract{
         this.app = app;
     }
 
-    public app?: PIXI.Application;
+    public app?: vf.Application;
     public _stageWidth = 0;//调整缩放后的值
     public _stageHeight = 0;//调整缩放后的值
 
@@ -61,7 +61,7 @@ export class Stage extends DisplayLayoutAbstract{
         this._stageHeight = value * this.height;
     }
 
-    public set Scale(value: PIXI.Point){
+    public set Scale(value: vf.Point){
         this.container.scale.copyFrom(value);
         this._stageWidth = value.x * this.width;
         this._stageHeight = value.y * this.height;
@@ -87,14 +87,14 @@ export class Stage extends DisplayLayoutAbstract{
 
  
     public resize(): void {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
+        this.container.hitArea = new vf.Rectangle(0, 0, this.width, this.height);
         //this.updateChildren();
     }
 
     /**
      * 虚接口，子类可以扩充
      */
-    public inputLog(msg: TAny){
+    public inputLog(msg: any){
         //
         //console.log(msg);
     }

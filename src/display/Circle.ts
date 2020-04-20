@@ -6,20 +6,20 @@ import {MaskSprite} from "../core/MaskSprite";
  * 
  * 不设置 lineWidth 或 color 圆形不可见
  * 
- * @example let circle = new gui.Circle();
+ * @example let circle = new vf.gui.Circle();
  * 
- * @namespace gui
+
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCircle
  */
 export class Circle extends DisplayObject implements MaskSprite{
     public constructor(){
         super();
-        this.graphics = new PIXI.Graphics();
+        this.graphics = new vf.Graphics();
         this.container.addChild(this.graphics);
     }
 
-    public readonly graphics: PIXI.Graphics;
+    public readonly graphics: vf.Graphics;
 
     /** 可以支持遮罩的组件 */
     public maskSprite(){

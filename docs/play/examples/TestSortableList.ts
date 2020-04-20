@@ -2,28 +2,28 @@
 
 // export default class TestSortableList {
 
-//     public constructor(app: PIXI.Application, uiStage: gui.Stage) {
+//     public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
 //         this.onLoad(app,uiStage)
 //     }
 
-//     private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+//     private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
-//         let t = new gui.Text("排序功能的容器组件SortableList,拖动左边选项到右边", new gui.TextStyle({ fill: 0x00ffcc }));
+//         let t = new vf.gui.Text("排序功能的容器组件SortableList,拖动左边选项到右边", new vf.gui.TextStyle({ fill: 0x00ffcc }));
 //         t.x = 50;
 //         t.y = 10;
 //         uiStage.addChild(t);
 
 
-//         let dragContainer = new gui.Container();
+//         let dragContainer = new vf.gui.Container();
 //         uiStage.addChild(dragContainer);
 
 //         this.newSortableList(1, uiStage, dragContainer);
 //         this.newSortableList(2, uiStage, dragContainer);
 //     }
 
-//     private newSortableList(index: number, uiStage: gui.Stage, dragContainer: gui.Container) {
+//     private newSortableList(index: number, uiStage: vf.gui.Stage, dragContainer: vf.gui.Container) {
 
-//         let sc = new gui.ScrollingContainer();
+//         let sc = new vf.gui.ScrollingContainer();
 //         if (index == 2) {
 //             sc.left = 400;
 //         }
@@ -36,7 +36,7 @@
 //         sc.heightPct = "100%";
 //         uiStage.addChildAt(sc, 0);
 
-//         let sb = new gui.ScrollBar(0, 1);//参数2设置sourceTrack的9宫拉伸
+//         let sb = new vf.gui.ScrollBar(0, 1);//参数2设置sourceTrack的9宫拉伸
 //         if (index == 2)
 //             sb.left = 400;
 //         sb.top = 50;
@@ -49,10 +49,10 @@
 //         sb.scrollingContainer = sc;
 //         uiStage.addChild(sb);
 
-//         //============ gui.SortableList ============= 
-//         let stl = new gui.SortableList();
+//         //============ vf.gui.SortableList ============= 
+//         let stl = new vf.gui.SortableList();
 //         stl.tweenTime = 30;
-//         stl.tweenEase = gui.Easing.Cubic.Out;
+//         stl.tweenEase = vf.gui.Easing.Cubic.Out;
 //         stl.desc = true;
 //         stl.heightPct = "100%";
 //         stl.widthPet = "100%";
@@ -83,9 +83,9 @@
 //         }
 //     }
 
-//     private getItemContainer(str: string, dragContainer: gui.Container) {
+//     private getItemContainer(str: string, dragContainer: vf.gui.Container) {
 
-//         let contariner = new gui.Container()
+//         let contariner = new vf.gui.Container()
 //         contariner.draggable = true;
 //         contariner.dragGroup = "player";
 //         contariner.dragThreshold = 5;
@@ -95,14 +95,14 @@
 //         contariner.widthPet = "100%";
 //         contariner.height = 55;
 
-//         let rect = new gui.Rect();
+//         let rect = new vf.gui.Rect();
 //         rect.drawRoundedRect(0, 0, 300, 50, 5, 0xffffff);
 //         contariner.addChild(rect);
 
-//         let textStyle = new gui.TextStyle({ fill: ['#000000', '#00ffcc'], fontSize: 25, fontFamily: 'Calibri', fontWeight: 'bold' });
-//         let text = new gui.Text(str, textStyle);
-//         text.horizontalAlign = gui.AlignEnum.HorizontalAlignEnum.center;
-//         text.verticalAlign = gui.AlignEnum.VerticalAlignEnum.middle;
+//         let textStyle = new vf.gui.TextStyle({ fill: ['#000000', '#00ffcc'], fontSize: 25, fontFamily: 'Calibri', fontWeight: 'bold' });
+//         let text = new vf.gui.Text(str, textStyle);
+//         text.horizontalAlign = vf.gui.AlignEnum.HorizontalAlignEnum.center;
+//         text.verticalAlign = vf.gui.AlignEnum.VerticalAlignEnum.middle;
 //         contariner.addChild(text);
 
 //         console.log(contariner.width, contariner.height);

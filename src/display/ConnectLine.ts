@@ -13,9 +13,8 @@ export const play = Symbol("play");
  * 连线组件
  * 
  * 
- * @example let connectLine = new gui.ConnectLine();
+ * @example let connectLine = new vf.gui.ConnectLine();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestConnectLine
  */
@@ -23,12 +22,12 @@ export class ConnectLine extends DisplayObject {
 
     public constructor() {
         super();
-        this.line = new PIXI.Graphics();
+        this.line = new vf.Graphics();
         this.container.addChild(this.line);
 
     }
 
-    private readonly line: PIXI.Graphics;
+    private readonly line: vf.Graphics;
     private _lastStartPos: {x: number; y: number} = {x: NaN, y: NaN};
     private _lastEndPos: {x: number; y: number} = {x: NaN, y: NaN};
 
@@ -266,7 +265,7 @@ export class ConnectLine extends DisplayObject {
         const to =  {dt:distance};
         const tw = new Tween(from)
             .to(to,500)
-            .on(Tween.Event.update, (obj: TAny) => {
+            .on(Tween.Event.update, (obj: any) => {
                 const dt =  Math.ceil(obj.dt);
                 const x = (dt*(endPos.x-startPos.x))/distance + startPos.x;
                 const y = (dt*(endPos.y-startPos.y))/distance + startPos.y;
@@ -275,7 +274,7 @@ export class ConnectLine extends DisplayObject {
                 lastPos.x = x;
                 lastPos.y = y;
             })
-            .once(Tween.Event.complete, (obj: TAny) => {
+            .once(Tween.Event.complete, (obj: any) => {
                 tw.removeAllListeners();
                 tw.release();
                 this.emit(ComponentEvent.COMPLETE,this);

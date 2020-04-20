@@ -19,17 +19,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      */
     public constructor() {
         super();
-        this.container.name = (this.constructor as TAny).name;
+        this.container.name = (this.constructor as any).name;
     }
 
     /**
      * 背景(内部使用)
      */
-    public $background?: PIXI.Graphics;
+    public $background?: vf.Graphics;
     /**
      * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化
      */
-    public $mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
+    public $mask?: vf.Graphics | vf.Sprite | DisplayObject;
     /**
      * 插件列表
      */
@@ -39,7 +39,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      */
     public dragThreshold = 0;
     /** 模糊 */
-    private blurFilter?: PIXI.filters.BlurFilter;
+    private blurFilter?: vf.filters.BlurFilter;
     /** 拖动时，事件流是否继续传输 */
     public dragStopPropagation = true;
     /**
@@ -132,8 +132,8 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         }
         this._tint = value;
         this.container.children.forEach(childrenItem => {
-            if ((childrenItem as TAny)["tint"]) {
-                (childrenItem as TAny)["tint"] = value;
+            if ((childrenItem as any)["tint"]) {
+                (childrenItem as any)["tint"] = value;
             }
         });
     }
@@ -141,23 +141,23 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
     /** 
      * 混合模式 
      */
-    private _blendMode: PIXI.BLEND_MODES | undefined;
-    public get blendMode(): PIXI.BLEND_MODES | undefined {
+    private _blendMode: vf.BLEND_MODES | undefined;
+    public get blendMode(): vf.BLEND_MODES | undefined {
         return this._blendMode;
     }
-    public set blendMode(value: PIXI.BLEND_MODES | undefined) {
+    public set blendMode(value: vf.BLEND_MODES | undefined) {
         if (value === this._blendMode) {
             return;
         }
         this._blendMode = value;
         this.container.children.forEach(childrenItem => {
-            if (childrenItem instanceof PIXI.Sprite) {
-                childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
+            if (childrenItem instanceof vf.Sprite) {
+                childrenItem.blendMode = value || vf.BLEND_MODES.NORMAL;
             }
         });
     }
 
-    private _filterProxy: TAny = {};
+    private _filterProxy: any = {};
     private _filterMap = new Map<string,Filter>();
     private _filterCount = 0;
     public get filter() {
@@ -171,7 +171,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
             }
             const containerFilters = this.container.filters;
 
-            Filter.list.forEach((cls: TAny, key: string) => {
+            Filter.list.forEach((cls: any, key: string) => {
                 if(!_filterMap.has(key)){
                     const filter = new cls();
                     _filterMap.set(key,filter);
@@ -205,7 +205,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
     public set filterBlur(value: number) {
         const container = this.container;
         if (this.blurFilter === undefined) {
-            this.blurFilter = new PIXI.filters.BlurFilter(8, 1, 1);
+            this.blurFilter = new vf.filters.BlurFilter(8, 1, 1);
             container.filters = [this.blurFilter];
         }
         this.blurFilter.blur = value;
@@ -220,12 +220,12 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      *
      * 参数类型为 number, 接收一个百分比值，然后再将其转换为小数
      */
-    private grayscaleFilter?: PIXI.filters.ColorMatrixFilter;
+    private grayscaleFilter?: vf.filters.ColorMatrixFilter;
     private grayscaleFilterValue = 0;
     public set filterGrayscale(value: number) {
         const container = this.container;
         if (this.grayscaleFilter === undefined) {
-            this.grayscaleFilter = new PIXI.filters.ColorMatrixFilter();
+            this.grayscaleFilter = new vf.filters.ColorMatrixFilter();
             container.filters = [this.grayscaleFilter];
         }
 
@@ -298,7 +298,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         }
 
         if ($mask) {
-            container.mask = null;
+            container.mask = null as any;
             if ($mask instanceof DisplayObject) {
                 $mask.release();
             } else {

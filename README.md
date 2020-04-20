@@ -3,7 +3,7 @@
 
 ## vf-gui
 
-vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
+vf-gui简称`gui`是基于VFJS引擎，使用TypeScript语言开发的开源UI库。 为VFJS提供提供基础可靠的UI组件。
 
 
 ## 学习(Learn) 
@@ -17,29 +17,13 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
 ## 安装(Setup) 
 
->使用gui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
+1. <script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script>
+2. <script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
 
-### NPM Install
-
-    npm install vf-gui
-
-### CDN Install
-    
-Version:
-
-    <script src="http://unpkg.com/vf-gui@1.1.2/dist/vf-gui.js"></script>
-    
-    <script src="http://unpkg.com/vf-gui@01.1.2/dist/vf-gui.min.js"></script>
-
-Master:
-
-    <script src="http://unpkg.com/vf-gui/dist/vf-gui.js"></script>
-
-    <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
 
 ### 创建方式(Usage)：
 
-    let button = new  gui.Button();
+    let button = new  vf.gui.Button();
 
 
 ## 如何构建(How build)
@@ -63,26 +47,25 @@ Master:
 
 | 导入方式    |      名称       |
 |----------|-------------|
-| gui.Stage |  UI舞台 |
-| gui.Container | 容器 |
-| gui.ScrollingContainer | 可滑动的容器 |
-| gui.Image | 图片 |
-| gui.Label | 文本 |
-| gui.TextInput | 输入文本 |
-| gui.Graphics | 绘制矢量 |
-| gui.Rect | 绘制矢量矩形 |
-| gui.Circle | 绘制矢量圆形 |
-| gui.Button | 按钮 |
-| gui.CheckBox | 单选与复选 |
-| gui.SpriteAnimated | 序列图 |
-| gui.Slider | 滑动/进度条 |
-| gui.FollowLine | 跟随鼠标划线与擦除 |
-| gui.ConnectLine | 连线 |
-| gui.Ticker | 心跳 |
-| gui.Tween | 缓动 |
-| gui.Timeline | 缓动 |
-| gui.Sound | 音频(deprecated) |
-| gui.Utils | 工具类 |
+| vf.gui.Stage |  UI舞台 |
+| vf.gui.Container | 容器 |
+| vf.gui.ScrollingContainer | 可滑动的容器 |
+| vf.gui.Image | 图片 |
+| vf.gui.Label | 文本 |
+| vf.gui.TextInput | 输入文本 |
+| vf.gui.Graphics | 绘制矢量 |
+| vf.gui.Rect | 绘制矢量矩形 |
+| vf.gui.Circle | 绘制矢量圆形 |
+| vf.gui.Button | 按钮 |
+| vf.gui.CheckBox | 单选与复选 |
+| vf.gui.SpriteAnimated | 序列图 |
+| vf.gui.Slider | 滑动/进度条 |
+| vf.gui.FollowLine | 跟随鼠标划线与擦除 |
+| vf.gui.ConnectLine | 连线 |
+| vf.gui.Ticker | 心跳 |
+| vf.gui.Tween | 缓动 |
+| vf.gui.Timeline | 缓动 |
+| vf.gui.Utils | 工具类 |
 
 
 计划中：

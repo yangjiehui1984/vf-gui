@@ -1,15 +1,16 @@
-import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
 export default class TestLabel {
 
-    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
-        this.onLoad(app,uiStage)
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
+        this.onLoad(app, uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
         /** 基础文本展示 */
-        let basicText = new gui.Label();
+        const basicText = new vf.gui.Label();
         basicText.style.left = 15;
         basicText.style.top = 50;
         basicText.style.color = 0xffffff;
@@ -17,15 +18,15 @@ export default class TestLabel {
         uiStage.addChild(basicText);
 
         /** 手动换行文本展示 "\n" */
-        let nText = new gui.Label();
+        const nText = new vf.gui.Label();
         nText.style.left = 15;
         nText.style.top = 100;
-        nText.style.color =[0xffffff,0xffcc00];
+        nText.style.color = [0xffffff, 0xffcc00];
         nText.text = "你好，\n世界！"
         uiStage.addChild(nText);
 
         /** 高级样式文本,换行的宽度为 fields.wordWrapWidth = 600; */
-        let richText = new gui.Label();
+        const richText = new vf.gui.Label();
         richText.style.left = 15
         richText.style.top = 180;
         richText.fontCssStyle = this.getFontCssStyle();
@@ -33,24 +34,25 @@ export default class TestLabel {
         uiStage.addChild(richText);
 
         /** 限定宽度 */
-        let wText = new gui.Label();
+        const wText = new vf.gui.Label();
         wText.style.left = 5;
-        wText.style.top = 500;
-        wText.style.color =[0xffffff,0xffcc00];
-        wText.style.width = 500;
+        wText.style.top = 400;
+        wText.style.color = [0xffffff, 0xffcc00];
+        wText.style.width = 300;
         wText.style.textAlign = "right";
         wText.text = "我限定了宽度与位置"
         uiStage.addChild(wText);
     }
 
-    private getFontCssStyle(){
-        // //自定义样式
-        let fields = {} as any;
+    private getFontCssStyle() {
+        // 自定义样式 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const fields = {} as any;
         fields.fontFamily = 'Arial';
-        fields.fontSize=   36;
+        fields.fontSize = 36;
         fields.fontStyle = 'italic';
         fields.fontWeight = 'bold';
-        fields.color =   [0xffffff, 0x00ff99]; // gradient
+        fields.color = [0xffffff, 0x00ff99]; // gradient
 
         fields.stroke = 0x4a1850;
         fields.strokeThickness = 5;

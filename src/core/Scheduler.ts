@@ -8,7 +8,7 @@ import { EventLevel } from "../event/EventLevel";
  * @author 8088
  */
 
-export class Scheduler extends PIXI.utils.EventEmitter {
+export class Scheduler extends vf.utils.EventEmitter {
 
     public get id(): number {
         return this._id;

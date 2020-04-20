@@ -18,7 +18,7 @@ import { getDisplayPathUUID } from "../utils/Utils";
  * ```
  * onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
  * onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
- * onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+ * onDragMove: ((e: InteractionEvent, offset: vf.Point,dragObj?: DragEvent) => void) | undefined 
  * onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
  * ```
  * 
@@ -36,12 +36,12 @@ export class DragEvent {
 
     private obj: DisplayObject;
     public  id = 0;
-    private offset = new PIXI.Point();
+    private offset = new vf.Point();
     private movementX = 0;
     private movementY = 0;
     private bound = false;
-    private start = new PIXI.Point();
-    private mouse = new PIXI.Point();
+    private start = new vf.Point();
+    private mouse = new vf.Point();
     private cancel = false;
     private dragging = false;
     private isStop = true;
@@ -176,6 +176,6 @@ export class DragEvent {
 
     public onDragPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
     public onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
-    public onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+    public onDragMove: ((e: InteractionEvent, offset: vf.Point,dragObj?: DragEvent) => void) | undefined 
     public onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
 }

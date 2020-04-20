@@ -1,7 +1,7 @@
 import { DisplayObject } from "../core/DisplayObject";
 import * as UIKeys from "../core/DisplayLayoutKeys";
 
-export const $tempRectangle = new PIXI.Rectangle();
+export const $tempRectangle = new vf.Rectangle();
 
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸

@@ -6,20 +6,19 @@ import {MaskSprite} from "../core/MaskSprite";
  * 
  * 不设置 lineWidth 或 color 矩形不可见
  * 
- * @example let rect = new gui.Rect();
+ * @example let rect = new vf.gui.Rect();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
  */
 export class Rect extends DisplayObject implements MaskSprite{
     public constructor(){
         super();
-        this.graphics = new PIXI.Graphics();
+        this.graphics = new vf.Graphics();
         this.container.addChild(this.graphics);
     }
 
-    public readonly graphics: PIXI.Graphics;
+    public readonly graphics: vf.Graphics;
 
     /** 可以支持遮罩的组件 */
     public maskSprite(){

@@ -67,7 +67,7 @@
 				<a href="#vf-gui" id="vf-gui" style="color: inherit; text-decoration: none;">
 					<h2>vf-gui</h2>
 				</a>
-				<p>vf-gui简称<code>gui</code>是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。</p>
+				<p>vf-gui简称<code>gui</code>是基于VFJS引擎，使用TypeScript语言开发的开源UI库。 为VFJS提供提供基础可靠的UI组件。</p>
 				<a href="#学习learn" id="学习learn" style="color: inherit; text-decoration: none;">
 					<h2>学习(Learn)</h2>
 				</a>
@@ -82,27 +82,15 @@
 				<a href="#安装setup" id="安装setup" style="color: inherit; text-decoration: none;">
 					<h2>安装(Setup)</h2>
 				</a>
-				<blockquote>
-					<p>使用gui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。</p>
-				</blockquote>
-				<a href="#npm-install" id="npm-install" style="color: inherit; text-decoration: none;">
-					<h3>NPM Install</h3>
-				</a>
-				<pre><code>npm <span class="hljs-keyword">install</span> vf-gui</code></pre>
-				<a href="#cdn-install" id="cdn-install" style="color: inherit; text-decoration: none;">
-					<h3>CDN Install</h3>
-				</a>
-				<p>Version:</p>
-				<pre><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/vf-gui@1.1.2/dist/vf-gui.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/vf-gui@01.1.2/dist/vf-gui.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p>Master:</p>
-				<pre><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/vf-gui/dist/vf-gui.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/vf-gui/dist/vf-gui.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+				<ol>
+					<li><script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script></li>
+					<li><script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
+					</li>
+				</ol>
 				<a href="#创建方式usage：" id="创建方式usage：" style="color: inherit; text-decoration: none;">
 					<h3>创建方式(Usage)：</h3>
 				</a>
-				<pre><code><span class="hljs-keyword">let</span> button = <span class="hljs-keyword">new</span>  gui.<span class="hljs-constructor">Button()</span>;</code></pre>
+				<pre><code><span class="hljs-keyword">let</span> button = <span class="hljs-keyword">new</span>  vf.gui.<span class="hljs-constructor">Button()</span>;</code></pre>
 				<a href="#如何构建how-build" id="如何构建how-build" style="color: inherit; text-decoration: none;">
 					<h2>如何构建(How build)</h2>
 				</a>
@@ -130,83 +118,79 @@
 						</tr>
 					</thead>
 					<tbody><tr>
-							<td>gui.Stage</td>
+							<td>vf.gui.Stage</td>
 							<td>UI舞台</td>
 						</tr>
 						<tr>
-							<td>gui.Container</td>
+							<td>vf.gui.Container</td>
 							<td>容器</td>
 						</tr>
 						<tr>
-							<td>gui.ScrollingContainer</td>
+							<td>vf.gui.ScrollingContainer</td>
 							<td>可滑动的容器</td>
 						</tr>
 						<tr>
-							<td>gui.Image</td>
+							<td>vf.gui.Image</td>
 							<td>图片</td>
 						</tr>
 						<tr>
-							<td>gui.Label</td>
+							<td>vf.gui.Label</td>
 							<td>文本</td>
 						</tr>
 						<tr>
-							<td>gui.TextInput</td>
+							<td>vf.gui.TextInput</td>
 							<td>输入文本</td>
 						</tr>
 						<tr>
-							<td>gui.Graphics</td>
+							<td>vf.gui.Graphics</td>
 							<td>绘制矢量</td>
 						</tr>
 						<tr>
-							<td>gui.Rect</td>
+							<td>vf.gui.Rect</td>
 							<td>绘制矢量矩形</td>
 						</tr>
 						<tr>
-							<td>gui.Circle</td>
+							<td>vf.gui.Circle</td>
 							<td>绘制矢量圆形</td>
 						</tr>
 						<tr>
-							<td>gui.Button</td>
+							<td>vf.gui.Button</td>
 							<td>按钮</td>
 						</tr>
 						<tr>
-							<td>gui.CheckBox</td>
+							<td>vf.gui.CheckBox</td>
 							<td>单选与复选</td>
 						</tr>
 						<tr>
-							<td>gui.SpriteAnimated</td>
+							<td>vf.gui.SpriteAnimated</td>
 							<td>序列图</td>
 						</tr>
 						<tr>
-							<td>gui.Slider</td>
+							<td>vf.gui.Slider</td>
 							<td>滑动/进度条</td>
 						</tr>
 						<tr>
-							<td>gui.FollowLine</td>
+							<td>vf.gui.FollowLine</td>
 							<td>跟随鼠标划线与擦除</td>
 						</tr>
 						<tr>
-							<td>gui.ConnectLine</td>
+							<td>vf.gui.ConnectLine</td>
 							<td>连线</td>
 						</tr>
 						<tr>
-							<td>gui.Ticker</td>
+							<td>vf.gui.Ticker</td>
 							<td>心跳</td>
 						</tr>
 						<tr>
-							<td>gui.Tween</td>
+							<td>vf.gui.Tween</td>
 							<td>缓动</td>
 						</tr>
 						<tr>
-							<td>gui.Timeline</td>
+							<td>vf.gui.Timeline</td>
 							<td>缓动</td>
 						</tr>
 						<tr>
-							<td>gui.Sound</td>
-							<td>音频(deprecated)</td>
-						</tr>
-						<tr>
-							<td>gui.Utils</td>
+							<td>vf.gui.Utils</td>
 							<td>工具类</td>
 						</tr>
 				</tbody></table>
@@ -363,9 +347,6 @@
 						<a href="classes/slider.html" class="tsd-kind-icon">Slider</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/sound.html" class="tsd-kind-icon">Sound</a>
-					</li>
-					<li class=" tsd-kind-class">
 						<a href="classes/spriteanimated.html" class="tsd-kind-icon">Sprite<wbr>Animated</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -425,11 +406,11 @@
 					<li class=" tsd-kind-interface tsd-is-not-exported">
 						<a href="interfaces/twheelevent.html" class="tsd-kind-icon">TWheel<wbr>Event</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-is-not-exported">
-						<a href="interfaces/window.html" class="tsd-kind-icon">Window</a>
-					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#align" class="tsd-kind-icon">Align</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#application" class="tsd-kind-icon">Application</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#display" class="tsd-kind-icon">Display</a>
@@ -440,9 +421,6 @@
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#position" class="tsd-kind-icon">Position</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-not-exported">
-						<a href="globals.html#tany" class="tsd-kind-icon">TAny</a>
-					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#_temprectangle" class="tsd-kind-icon">$<wbr>Temp<wbr>Rectangle</a>
 					</li>
@@ -451,9 +429,6 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#_getuidisplayobjectpath" class="tsd-kind-icon">$getUIDisplay<wbr>Object<wbr>Path</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#_sounds" class="tsd-kind-icon">$sounds</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#_templocalbounds" class="tsd-kind-icon">$temp<wbr>Local<wbr>Bounds</a>
@@ -837,6 +812,9 @@
 						<a href="globals.html#getgroup" class="tsd-kind-icon">get<wbr>Group</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#getguiclass" class="tsd-kind-icon">get<wbr>Gui<wbr>Class</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#getitem" class="tsd-kind-icon">get<wbr>Item</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -952,6 +930,9 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#rgbtonumber" class="tsd-kind-icon">rgb<wbr>ToNumber</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#sayhello" class="tsd-kind-icon">say<wbr>Hello</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#set" class="tsd-kind-icon">set</a>

@@ -1,4 +1,4 @@
-declare module 'interaction/TouchMouseEventEnum' {
+declare module 'src/interaction/TouchMouseEventEnum' {
 	/**
 	 * 鼠标点击与触摸事件枚举,内部DisplayObject使用
 	 * @since 1.0.0
@@ -22,8 +22,8 @@ declare module 'interaction/TouchMouseEventEnum' {
 	}
 
 }
-declare module 'event/InteractionEvent' {
-	/// <reference types="pixi.js" />
+declare module 'src/event/InteractionEvent' {
+	///   types="@vf.js/vf" />
 	/**
 	 * 事件的基础类
 	 *
@@ -31,15 +31,13 @@ declare module 'event/InteractionEvent' {
 	 *
 	 * import InteractionEvent from "../interaction/InteractionEvent",
 	 */
-	export class InteractionEvent extends PIXI.interaction.InteractionEvent {
+	export class InteractionEvent extends vf.interaction.InteractionEvent {
 	    constructor();
-	    local: PIXI.Point;
-	    path?: number[];
-	    signalling: boolean;
+	    local: vf.Point;
 	}
 
 }
-declare module 'event/TouchMouseEvent' {
+declare module 'src/event/TouchMouseEvent' {
 	/**
 	 * 对外，封装的点击触摸事件
 	 *
@@ -81,9 +79,9 @@ declare module 'event/TouchMouseEvent' {
 	};
 
 }
-declare module 'interaction/ClickEvent' {
-	import { DisplayObject } from 'core/DisplayObject';
-	import { InteractionEvent } from 'event/InteractionEvent';
+declare module 'src/interaction/ClickEvent' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { InteractionEvent } from 'src/event/InteractionEvent';
 	/**
 	 * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
 	 *
@@ -118,7 +116,7 @@ declare module 'interaction/ClickEvent' {
 	    constructor(obj: DisplayObject, isOpenEmitEvent?: boolean, includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean);
 	    private obj;
 	    id: number;
-	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
+	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vf.gui.Interaction.TouchEvent */
 	    isOpenEmitEvent: boolean;
 	    /** 是否开启本地坐标转换，开启后，事件InteractionEvent中的localX localY为本地坐标，false情况下为0 */
 	    isOpenLocalPoint: boolean;
@@ -158,9 +156,9 @@ declare module 'interaction/ClickEvent' {
 	}
 
 }
-declare module 'interaction/DragDropController' {
-	import { DisplayObject } from 'core/DisplayObject';
-	import { InteractionEvent } from 'event/InteractionEvent';
+declare module 'src/interaction/DragDropController' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { InteractionEvent } from 'src/event/InteractionEvent';
 	/**
 	 * 记录当前正在拖动的UI组件列表
 	 * @private
@@ -188,10 +186,10 @@ declare module 'interaction/DragDropController' {
 	export function getEventItem(e: InteractionEvent, group: string | undefined): false | DisplayObject | null;
 
 }
-declare module 'interaction/DragEvent' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { InteractionEvent } from 'event/InteractionEvent';
+declare module 'src/interaction/DragEvent' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { InteractionEvent } from 'src/event/InteractionEvent';
 	/**
 	 * 多拽相关的事件处理类
 	 *
@@ -206,7 +204,7 @@ declare module 'interaction/DragEvent' {
 	 * ```
 	 * onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
 	 * onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
-	 * onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined
+	 * onDragMove: ((e: InteractionEvent, offset: vf.Point,dragObj?: DragEvent) => void) | undefined
 	 * onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
 	 * ```
 	 *
@@ -232,7 +230,6 @@ declare module 'interaction/DragEvent' {
 	     */
 	    dragRestrictAxis?: "x" | "y";
 	    startEvent(): void;
-	    executeAction(e: InteractionEvent): void;
 	    private _onDragStart;
 	    private _onDragMove;
 	    private _onDragEnd;
@@ -241,12 +238,12 @@ declare module 'interaction/DragEvent' {
 	    remove(): void;
 	    onDragPress: ((e: InteractionEvent, isPressed: boolean, dragObj?: DragEvent) => void) | undefined;
 	    onDragEnd: ((e: InteractionEvent, dragObj?: DragEvent) => void) | undefined;
-	    onDragMove: ((e: InteractionEvent, offset: PIXI.Point, dragObj?: DragEvent) => void) | undefined;
+	    onDragMove: ((e: InteractionEvent, offset: vf.Point, dragObj?: DragEvent) => void) | undefined;
 	    onDragStart: ((e: InteractionEvent, dragObj?: DragEvent) => void) | undefined;
 	}
 
 }
-declare module 'core/DisplayLayoutKeys' {
+declare module 'src/core/DisplayLayoutKeys' {
 	/** 标记属性失效 */
 	export const invalidatePropertiesFlag: unique symbol;
 	/** 标记大小失效 */
@@ -289,9 +286,9 @@ declare module 'core/DisplayLayoutKeys' {
 	export const verticalCenter: unique symbol;
 
 }
-declare module 'display/Label' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/display/Label' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 文本
 	 *
@@ -301,15 +298,14 @@ declare module 'display/Label' {
 	 *
 	 * 当文本容器设置宽高后，可通过 style.textAlign 进行文字位置调整
 	 *
-	 * @example let label = new gui.Label();
+	 * @example let label = new vf.gui.Label();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
 	 */
 	export class Label extends DisplayObject {
 	    constructor(text?: string);
-	    readonly sprite: PIXI.Text;
+	    readonly sprite: vf.Text;
 	    /**
 	     * 设置分辨力比例
 	     */
@@ -318,45 +314,44 @@ declare module 'display/Label' {
 	     * 文本内容
 	     */
 	    text: string;
-	    fontCssStyle: TAny;
+	    fontCssStyle: any;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    release(): void;
 	}
 
 }
-declare module 'core/MaskSprite' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/core/MaskSprite' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	export interface MaskSprite extends DisplayObject {
-	    maskSprite(): PIXI.Sprite | PIXI.Graphics;
+	    maskSprite(): vf.Sprite | vf.Graphics;
 	}
 
 }
-declare module 'display/Image' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { MaskSprite } from 'core/MaskSprite';
+declare module 'src/display/Image' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { MaskSprite } from 'src/core/MaskSprite';
 	/**
 	 * 图片
 	 *
-	 * @example let image = new gui.Image();
+	 * @example let image = new vf.gui.Image();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestImage
 	 */
 	export class Image extends DisplayObject implements MaskSprite {
 	    constructor();
 	    /** 可以支持遮罩的组件 */
-	    maskSprite(): PIXI.Sprite;
-	    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
-	    protected _texture: PIXI.Texture | undefined;
-	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    maskSprite(): vf.Sprite;
+	    protected _sprite: vf.Sprite | vf.TilingSprite | vf.NineSlicePlane | undefined;
+	    protected _texture: vf.Texture | undefined;
+	    protected _source: number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    /**
 	     * 图像路径或位图对象
 	     */
 	    private _src;
-	    src: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    src: number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    /**
 	     * 矩形区域，它定义素材对象的九个缩放区域。
 	     *
@@ -395,10 +390,10 @@ declare module 'display/Image' {
 	}
 
 }
-declare module 'display/private/InputBase' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { ClickEvent, InteractionEvent } from 'interaction/Index';
+declare module 'src/display/private/InputBase' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { ClickEvent, InteractionEvent } from 'src/interaction/Index';
 	/**
 	 * 输入对象的基础类
 	 */
@@ -419,35 +414,35 @@ declare module 'display/private/InputBase' {
 	    /**
 	     * 状态皮肤，
 	     */
-	    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    up?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 状态皮肤，
 	     */
-	    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    down?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 状态皮肤，
 	     */
-	    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    move?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 状态皮肤，
 	     */
-	    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    disabled?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 选中状态皮肤，
 	     */
-	    upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    upAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 选中状态皮肤，
 	     */
-	    downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    downAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 选中状态皮肤，
 	     */
-	    moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    moveAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    /**
 	     * 选中状态皮肤，
 	     */
-	    disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    disabledAndSelected?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 	    protected onMove(): void;
 	    protected onHover(): void;
 	    protected onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean): void;
@@ -464,16 +459,15 @@ declare module 'display/private/InputBase' {
 	}
 
 }
-declare module 'display/Button' {
-	import { Label } from 'display/Label';
-	import { Image } from 'display/Image';
-	import { InputBase } from 'display/private/InputBase';
+declare module 'src/display/Button' {
+	import { Label } from 'src/display/Label';
+	import { Image } from 'src/display/Image';
+	import { InputBase } from 'src/display/private/InputBase';
 	/**
 	 * 按钮
 	 *
-	 * @example let button = new gui.Button();
+	 * @example let button = new vf.gui.Button();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestButton
 	 */
@@ -496,17 +490,16 @@ declare module 'display/Button' {
 	}
 
 }
-declare module 'display/CheckBox' {
-	import { Label } from 'display/Label';
-	import { Button } from 'display/Button';
+declare module 'src/display/CheckBox' {
+	import { Label } from 'src/display/Label';
+	import { Button } from 'src/display/Button';
 	/**
 	 * 单选\复选框
 	 *
 	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
 	 *
-	 * @example let checkBox = new gui.CheckBox();
+	 * @example let checkBox = new vf.gui.CheckBox();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCheckBox
 	 */
@@ -542,9 +535,9 @@ declare module 'display/CheckBox' {
 	}
 
 }
-declare module 'interaction/InputController' {
-	import { DisplayObject } from 'core/DisplayObject';
-	import { CheckBox } from 'display/CheckBox';
+declare module 'src/interaction/InputController' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { CheckBox } from 'src/display/CheckBox';
 	interface CheckGroupObject {
 	    groups: {
 	        [key: string]: {
@@ -609,9 +602,9 @@ declare module 'interaction/InputController' {
 	export {};
 
 }
-declare module 'interaction/MouseScrollEvent' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/interaction/MouseScrollEvent' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 鼠标滑轮事件
 	 *
@@ -621,7 +614,7 @@ declare module 'interaction/MouseScrollEvent' {
 	 * ```
 	 *  可赋值方法:
 	 * ```
-	 * oonMouseScroll: ((e: WheelEvent,delta: PIXI.Point) => void) | undefined
+	 * oonMouseScroll: ((e: WheelEvent,delta: vf.Point) => void) | undefined
 	 * ```
 	 *
 	 * @example 可查看 `Slider` 源码
@@ -647,11 +640,11 @@ declare module 'interaction/MouseScrollEvent' {
 	    private _onMouseOut;
 	    stopEvent(): void;
 	    remove(): void;
-	    onMouseScroll: ((e: WheelEvent, delta: PIXI.Point) => void) | undefined;
+	    onMouseScroll: ((e: WheelEvent, delta: vf.Point) => void) | undefined;
 	}
 
 }
-declare module 'event/ComponentEvent' {
+declare module 'src/event/ComponentEvent' {
 	/**
 	 * 特定属性改变时,通常为了去系统事件区分，UI组件的事件名为大写
 	 * 1. CheckBox 的 checked 改变时
@@ -752,8 +745,8 @@ declare module 'event/ComponentEvent' {
 	export const PLAY_AUDIO = "PLAY_AUDIO";
 
 }
-declare module 'interaction/GroupController' {
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/interaction/GroupController' {
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 *
 	 * @private
@@ -775,26 +768,25 @@ declare module 'interaction/GroupController' {
 	} | undefined;
 
 }
-declare module 'interaction/Index' {
-	import { ClickEvent } from 'interaction/ClickEvent';
-	import * as DragDropController from 'interaction/DragDropController';
-	import { DragEvent } from 'interaction/DragEvent';
-	import * as InputController from 'interaction/InputController';
-	import { MouseScrollEvent } from 'interaction/MouseScrollEvent';
-	import { InteractionEvent } from 'event/InteractionEvent';
-	import { TouchMouseEvent } from 'event/TouchMouseEvent';
-	import * as ComponentEvent from 'event/ComponentEvent';
-	import * as GroupController from 'interaction/GroupController';
+declare module 'src/interaction/Index' {
+	import { ClickEvent } from 'src/interaction/ClickEvent';
+	import * as DragDropController from 'src/interaction/DragDropController';
+	import { DragEvent } from 'src/interaction/DragEvent';
+	import * as InputController from 'src/interaction/InputController';
+	import { MouseScrollEvent } from 'src/interaction/MouseScrollEvent';
+	import { InteractionEvent } from 'src/event/InteractionEvent';
+	import { TouchMouseEvent } from 'src/event/TouchMouseEvent';
+	import * as ComponentEvent from 'src/event/ComponentEvent';
+	import * as GroupController from 'src/interaction/GroupController';
 	export { ClickEvent, DragDropController, DragEvent, InputController, MouseScrollEvent, InteractionEvent, TouchMouseEvent, ComponentEvent, GroupController };
 
 }
-declare module 'tween/Easing' {
+declare module 'src/tween/Easing' {
 	/**
 	 * 完整的缓动曲线列表
 	 *
-	 * @example gui.Easing.Linear.None;
+	 * @example vf.gui.Easing.Linear.None;
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
 	 */
@@ -858,7 +850,7 @@ declare module 'tween/Easing' {
 	};
 
 }
-declare module 'tween/private/constants' {
+declare module 'src/tween/private/constants' {
 	/**
 	 * 卡帧后的平滑处理帧率
 	 */
@@ -882,15 +874,14 @@ declare module 'tween/private/constants' {
 	export const SET_NESTED: (nested: any) => any;
 
 }
-declare module 'tween/private/Interpolation' {
+declare module 'src/tween/private/Interpolation' {
 	/**
 	 * 差值计算列表
-	 * @namespace TWEEN.Interpolation
 	 * @example
 	 *
-	 * let bezier = gui.tween.Interpolation.Bezier
-	 * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
-	 * @memberof gui.tween
+	 * let bezier = vf.gui.tween.Interpolation.Bezier
+	 * new vf.gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+	 * @memberof vf.gui.tween
 	 */
 	export const Interpolation: {
 	    Linear(v: any, k: number, value: any): any;
@@ -906,7 +897,7 @@ declare module 'tween/private/Interpolation' {
 	};
 
 }
-declare module 'event/TweenEvent' {
+declare module 'src/event/TweenEvent' {
 	/**
 	 * 缓动事件
 	 */
@@ -954,19 +945,18 @@ declare module 'event/TweenEvent' {
 	};
 
 }
-declare module 'tween/Tween' {
-	/// <reference types="pixi.js" />
-	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'tween/private/core';
+declare module 'src/tween/Tween' {
+	///   types="@vf.js/vf" />
+	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'src/tween/private/core';
 	/**
 	 * 缓动动画
 	 *
-	 * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+	 * @example let tween = new vf.gui.Tween(myObject).to({width:'300px'}, 2000).start()
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
 	 */
-	export class Tween extends PIXI.utils.EventEmitter {
+	export class Tween extends vf.utils.EventEmitter {
 	    static core: {
 	        add: typeof add;
 	        get: typeof get;
@@ -994,33 +984,33 @@ declare module 'tween/Tween' {
 	     * @param {object} to - Target value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     * @static
 	     */
-	    static fromTo(object: TAny, to: TAny, duration?: number): Tween;
+	    static fromTo(object: any, to: any, duration?: number): Tween;
 	    /**
 	     * Easier way calling constructor only applies the `to` value, useful for CSS Animation
-	     * @param {TAny} object object
+	     * @param {any} object object
 	     * @param {object} to - Target value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.to(myObject, {x:200}, 1000)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     * @static
 	     */
-	    static to(object: TAny | TAny[], to: TAny, duration?: number): Tween;
+	    static to(object: any | any[], to: any, duration?: number): Tween;
 	    /**
 	     * Easier way calling constructor only applies the `from` value, useful for CSS Animation
-	     * @param {TAny} object object
+	     * @param {any} object object
 	     * @param {object} from - Initial value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.from(myObject, {x:200}, 1000)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     * @static
 	     */
-	    static from(object: TAny, from: TAny, duration?: number): Tween;
-	    constructor(object?: TAny);
+	    static from(object: any, from: any, duration?: number): Tween;
+	    constructor(object?: any);
 	    id: number;
-	    object: TAny;
+	    object: any;
 	    private _valuesEnd;
 	    private _valuesStart;
 	    protected _duration: number;
@@ -1041,21 +1031,21 @@ declare module 'tween/Tween' {
 	    private _reverseDelayTime;
 	    /** 附加数据 */
 	    data: {
-	        [key: string]: TAny;
+	        [key: string]: any;
 	    };
-	    setObject(object: TAny): void;
+	    setObject(object: any): void;
 	    /**
 	     * 是否在播放中
 	     * @return {boolean}
 	     * @example tween.isPlaying()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    readonly isPlaying: boolean;
 	    /**
 	     * 是否开始播放
 	     * @return {boolean}
 	     * @example tween.isStarted()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    readonly isStarted: boolean;
 	    /**
@@ -1069,7 +1059,7 @@ declare module 'tween/Tween' {
 	     * 设置缓动时长
 	     * @param {number} amount 持续的毫秒值
 	     * @example tween.duration(2000)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     * @deprecated 不推荐使用这个方法，内部使用
 	     * @private
 	     */
@@ -1078,69 +1068,69 @@ declare module 'tween/Tween' {
 	     * 逆向缓动
 	     * @example tween.reverse()
 	     * @param {boolean=} state 是否逆向
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    reverse(state?: boolean): this;
 	    /**
 	     * 当前动画是否逆转
 	     * @return {boolean}
 	     * @example tween.reversed() true逆向中
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    reversed(): boolean;
 	    /**
 	     * 暂停缓动
 	     * @example tween.pause()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    pause(): boolean | this;
 	    /**
 	     * 播放或恢复播放
 	     * @example tween.play()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    play(): boolean | this;
 	    /**
 	     * 设置要缓动的目标属性与持续时间
 	     * @param {object} properties 目标属性值
 	     * @param {number|Object=} [duration=1000] 持续时间
-	     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
-	     * @memberof gui.Tween
+	     * @example let tween = new vf.gui.Tween({x:0}).to({x:100}, 2000)
+	     * @memberof vf.gui.Tween
 	     */
-	    to(properties: TAny, duration?: number): this;
+	    to(properties: any, duration?: number): this;
 	    private render;
 	    /**
 	     * 开始执行缓动
 	     * @param {number|string} time 要开始的时间，延迟值
 	     * @example tween.start()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    start(time?: number): this;
 	    /**
 	     * 停止缓动
 	     * @example tween.stop()
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    stop(): boolean | this;
 	    /**
 	     * 设置延迟执行时间
 	     * @param {number} amount 延迟等待的时间，毫秒
 	     * @example tween.delay(500)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    delay(amount: number): this;
 	    /**
 	     * 设置重复执行的次数
 	     * @param {number} amount 重复次数
 	     * @example tween.repeat(5)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    repeat(amount: number): this;
 	    /**
 	     * 设置每个重复执行过程的延迟时间，毫秒
 	     * @param {number} amount 延迟值
 	     * @example tween.reverseDelay(500)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    reverseDelay(amount: number): this;
 	    /**
@@ -1148,23 +1138,23 @@ declare module 'tween/Tween' {
 	     * @param {boolean} state true启动
 	     * @param {Function=} _easingReverse 反向时的Easing function
 	     * @example tween.yoyo(true)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number): this;
 	    /**
 	     * 设置缓动函数
 	     * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
 	     * @example tween.easing(Easing.Elastic.InOut)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
-	    easing(_easingFunction: ((k: number) => number) | TAny): this;
+	    easing(_easingFunction: ((k: number) => number) | any): this;
 	    /**
 	     * 设置差值
 	     * @param {Function} _interpolationFunction 差值的函数
 	     * @example tween.interpolation(Interpolation.Bezier)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
-	    interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny): this;
+	    interpolation(_interpolationFunction: (v: any, k: number, value: any) => any): this;
 	    /**
 	     * 更新动画到指定时间点，进行播放
 	     * @param time
@@ -1186,19 +1176,18 @@ declare module 'tween/Tween' {
 	    * @param {Boolean=} preserve 完成后，防止删除动画对象
 	     * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
 	     * @example tween.update(100)
-	     * @memberof gui.Tween
+	     * @memberof vf.gui.Tween
 	     */
 	    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
 	    release(): void;
 	}
 
 }
-declare module 'tween/private/core' {
-	import { Tween } from 'tween/Tween';
+declare module 'src/tween/private/core' {
+	import { Tween } from 'src/tween/Tween';
 	/**
 	 * 插件存储器
-	 * @namespace tween.Plugins
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
 	 * let num = Plugins.num = function (node, start, end) {
 	  * return t => start + (end - start) * t
@@ -1206,89 +1195,89 @@ declare module 'tween/private/core' {
 	  *
 	  * @static
 	  */
-	export const Plugins: TAny;
+	export const Plugins: any;
 	/**
 	 * 添加对象到缓动列表
 	 * @param {Tween} tween Tween 实例
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * let tween = new gui.tween.Tween({x:0})
+	 * let tween = new vf.gui.tween.Tween({x:0})
 	 * tween.to({x:200}, 1000)
-	 * gui.tween.add(tween)
+	 * vf.gui.tween.add(tween)
 	 */
 	export function add(tween: Tween): void;
 	/**
 	 * 没有缓动后，设置运行多少帧后，停止
 	 * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * gui.tween.FrameThrottle(60)
+	 * vf.gui.tween.FrameThrottle(60)
 	 */
 	export function FrameThrottle(frameCount?: number): void;
 	/**
 	 * 延时处理，针对插件、canvas、dom
 	 * @param {number} state=true 是否平滑处理
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * gui.tween.ToggleLagSmoothing(false)
+	 * vf.gui.tween.ToggleLagSmoothing(false)
 	 */
 	export function ToggleLagSmoothing(_state?: boolean): void;
 	/**
 	 * 获得所有缓动对象
-	 * @memberof gui.tween
-	 * gui.tween.getAll()
+	 * @memberof vf.gui.tween
+	 * vf.gui.tween.getAll()
 	 */
 	export function getAll(): Tween[];
 	/**
 	 * 移除所有动画对象
-	 * @example  gui.tween.removeAll()
-	 * @memberof gui.tween
+	 * @example  vf.gui.tween.removeAll()
+	 * @memberof vf.gui.tween
 	 */
 	export function removeAll(): void;
 	/**
 	 * 获取对象
 	 * @param {Tween} tween 缓动对象实例
 	 * @return {Tween} 返回对象或null
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * gui.tween.get(tween)
+	 * vf.gui.tween.get(tween)
 	 */
 	export function get(tween: Tween): Tween | null;
-	export function removeDisplay(uuid: string): void;
 	/**
 	 * 从缓动列表移除对象
 	 * @param {Tween} tween Tween instance
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * gui.tween.remove(tween)
+	 * vf.gui.tween.remove(tween)
 	 */
 	export function remove(tween: Tween): void;
+	export function removeDisplay(uuid: string): void;
 	/**
 	 * 按给定时间更新缓动
 	 * @param {number=} time 时间戳
 	 * @param {Boolean=} preserve 完成后，防止删除动画对象
-	 * @memberof gui.tween
+	 * @memberof vf.gui.tween
 	 * @example
-	 * gui.tween.update(500)
+	 * vf.gui.tween.update(500)
 	 */
 	export function update(time: number, preserve?: boolean): boolean;
 	/**
 	 * 是否正在运行中
 	 * @return {Boolean} 只要还有缓动在运行，返回true
-	 * @memberof gui.tween
-	 * @example gui.tween.isRunning()
+	 * @memberof vf.gui.tween
+	 * @example vf.gui.tween.isRunning()
 	 */
 	export function isRunning(): boolean;
 	/**
 	 * 返回是否开启延迟平滑状态
 	 * @return {Boolean}
-	 * @memberof gui.tween
-	 * @example gui.tween.isRunning()
+	 * @memberof vf.gui.tween
+	 * @example vf.gui.tween.isRunning()
 	 */
 	export function isLagSmoothing(): boolean;
 
 }
-declare module 'utils/ObjectPool' {
+declare module 'src/utils/ObjectPool' {
 	 class ObjectPool {
 	    constructor();
 	    /**
@@ -1304,7 +1293,7 @@ declare module 'utils/ObjectPool' {
 	     * @return 取出的相应对象
 	     *
 	     */
-	    pop<T>(keyClass: T): TAny;
+	    pop<T>(keyClass: T): any;
 	}
 	/**
 	 * 对象池实例
@@ -1313,14 +1302,14 @@ declare module 'utils/ObjectPool' {
 	export {};
 
 }
-declare module 'tween/Timeline' {
+declare module 'src/tween/Timeline' {
 	 class Node {
 	    constructor(node?: Node);
 	    parent: Node | undefined;
 	    default: number;
-	    start: TAny;
-	    end: TAny;
-	    easing: TAny;
+	    start: any;
+	    end: any;
+	    easing: any;
 	    duration: number;
 	    startFrame: number;
 	    endFrame: number;
@@ -1332,13 +1321,12 @@ declare module 'tween/Timeline' {
 	/**
 	 * 基于帧的时间轴控制类
 	 *
-	 * @example let timeline = new gui.Timeline();
+	 * @example let timeline = new vf.gui.Timeline();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
-	export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
+	export class Timeline extends vf.utils.EventEmitter implements Lifecycle {
 	    constructor();
 	    id: number;
 	    private _object;
@@ -1350,8 +1338,8 @@ declare module 'tween/Timeline' {
 	    private _lastNode;
 	    private _isSetDefault;
 	    loop: boolean;
-	    setDefault(object: TAny, _duration: number, fps: number): this;
-	    addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: TAny): this;
+	    setDefault(object: any, _duration: number, fps: number): this;
+	    addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: any): this;
 	    stop(): void;
 	    play(): void;
 	    gotoAndPlay(frame: number): void;
@@ -1366,17 +1354,17 @@ declare module 'tween/Timeline' {
 	export {};
 
 }
-declare module 'tween/private/index' {
-	import { add, get, getAll, isRunning, FrameThrottle, ToggleLagSmoothing, Plugins, remove, removeAll, removeDisplay, update } from 'tween/private/core';
-	import { Interpolation } from 'tween/private/Interpolation';
-	import * as utils from 'tween/private/constants';
-	import { TweenEvent } from 'event/TweenEvent';
-	import { Timeline } from 'tween/Timeline';
+declare module 'src/tween/private/index' {
+	import { add, get, getAll, isRunning, FrameThrottle, ToggleLagSmoothing, Plugins, remove, removeAll, removeDisplay, update } from 'src/tween/private/core';
+	import { Interpolation } from 'src/tween/private/Interpolation';
+	import * as utils from 'src/tween/private/constants';
+	import { TweenEvent } from 'src/event/TweenEvent';
+	import { Timeline } from 'src/tween/Timeline';
 	export { Plugins, get, getAll, removeAll, remove, removeDisplay, add, update, isRunning, FrameThrottle, ToggleLagSmoothing, Interpolation, TweenEvent, Timeline, utils };
 
 }
-declare module 'core/Ticker' {
-	 class Ticker extends PIXI.utils.EventEmitter {
+declare module 'src/core/Ticker' {
+	 class Ticker extends vf.utils.EventEmitter {
 	    /**
 	     * 心跳构造函数
 	     * @param autoStart 是否自动开启心跳，默认false
@@ -1407,9 +1395,9 @@ declare module 'core/Ticker' {
 	export default tickerShared;
 
 }
-declare module 'core/DisplayLayoutValidator' {
-	/// <reference types="pixi.js" />
-	import { DisplayLayoutAbstract } from 'core/DisplayLayoutAbstract'; class UIValidator extends PIXI.utils.EventEmitter {
+declare module 'src/core/DisplayLayoutValidator' {
+	///   types="@vf.js/vf" />
+	import { DisplayLayoutAbstract } from 'src/core/DisplayLayoutAbstract'; class UIValidator extends vf.utils.EventEmitter {
 	    /**
 	     * @private
 	     * 创建一个Validator对象
@@ -1511,19 +1499,19 @@ declare module 'core/DisplayLayoutValidator' {
 	export default validatorShared;
 
 }
-declare module 'core/ContainerBase' {
-	/// <reference types="pixi.js" />
+declare module 'src/core/ContainerBase' {
+	///   types="@vf.js/vf" />
 	/** 容器扩展类，后续便于做延时渲染 */
-	export class ContainerBase extends PIXI.Container {
+	export class ContainerBase extends vf.Container {
 	    constructor();
 	    isEmitRender: boolean;
-	    render(renderer: PIXI.Renderer): void;
+	    render(renderer: vf.Renderer): void;
 	}
 
 }
-declare module 'core/Stage' {
-	/// <reference types="pixi.js" />
-	import { DisplayLayoutAbstract } from 'core/DisplayLayoutAbstract';
+declare module 'src/core/Stage' {
+	///   types="@vf.js/vf" />
+	import { DisplayLayoutAbstract } from 'src/core/DisplayLayoutAbstract';
 	/**
 	 * UI的舞台对象，展示所有UI组件
 	 *
@@ -1532,34 +1520,31 @@ declare module 'core/Stage' {
 	 * @param height {Number} 舞台高度
 	 */
 	export class Stage extends DisplayLayoutAbstract {
-	    constructor(width: number, height: number, app?: PIXI.Application);
-	    app?: PIXI.Application;
+	    constructor(width: number, height: number, app?: vf.Application);
+	    app?: vf.Application;
 	    _stageWidth: number;
 	    _stageHeight: number;
 	    readonly stageWidth: number;
 	    readonly stageHeight: number;
 	    scaleX: number;
 	    scaleY: number;
-	    Scale: PIXI.Point;
+	    Scale: vf.Point;
 	    release(): void;
 	    releaseAll(): void;
 	    resize(): void;
 	    /**
 	     * 虚接口，子类可以扩充
 	     */
-	    inputLog(msg: TAny): void;
+	    inputLog(msg: any): void;
 	}
 
 }
-declare module 'core/DisplayObjectAbstract' {
-	/// <reference types="pixi.js" />
-	import { ContainerBase } from 'core/ContainerBase';
-	import { Stage } from 'core/Stage';
-	import { DisplayObject } from 'core/DisplayObject';
-	/**
-	 *
-	 */
-	export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements LifecycleHook, Lifecycle {
+declare module 'src/core/DisplayObjectAbstract' {
+	///   types="@vf.js/vf" />
+	import { ContainerBase } from 'src/core/ContainerBase';
+	import { Stage } from 'src/core/Stage';
+	import { DisplayObject } from 'src/core/DisplayObject';
+	export class DisplayObjectAbstract extends vf.utils.EventEmitter implements LifecycleHook, Lifecycle {
 	    constructor();
 	    /**
 	     * 全局唯一ID
@@ -1597,8 +1582,6 @@ declare module 'core/DisplayObjectAbstract' {
 	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
 	    getChildAt(index: number): DisplayObjectAbstract;
-	    getChildUUID(uuid: number): DisplayObjectAbstract | undefined;
-	    pathToDisplayObject(uuid: number[]): DisplayObjectAbstract | undefined;
 	    /**
 	     * 移除已添加的UI组件
 	     * @param UIObject 要移除的UI组件
@@ -1647,10 +1630,10 @@ declare module 'core/DisplayObjectAbstract' {
 	}
 
 }
-declare module 'core/DisplayLayoutAbstract' {
-	/// <reference types="pixi.js" />
-	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
-	export const $tempLocalBounds: PIXI.Rectangle;
+declare module 'src/core/DisplayLayoutAbstract' {
+	///   types="@vf.js/vf" />
+	import { DisplayObjectAbstract } from 'src/core/DisplayObjectAbstract';
+	export const $tempLocalBounds: vf.Rectangle;
 	/**
 	 * UI 布局的基础属性类
 	 */
@@ -1660,7 +1643,7 @@ declare module 'core/DisplayLayoutAbstract' {
 	    /**
 	     * @private
 	     */
-	    $values: TAny;
+	    $values: any;
 	    includeInLayout: boolean;
 	    /**
 	     * @private
@@ -1724,7 +1707,7 @@ declare module 'core/DisplayLayoutAbstract' {
 	     * 获取组件的首选尺寸,常用于父级的measure()方法中
 	     * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
 	     */
-	    getPreferredBounds(bounds: PIXI.Rectangle): PIXI.Rectangle;
+	    getPreferredBounds(bounds: vf.Rectangle): vf.Rectangle;
 	    /**
 	    * @private
 	    * 标记提交过需要延迟应用的属性，以便在稍后屏幕更新期间调用该组件的 commitProperties() 方法。
@@ -1790,32 +1773,32 @@ declare module 'core/DisplayLayoutAbstract' {
 	     * @private
 	     * 距父级容器离左边距离
 	     */
-	    left: TAny;
+	    left: any;
 	    /**
 	     * @private
 	     * 距父级容器右边距离
 	     */
-	    right: TAny;
+	    right: any;
 	    /**
 	     * @private
 	     * 距父级容器顶部距离
 	     */
-	    top: TAny;
+	    top: any;
 	    /**
 	     * @private
 	     * 距父级容器底部距离
 	     */
-	    bottom: TAny;
+	    bottom: any;
 	    /**
 	     * @private
 	     * 在父级容器中距水平中心位置的距离
 	     */
-	    horizontalCenter: TAny;
+	    horizontalCenter: any;
 	    /**
 	     * @private
 	     * 在父级容器中距竖直中心位置的距离
 	     */
-	    verticalCenter: TAny;
+	    verticalCenter: any;
 	    /**
 	     * @private
 	     * 相对父级容器宽度的百分比
@@ -1894,8 +1877,8 @@ declare module 'core/DisplayLayoutAbstract' {
 	}
 
 }
-declare module 'layout/CSSSSystem' {
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/layout/CSSSSystem' {
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/** ===================== background  ===================== */
 	export function backgroundColor(target: DisplayObject): void;
 	export function backgroundPositionSize(target: DisplayObject): void;
@@ -1906,13 +1889,13 @@ declare module 'layout/CSSSSystem' {
 	export function maskSize(target: DisplayObject): void;
 	export function maskImage(target: DisplayObject): void;
 	/** ===================== font  ===================== */
-	export function updateFontStyle(target: TAny, key: string, value: TAny): void;
-	export function color(target: TAny, key: string, value: TAny): void;
+	export function updateFontStyle(target: any, key: string, value: any): void;
+	export function color(target: any, key: string, value: any): void;
 
 }
-declare module 'layout/CSSStyle' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/layout/CSSStyle' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 	定位方式
 	 *
@@ -2082,7 +2065,7 @@ declare module 'layout/CSSStyle' {
 	     * 设置元素的背景图像。backgroundImage = "./xxx.png"
 	     * */
 	    private _backgroundImage?;
-	    backgroundImage: string | PIXI.Texture | undefined;
+	    backgroundImage: string | vf.Texture | undefined;
 	    /**
 	     * 设置 backgroundImage 后 ，设置背景图像的X位置
 	     * */
@@ -2109,7 +2092,7 @@ declare module 'layout/CSSStyle' {
 	     * 遮罩图
 	     */
 	    private _maskImage?;
-	    maskImage: string | DisplayObject | PIXI.Graphics | PIXI.Texture | undefined;
+	    maskImage: string | DisplayObject | vf.Graphics | vf.Texture | undefined;
 	    /**
 	     * 设置位数 [x,y]
 	     */
@@ -2123,7 +2106,7 @@ declare module 'layout/CSSStyle' {
 	    /**
 	     * 设置滤镜
 	     */
-	    filter: TAny;
+	    filter: any;
 	    /**
 	     * 设置鼠标样式
 	     */
@@ -2205,10 +2188,10 @@ declare module 'layout/CSSStyle' {
 	}
 
 }
-declare module 'layout/CSSBasicLayout' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	export const $tempRectangle: PIXI.Rectangle;
+declare module 'src/layout/CSSBasicLayout' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	export const $tempRectangle: vf.Rectangle;
 	/**
 	 * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
 	 */
@@ -2220,9 +2203,9 @@ declare module 'layout/CSSBasicLayout' {
 	export function updateBasicDisplayList(target: DisplayObject | undefined, unscaledWidth: number, unscaledHeight: number): void;
 
 }
-declare module 'layout/CSSGridLayout' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/layout/CSSGridLayout' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 *  更新网格布局
 	 *
@@ -2248,23 +2231,23 @@ declare module 'layout/CSSGridLayout' {
 	 *
 	 * 网格面积（未实现）https://developer.mozilla.org/zh-CN/docs/Glossary/Grid_Areas
 	 */
-	export function updateGridLayout(target: DisplayObject): PIXI.Rectangle;
+	export function updateGridLayout(target: DisplayObject): vf.Rectangle;
 
 }
-declare module 'layout/CSSLayout' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	export const $TempRectangle: PIXI.Rectangle;
+declare module 'src/layout/CSSLayout' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	export const $TempRectangle: vf.Rectangle;
 	/**
 	 * 调整目标的元素的大小并定位这些元素。
 	 */
 	export function updateDisplayLayout(target: DisplayObject, unscaledWidth: number, unscaledHeight: number): void;
 
 }
-declare module 'core/plugs/UIBaseDrag' {
-	import { DisplayObject } from 'core/DisplayObject';
-	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
-	import { Stage } from 'core/Stage';
+declare module 'src/core/plugs/UIBaseDrag' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { DisplayObjectAbstract } from 'src/core/DisplayObjectAbstract';
+	import { Stage } from 'src/core/Stage';
 	/**
 	 *  组件的拖拽操作
 	 *
@@ -2292,15 +2275,6 @@ declare module 'core/plugs/UIBaseDrag' {
 	     * 拖动控制类
 	     */
 	    private drag;
-	    /**
-	     * 临时属性，为了解决同步时的动作补齐
-	     * 0 没有操作
-	     * 1 开始拖动
-	     * 2 拖动中
-	     * 3 拖动结束
-	     * 4 拖动到目标
-	     */
-	    private _dragState;
 	    /**
 	     * 位置
 	     *
@@ -2360,27 +2334,18 @@ declare module 'core/plugs/UIBaseDrag' {
 	     * 接收拖动掉落的分组名
 	     */
 	    dropGroup: string | undefined;
-	    private _actionData;
-	    /**
-	     * 获取当前的操作数据
-	     */
-	    actionData: string;
 	    protected clearDraggable(): void;
 	    protected initDraggable(): void;
 	    protected clearDroppable(): void;
 	    protected initDroppable(): void;
 	    private onDrop;
-	    /**
-	     * 同步数据临时的方法
-	     */
-	    private executeDrop;
 	    load(): void;
 	    release(): void;
 	}
 
 }
-declare module 'core/plugs/UIClick' {
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/core/plugs/UIClick' {
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 *  组件的单击操作
 	 *
@@ -2398,11 +2363,11 @@ declare module 'core/plugs/UIClick' {
 	}
 
 }
-declare module 'core/DisplayObject' {
-	/// <reference types="pixi.js" />
-	import { DisplayLayoutAbstract } from 'core/DisplayLayoutAbstract';
-	import { CSSStyle } from 'layout/CSSStyle';
-	import { UIBaseDrag } from 'core/plugs/UIBaseDrag';
+declare module 'src/core/DisplayObject' {
+	///   types="@vf.js/vf" />
+	import { DisplayLayoutAbstract } from 'src/core/DisplayLayoutAbstract';
+	import { CSSStyle } from 'src/layout/CSSStyle';
+	import { UIBaseDrag } from 'src/core/plugs/UIBaseDrag';
 	/**
 	 * UI的顶级类，基础的UI对象
 	 *
@@ -2417,11 +2382,11 @@ declare module 'core/DisplayObject' {
 	    /**
 	     * 背景(内部使用)
 	     */
-	    $background?: PIXI.Graphics;
+	    $background?: vf.Graphics;
 	    /**
 	     * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化
 	     */
-	    $mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
+	    $mask?: vf.Graphics | vf.Sprite | DisplayObject;
 	    /**
 	     * 插件列表
 	     */
@@ -2458,7 +2423,7 @@ declare module 'core/DisplayObject' {
 	     * 混合模式
 	     */
 	    private _blendMode;
-	    blendMode: PIXI.BLEND_MODES | undefined;
+	    blendMode: vf.BLEND_MODES | undefined;
 	    private _filterProxy;
 	    private _filterMap;
 	    private _filterCount;
@@ -2507,12 +2472,11 @@ declare module 'core/DisplayObject' {
 	}
 
 }
-declare module 'utils/Utils' {
-	/// <reference types="pixi-sound" />
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { Stage } from 'core/Stage';
-	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
+declare module 'src/utils/Utils' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { Stage } from 'src/core/Stage';
+	import { DisplayObjectAbstract } from 'src/core/DisplayObjectAbstract';
 	/**
 	 * 是否调试模式
 	 */
@@ -2526,27 +2490,21 @@ declare module 'utils/Utils' {
 	 * 组件获取资源 - 源路径,外部可以重写本方法
 	 */
 	export let $getSourcePath: Function;
-	export function setSourcePath(params: (path: TAny, cls?: TAny) => {}): void;
+	export function setSourcePath(params: (path: any, cls?: any) => {}): void;
 	/**
 	 * 根据显示路径，获取显示对象
 	 */
 	export let $getUIDisplayObjectPath: Function;
-	export function setDisplayObjectPath(params: (cls?: TAny, target?: DisplayObject) => {}): void;
-	export function getTexture(src: TAny): any;
-	export function getSheet(src: TAny): any;
-	export function getSound(src: TAny): PIXI.sound.Sound;
-	export function getDisplayObject(src: TAny, target?: DisplayObject): any;
+	export function setDisplayObjectPath(params: (cls?: any, target?: DisplayObject) => {}): void;
+	export function getTexture(src: any): any;
+	export function getSheet(src: any): any;
+	export function getSound(src: any): any;
+	export function getDisplayObject(src: any, target?: DisplayObject): any;
 	/**
 	 * 递归获取舞台，组件必须已经添加到舞台
 	 * @param DisplayObject
 	 */
 	export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage): Stage | undefined;
-	/**
-	 * 获取显示对象的路径
-	 * @param target
-	 * @param ids
-	 */
-	export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage, ids?: number[]): number[];
 	/**
 	 * 快速设置矩形
 	 * @param sourcr
@@ -2555,14 +2513,14 @@ declare module 'utils/Utils' {
 	 * @param w
 	 * @param h
 	 */
-	export function setRectangle(source: PIXI.Rectangle, x: number, y: number, w: number, h: number): void;
+	export function setRectangle(source: vf.Rectangle, x: number, y: number, w: number, h: number): void;
 	/** 获取当前运行时时间 */
 	export function now(): number;
 	/**
 	 * 深度拷贝对象
 	 * @param source 对象元
 	 */
-	export function deepCopy(source: TAny, target?: TAny): any;
+	export function deepCopy(source: any, target?: any): any;
 	/**
 	 * helper function to convert string hex to int or default
 	 *
@@ -2649,7 +2607,7 @@ declare module 'utils/Utils' {
 	    key: string;
 	    value: number;
 	};
-	export function isDeltaIdentity(m: PIXI.Matrix): boolean;
+	export function isDeltaIdentity(m: vf.Matrix): boolean;
 	/**
 	 * 格式化一个百分比为小数
 	 * @param value
@@ -2657,18 +2615,18 @@ declare module 'utils/Utils' {
 	 */
 	export function formatRelative(value: number | string | undefined, total: number): number;
 	/** 计算两点距离 */
-	export function pointDistance(pointA: PIXI.Point | {
+	export function pointDistance(pointA: vf.Point | {
 	    x: number;
 	    y: number;
-	}, pointB: PIXI.Point | {
+	}, pointB: vf.Point | {
 	    x: number;
 	    y: number;
 	}): number;
 	/** 坐标相减 */
-	export function pointSub(source: PIXI.Point | {
+	export function pointSub(source: vf.Point | {
 	    x: number;
 	    y: number;
-	}, subPoint: PIXI.Point | {
+	}, subPoint: vf.Point | {
 	    x: number;
 	    y: number;
 	}): {
@@ -2676,10 +2634,10 @@ declare module 'utils/Utils' {
 	    y: number;
 	};
 	/** 坐标相加 */
-	export function pointPlus(source: PIXI.Point | {
+	export function pointPlus(source: vf.Point | {
 	    x: number;
 	    y: number;
-	}, PlusPoint: PIXI.Point | {
+	}, PlusPoint: vf.Point | {
 	    x: number;
 	    y: number;
 	}): {
@@ -2687,37 +2645,42 @@ declare module 'utils/Utils' {
 	    y: number;
 	};
 	/** 向量转弧度 */
-	export function pointSignAngle(pointA: PIXI.Point | {
+	export function pointSignAngle(pointA: vf.Point | {
 	    x: number;
 	    y: number;
-	}, pointB: PIXI.Point | {
+	}, pointB: vf.Point | {
 	    x: number;
 	    y: number;
 	}): number;
+	/**
+	 *  根据类型获得具体的类定义
+	 * @param type
+	 */
+	export function getGuiClass(type: string): any;
+	export function sayHello(): void;
 
 }
-declare module 'core/Filter' {
-	/// <reference types="pixi.js" />
-	export class Filter extends PIXI.Filter {
+declare module 'src/core/Filter' {
+	///   types="@vf.js/vf" />
+	export class Filter extends vf.Filter {
 	    static isFilter: boolean;
 	    static defaultFilterVertex: string;
 	    static list: Map<string, boolean>;
 	    constructor(vertexSrc?: string, fragmentSrc?: string, uniforms?: {
-	        [key: string]: TAny;
+	        [key: string]: any;
 	    });
 	}
 
 }
-declare module 'display/Container' {
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/display/Container' {
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 基础容器
 	 *
 	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
 	 *
-	 * @example let container = new gui.Container();
+	 * @example let container = new vf.gui.Container();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestContainer
 	 */
@@ -2733,16 +2696,15 @@ declare module 'display/Container' {
 	}
 
 }
-declare module 'display/ScrollingContainer' {
-	/// <reference types="pixi.js" />
-	import { Container } from 'display/Container';
-	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
+declare module 'src/display/ScrollingContainer' {
+	///   types="@vf.js/vf" />
+	import { Container } from 'src/display/Container';
+	import { DisplayObjectAbstract } from 'src/core/DisplayObjectAbstract';
 	/**
 	 * 可滚动的容器
 	 *
-	 * @example let scrollingContainer = new gui.ScrollingContainer();
+	 * @example let scrollingContainer = new vf.gui.ScrollingContainer();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
 	 */
@@ -2790,7 +2752,7 @@ declare module 'display/ScrollingContainer' {
 	    /**
 	     * 内容的宽高
 	     */
-	    innerBounds: PIXI.Rectangle;
+	    innerBounds: vf.Rectangle;
 	    /**
 	     * 拖动处理类
 	     */
@@ -2817,9 +2779,9 @@ declare module 'display/ScrollingContainer' {
 	    private _Speed;
 	    private _stop;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
-	    protected setScrollPosition(speed?: PIXI.Point): void;
+	    protected setScrollPosition(speed?: vf.Point): void;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
-	    protected getInnerBounds(force?: boolean): PIXI.Rectangle;
+	    protected getInnerBounds(force?: boolean): vf.Rectangle;
 	    $onInit(): void;
 	    protected initScrolling(): void;
 	    protected updateScrollBars(): void;
@@ -2830,23 +2792,22 @@ declare module 'display/ScrollingContainer' {
 	     */
 	    forcePctPosition(direction: "x" | "y", pct: number): void;
 	    /** 根据焦点设置位置 */
-	    focusPosition(pos: PIXI.Point): void;
+	    focusPosition(pos: vf.Point): void;
 	    protected updateScrollPosition(delta: number): void;
 	    protected updateDirection(direction: "x" | "y", delta: number): void;
 	}
 
 }
-declare module 'display/SpriteAnimated' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/display/SpriteAnimated' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 序列图动画
 	 *
 	 * 支持使用texturepacker导出以及处理轴点
 	 *
-	 * @example let spriteAnimated = new gui.SpriteAnimated();
+	 * @example let spriteAnimated = new vf.gui.SpriteAnimated();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSpriteAnimated
 	 */
@@ -2865,7 +2826,7 @@ declare module 'display/SpriteAnimated' {
 	     * 序列图路径，或序列图数组
 	     */
 	    private _src;
-	    src: PIXI.Spritesheet | PIXI.Texture[] | undefined;
+	    src: vf.Spritesheet | vf.Texture[] | undefined;
 	    /**
 	     * 动画速度
 	     */
@@ -2910,7 +2871,7 @@ declare module 'display/SpriteAnimated' {
 	    /**
 	     * 添加动画
 	     */
-	    addAnimated(animationName: string, textures: PIXI.Texture[]): void;
+	    addAnimated(animationName: string, textures: vf.Texture[]): void;
 	    release(): void;
 	    protected releaseAnimate(): void;
 	    protected srcSystem(): void;
@@ -2920,7 +2881,7 @@ declare module 'display/SpriteAnimated' {
 	}
 
 }
-declare module 'event/KeyEvent' {
+declare module 'src/event/KeyEvent' {
 	/**
 	 * 键盘事件 驱动类KeysEvent
 	 *
@@ -3038,17 +2999,17 @@ declare module 'event/KeyEvent' {
 	}
 
 }
-declare module 'display/private/HtmlInput' {
-	/// <reference types="pixi.js" />
+declare module 'src/display/private/HtmlInput' {
+	///   types="@vf.js/vf" />
 	/**
-	 * 私有的，由于PIXIJS不支持文本输入，这里以HTML方式实现
+	 * 私有的，由于VFJS不支持文本输入，这里以HTML方式实现
 	 */
-	export default class HtmlInput extends PIXI.utils.EventEmitter {
+	export default class HtmlInput extends vf.utils.EventEmitter {
 	    constructor(multiline: boolean);
 	    private _domInput;
 	    private _selection;
 	    private _restrictRegex;
-	    private _restrict_value;
+	    private _restrictValue;
 	    readonly domInput: HTMLInputElement | HTMLTextAreaElement;
 	    visible: boolean;
 	    value: string;
@@ -3057,7 +3018,7 @@ declare module 'display/private/HtmlInput' {
 	    maxlength: number;
 	    restrict: RegExp | undefined;
 	    setStyle(style: InputStyle): void;
-	    setStyleValue(key: TAny, value: TAny): void;
+	    setStyleValue(key: any, value: any): void;
 	    select(): void;
 	    /** 测量，需要对象添加到body中 */
 	    getDOMInputBounds(): ClientRect | DOMRect;
@@ -3083,17 +3044,16 @@ declare module 'display/private/HtmlInput' {
 	}
 
 }
-declare module 'display/TextInput' {
-	/// <reference types="pixi.js" />
-	import HtmlInput from 'display/private/HtmlInput';
-	import { InputBase } from 'display/private/InputBase';
-	import { Image } from 'display/Image';
+declare module 'src/display/TextInput' {
+	///   types="@vf.js/vf" />
+	import HtmlInput from 'src/display/private/HtmlInput';
+	import { InputBase } from 'src/display/private/InputBase';
+	import { Image } from 'src/display/Image';
 	/**
 	 * 文本输入
 	 *
-	 * @example let textInput = new gui.TextInput(true|false);//单行或多行
+	 * @example let textInput = new vf.gui.TextInput(true|false);//单行或多行
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTextInput
 	 */
@@ -3101,7 +3061,7 @@ declare module 'display/TextInput' {
 	    constructor(multiline?: boolean);
 	    protected _oldState: string;
 	    protected htmlInputShared: HtmlInput;
-	    protected _lastRenderer: PIXI.Renderer | undefined;
+	    protected _lastRenderer: vf.Renderer | undefined;
 	    protected _resolution: number;
 	    protected _canvasBounds: {
 	        top: number;
@@ -3110,21 +3070,21 @@ declare module 'display/TextInput' {
 	        height: number;
 	    } | undefined;
 	    protected _previous: {
-	        canvasBounds: TAny;
-	        worldTransform: TAny;
-	        worldAlpha: TAny;
-	        worldVisible: TAny;
-	    } | TAny;
+	        canvasBounds: any;
+	        worldTransform: any;
+	        worldAlpha: any;
+	        worldVisible: any;
+	    } | any;
 	    protected _inputStyle: InputStyle;
 	    /**
 	     * 预览文字的样式
 	     */
 	    protected placeholderColor: number;
 	    protected _domVisible: boolean;
-	    protected _textHitbox: PIXI.Graphics;
-	    protected _textMask: PIXI.Graphics;
-	    protected _text: PIXI.Text;
-	    protected _fontMetrics: PIXI.IFontMetrics | undefined;
+	    protected _textHitbox: vf.Graphics;
+	    protected _textMask: vf.Graphics;
+	    protected _text: vf.Text;
+	    protected _fontMetrics: vf.IFontMetrics | undefined;
 	    protected state: string;
 	    /**
 	     * 设置文本
@@ -3149,7 +3109,7 @@ declare module 'display/TextInput' {
 	     * 状态展示
 	    */
 	    readonly img: Image;
-	    updateSystem(renderer?: PIXI.Renderer): void;
+	    updateSystem(renderer?: vf.Renderer): void;
 	    /**
 	     * 设置焦点
 	     */
@@ -3163,14 +3123,14 @@ declare module 'display/TextInput' {
 	     * @param key 健
 	     * @param value 值
 	     */
-	    setInputStyle(key: TAny, value: TAny): void;
+	    setInputStyle(key: any, value: any): void;
 	    protected onStateChange(ui: TextInput, state: string): void;
 	    private _onInputInput;
 	    private _onFocused;
 	    private _onBlurred;
 	    private _setState;
 	    private _updateSubstitution;
-	    render(renderer: PIXI.Renderer): void;
+	    render(renderer: vf.Renderer): void;
 	    private _renderInternal;
 	    private _updateDOMInput;
 	    private _needsUpdate;
@@ -3183,24 +3143,23 @@ declare module 'display/TextInput' {
 	    private _hasFocus;
 	    private _getCanvasBounds;
 	    private _getDOMRelativeWorldTransform;
-	    private _pixiMatrixToCSS;
-	    private _comparePixiMatrices;
+	    private _vfMatrixToCSS;
+	    private _comparevfMatrices;
 	    private _compareClientRects;
 	    release(): void;
 	}
 
 }
-declare module 'display/Slider' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { Image as VfuiImage } from 'display/Image';
-	import { DragEvent, InteractionEvent } from 'interaction/Index';
+declare module 'src/display/Slider' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { Image as VfuiImage } from 'src/display/Image';
+	import { DragEvent, InteractionEvent } from 'src/interaction/Index';
 	/**
 	 * 滑动条/进度条
 	 *
-	 * @example let slider = new gui.Slider();
+	 * @example let slider = new vf.gui.Slider();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
 	 */
@@ -3217,7 +3176,7 @@ declare module 'display/Slider' {
 	    protected _decimals: number;
 	    protected _startValue: number;
 	    protected _maxPosition: number;
-	    protected _localMousePosition: PIXI.Point;
+	    protected _localMousePosition: vf.Point;
 	    protected _lastChange: number;
 	    protected _lastChanging: number;
 	    private _thumbDrag;
@@ -3251,17 +3210,17 @@ declare module 'display/Slider' {
 	     * 背景
 	     */
 	    private _track?;
-	    track: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    track: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    /**
 	     * 手柄
 	     */
 	    private _thumb?;
-	    thumb: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    thumb: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    /**
 	     * 进度
 	     */
 	    private _tracklight?;
-	    tracklight: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    tracklight: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    private isExcValueSystem;
 	    setActualSize(w: number, h: number): void;
 	    release(): void;
@@ -3270,34 +3229,33 @@ declare module 'display/Slider' {
 	    protected updatePosition(soft?: boolean): void;
 	    protected onPress(event: InteractionEvent, isPressed: boolean, dragEvent?: DragEvent): void;
 	    protected onDragStart(event: InteractionEvent): void;
-	    protected onDragMove(event: InteractionEvent, offset: PIXI.Point): void;
+	    protected onDragMove(event: InteractionEvent, offset: vf.Point): void;
 	    protected onDragEnd(event: InteractionEvent): void;
-	    protected updatePositionToMouse(mousePosition: PIXI.Point, soft: boolean): void;
+	    protected updatePositionToMouse(mousePosition: vf.Point, soft: boolean): void;
 	    protected triggerValueChange(): void;
 	    protected triggerValueChanging(): void;
 	}
 
 }
-declare module 'display/Rect' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { MaskSprite } from 'core/MaskSprite';
+declare module 'src/display/Rect' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { MaskSprite } from 'src/core/MaskSprite';
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
 	 * 不设置 lineWidth 或 color 矩形不可见
 	 *
-	 * @example let rect = new gui.Rect();
+	 * @example let rect = new vf.gui.Rect();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
 	 */
 	export class Rect extends DisplayObject implements MaskSprite {
 	    constructor();
-	    readonly graphics: PIXI.Graphics;
+	    readonly graphics: vf.Graphics;
 	    /** 可以支持遮罩的组件 */
-	    maskSprite(): PIXI.Graphics;
+	    maskSprite(): vf.Graphics;
 	    /**
 	     * 圆角
 	     */
@@ -3334,26 +3292,26 @@ declare module 'display/Rect' {
 	}
 
 }
-declare module 'display/Circle' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
-	import { MaskSprite } from 'core/MaskSprite';
+declare module 'src/display/Circle' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { MaskSprite } from 'src/core/MaskSprite';
 	/**
 	 * 绘制圆形
 	 *
 	 * 不设置 lineWidth 或 color 圆形不可见
 	 *
-	 * @example let circle = new gui.Circle();
+	 * @example let circle = new vf.gui.Circle();
 	 *
-	 * @namespace gui
+
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCircle
 	 */
 	export class Circle extends DisplayObject implements MaskSprite {
 	    constructor();
-	    readonly graphics: PIXI.Graphics;
+	    readonly graphics: vf.Graphics;
 	    /** 可以支持遮罩的组件 */
-	    maskSprite(): PIXI.Graphics;
+	    maskSprite(): vf.Graphics;
 	    /**
 	     * 半径
 	     */
@@ -3390,25 +3348,24 @@ declare module 'display/Circle' {
 	}
 
 }
-declare module 'display/Graphics' {
-	/// <reference types="pixi.js" />
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/display/Graphics' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
 	 * 矢量绘制
 	 *
-	 * @example let graphics = new gui.Graphics();
+	 * @example let graphics = new vf.gui.Graphics();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
 	export class Graphics extends DisplayObject {
-	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
-	    readonly graphics: PIXI.Graphics;
+	    constructor(geometry?: vf.GraphicsGeometry | undefined);
+	    readonly graphics: vf.Graphics;
 	}
 
 }
-declare module 'enum/FollowLineEnum' {
+declare module 'src/enum/FollowLineEnum' {
 	export const enum Role {
 	    /** 老师 */
 	    teacher = "T",
@@ -3422,21 +3379,20 @@ declare module 'enum/FollowLineEnum' {
 	}
 
 }
-declare module 'enum/Index' {
-	import * as FollowLineEnum from 'enum/FollowLineEnum';
+declare module 'src/enum/Index' {
+	import * as FollowLineEnum from 'src/enum/FollowLineEnum';
 	export { FollowLineEnum };
 
 }
-declare module 'display/FollowLine' {
-	import { DisplayObject } from 'core/DisplayObject';
-	import { ClickEvent } from 'interaction/Index';
-	import { FollowLineEnum } from 'enum/Index';
+declare module 'src/display/FollowLine' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { ClickEvent } from 'src/interaction/Index';
+	import { FollowLineEnum } from 'src/enum/Index';
 	/**
 	 * 跟随鼠标或触摸绘制线条
 	 *
-	 * @example let graphics = new gui.FollowLine();
+	 * @example let graphics = new vf.gui.FollowLine();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
@@ -3518,20 +3474,19 @@ declare module 'display/FollowLine' {
 	    clear(): void;
 	    setData(data: string | string[]): void;
 	    source: string | string[];
-	    reset(): TAny;
+	    reset(): any;
 	}
 
 }
-declare module 'display/ConnectLine' {
-	import { DisplayObject } from 'core/DisplayObject'; type LinePostion = 'leftTop' | 'centerTop' | 'rightTop' | 'leftCenter' | 'center' | 'rightCenter' | 'leftBottom' | 'centerBottom' | 'rightBottom' | number[];
+declare module 'src/display/ConnectLine' {
+	import { DisplayObject } from 'src/core/DisplayObject'; type LinePostion = 'leftTop' | 'centerTop' | 'rightTop' | 'leftCenter' | 'center' | 'rightCenter' | 'leftBottom' | 'centerBottom' | 'rightBottom' | number[];
 	export const play: unique symbol;
 	/**
 	 * 连线组件
 	 *
 	 *
-	 * @example let connectLine = new gui.ConnectLine();
+	 * @example let connectLine = new vf.gui.ConnectLine();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestConnectLine
 	 */
@@ -3603,95 +3558,7 @@ declare module 'display/ConnectLine' {
 	export {};
 
 }
-declare module 'display/Sound' {
-	/// <reference types="pixi-sound" />
-	/// <reference types="pixi.js" />
-	import { SpriteAnimated } from 'display/SpriteAnimated';
-	import { InputBase } from 'display/private/InputBase';
-	export const $sounds: Map<string, PIXI.sound.Sound>;
-	/**
-	 * 音频播放组件
-	 *
-	 * @example let sound = new gui.Sound();
-	 *
-	 * @namespace gui
-	 *
-	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSound
-	 */
-	export class Sound extends InputBase {
-	    constructor();
-	    protected _sound: PIXI.sound.Sound | undefined;
-	    protected _mediaInstance: PIXI.sound.IMediaInstance | undefined;
-	    /**
-	     * 状态展示
-	     */
-	    readonly spriteAnimated: SpriteAnimated;
-	    /**
-	     * 是否自动播放
-	     * @default false
-	     */
-	    private _autoPlay;
-	    autoPlay: boolean;
-	    /**
-	     * 播放的动画
-	     */
-	    private _sheetSkin?;
-	    sheetSkin: PIXI.Spritesheet | undefined;
-	    readonly duration: number;
-	    private _src;
-	    /**
-	     * 音频源
-	     */
-	    src: string | number | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
-	    /**
-	     * 动画速度
-	     */
-	    animationSpeed: number;
-	    private _speed;
-	    /**
-	     * 设置播放速度
-	     */
-	    speed: number;
-	    private _volume;
-	    /**
-	     * 音量
-	     * @default 100
-	     */
-	    volume: number;
-	    private _loop;
-	    /**
-	     * 是否循环
-	     * @default false
-	     */
-	    loop: boolean;
-	    protected _curProgress: number;
-	    protected _playing: boolean;
-	    readonly isPlaying: boolean;
-	    private _startTime?;
-	    startTime: number | undefined;
-	    private _endTime?;
-	    endTime: number | undefined;
-	    isPlay: boolean;
-	    protected commitProperties(): void;
-	    play(start?: number, end?: number): Promise<void>;
-	    stop(): void;
-	    /**
-	     * 恢复播放
-	     */
-	    resume(): void;
-	    /**
-	     * 暂停播放
-	     */
-	    pause(): void;
-	    release(): void;
-	    private releaseSound;
-	    private onProgress;
-	    private onEnd;
-	    protected onClick(): void;
-	}
-
-}
-declare module 'event/SchedulerEvent' {
+declare module 'src/event/SchedulerEvent' {
 	export const enum SchedulerEvent {
 	    /**
 	     * 心跳
@@ -3712,16 +3579,16 @@ declare module 'event/SchedulerEvent' {
 	}
 
 }
-declare module 'event/Index' {
-	import * as ComponentEvent from 'event/ComponentEvent';
-	import { InteractionEvent } from 'event/InteractionEvent';
-	import { TouchMouseEvent } from 'event/TouchMouseEvent';
-	import { TweenEvent } from 'event/TweenEvent';
-	import { SchedulerEvent } from 'event/SchedulerEvent';
+declare module 'src/event/Index' {
+	import * as ComponentEvent from 'src/event/ComponentEvent';
+	import { InteractionEvent } from 'src/event/InteractionEvent';
+	import { TouchMouseEvent } from 'src/event/TouchMouseEvent';
+	import { TweenEvent } from 'src/event/TweenEvent';
+	import { SchedulerEvent } from 'src/event/SchedulerEvent';
 	export { ComponentEvent, InteractionEvent, TouchMouseEvent, TweenEvent, SchedulerEvent };
 
 }
-declare module 'event/EventType' {
+declare module 'src/event/EventType' {
 	export const enum EventType {
 	    /**
 	     * 状态变化 ：IVFData -> VFStateCode
@@ -3762,7 +3629,7 @@ declare module 'event/EventType' {
 	}
 
 }
-declare module 'event/EventLevel' {
+declare module 'src/event/EventLevel' {
 	/**
 	 * status: 状态变化
 	 *
@@ -3804,14 +3671,14 @@ declare module 'event/EventLevel' {
 	}
 
 }
-declare module 'core/Scheduler' {
-	/// <reference types="pixi.js" />
+declare module 'src/core/Scheduler' {
+	///   types="@vf.js/vf" />
 	/**
 	 * Schedule anything
 	 *
 	 * @author 8088
 	 */
-	export class Scheduler extends PIXI.utils.EventEmitter {
+	export class Scheduler extends vf.utils.EventEmitter {
 	    readonly id: number;
 	    static clock: () => number;
 	    static ticker: any;
@@ -3841,61 +3708,58 @@ declare module 'core/Scheduler' {
 	}
 
 }
-declare module 'UI' {
+declare module 'src/UI' {
+	///   types="@vf.js/vf" />
 	/** 工具类 */
-	import * as Utils from 'utils/Utils';
+	import * as Utils from 'src/utils/Utils';
 	/** UI舞台，最顶级的层 展示所有UI组件 */
-	import { Stage } from 'core/Stage';
+	import { Stage } from 'src/core/Stage';
 	/** UI基础显示对象，一般不会直接使用，只作为类型推断 */
-	import { DisplayObject } from 'core/DisplayObject';
+	import { DisplayObject } from 'src/core/DisplayObject';
 	/** 心跳，需要在初始化完成后，启动心跳更新 */
-	import { shared as TickerShared } from 'core/Ticker';
+	import { shared as TickerShared } from 'src/core/Ticker';
 	/** 滤镜的基础类 */
-	import { Filter } from 'core/Filter';
+	import { Filter } from 'src/core/Filter';
 	/**
 	 * 基础容器
 	 *
 	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
 	 *
-	 * @example let container = new gui.Container();
+	 * @example let container = new vf.gui.Container();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestContainer
 	 */
-	import { Container } from 'display/Container';
+	import { Container } from 'src/display/Container';
 	/**
 	 * 滚动容器
 	 *
-	 * @example let scrollingContainer = new gui.ScrollingContainer();
+	 * @example let scrollingContainer = new vf.gui.ScrollingContainer();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
 	 */
-	import { ScrollingContainer } from 'display/ScrollingContainer';
+	import { ScrollingContainer } from 'src/display/ScrollingContainer';
 	/**
 	 * 图片
 	 *
-	 * @example let image = new gui.Image();
+	 * @example let image = new vf.gui.Image();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestImage
 	 */
-	import { Image } from 'display/Image';
+	import { Image } from 'src/display/Image';
 	/**
 	 * 序列图动画
 	 *
 	 * 支持使用texturepacker导出以及处理轴点
 	 *
-	 * @example let spriteAnimated = new gui.SpriteAnimated();
+	 * @example let spriteAnimated = new vf.gui.SpriteAnimated();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSpriteAnimated
 	 */
-	import { SpriteAnimated } from 'display/SpriteAnimated';
+	import { SpriteAnimated } from 'src/display/SpriteAnimated';
 	/**
 	 * 文本
 	 *
@@ -3903,175 +3767,145 @@ declare module 'UI' {
 	 *
 	 * 文本没有宽高，自适应
 	 *
-	 * @example let label = new gui.Label();
+	 * @example let label = new vf.gui.Label();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
 	 */
-	import { Label } from 'display/Label';
+	import { Label } from 'src/display/Label';
 	/**
 	 * 文本输入
 	 *
-	 * @example let textInput = new gui.TextInput(true|false);//单行或多行
+	 * @example let textInput = new vf.gui.TextInput(true|false);//单行或多行
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTextInput
 	 */
-	import { TextInput } from 'display/TextInput';
+	import { TextInput } from 'src/display/TextInput';
 	/**
 	 * 滑动条/进度条
 	 *
-	 * @example let slider = new gui.Slider();
+	 * @example let slider = new vf.gui.Slider();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
 	 */
-	import { Slider } from 'display/Slider';
+	import { Slider } from 'src/display/Slider';
 	/**
 	 * 按钮
 	 *
-	 * @example let button = new gui.Button();
+	 * @example let button = new vf.gui.Button();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestButton
 	 */
-	import { Button } from 'display/Button';
+	import { Button } from 'src/display/Button';
 	/**
 	 * 单选\复选框
 	 *
 	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
 	 *
-	 * @example let checkBox = new gui.CheckBox();
+	 * @example let checkBox = new vf.gui.CheckBox();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCheckBox
 	 */
-	import { CheckBox } from 'display/CheckBox';
+	import { CheckBox } from 'src/display/CheckBox';
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
-	 * @example let rect = new gui.Rect();
+	 * @example let rect = new vf.gui.Rect();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestRect
 	 */
-	import { Rect } from 'display/Rect';
+	import { Rect } from 'src/display/Rect';
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
-	 * @example let rect = new gui.Circle();
+	 * @example let rect = new vf.gui.Circle();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestCircle
 	 */
-	import { Circle } from 'display/Circle';
+	import { Circle } from 'src/display/Circle';
 	/**
 	 * 矢量绘制
 	 *
-	 * @example let graphics = new gui.Graphics();
+	 * @example let graphics = new vf.gui.Graphics();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
-	import { Graphics } from 'display/Graphics';
+	import { Graphics } from 'src/display/Graphics';
 	/**
 	 * 跟随划线（鼠标或触摸按下时）
 	 *
-	 * @example let graphics = new gui.FollowLine();
+	 * @example let graphics = new vf.gui.FollowLine();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
-	import { FollowLine } from 'display/FollowLine';
+	import { FollowLine } from 'src/display/FollowLine';
 	/**
 	 * 连线组件
 	 *
 	 *
-	 * @example let connectLine = new gui.ConnectLine();
+	 * @example let connectLine = new vf.gui.ConnectLine();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestConnectLine
 	 */
-	import { ConnectLine } from 'display/ConnectLine';
-	/**
-	 * 音频播放组件
-	 *
-	 * @example let sound = new gui.Sound();
-	 *
-	 * @namespace gui
-	 *
-	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSound
-	 */
-	import { Sound } from 'display/Sound';
+	import { ConnectLine } from 'src/display/ConnectLine';
 	/**
 	 * 完整的缓动曲线列表
 	 *
-	 * @example gui.Easing.Linear.None;
+	 * @example vf.gui.Easing.Linear.None;
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
 	 */
-	import { Easing } from 'tween/Easing';
+	import { Easing } from 'src/tween/Easing';
 	/**
 	 * 缓动动画
 	 *
-	 * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+	 * @example let tween = new vf.gui.Tween(myObject).to({width:'300px'}, 2000).start()
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTween
 	 */
-	import { Tween } from 'tween/Tween';
+	import { Tween } from 'src/tween/Tween';
 	/**
 	 * 基于帧的时间轴控制类
 	 *
-	 * @example let timeline = new gui.Timeline();
+	 * @example let timeline = new vf.gui.Timeline();
 	 *
-	 * @namespace gui
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
 	 */
-	import { Timeline } from 'tween/Timeline';
+	import { Timeline } from 'src/tween/Timeline';
 	/**
 	 * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
 	 */
-	import * as Interaction from 'interaction/Index';
+	import * as Interaction from 'src/interaction/Index';
 	/**
 	 * 事件名
 	 */
-	import * as Event from 'event/Index';
+	import * as Event from 'src/event/Index';
 	/**
 	 * 枚举
 	 */
-	import * as Enum from 'enum/Index';
-	import { Scheduler } from 'core/Scheduler';
+	import * as Enum from 'src/enum/Index';
+	import { Scheduler } from 'src/core/Scheduler';
+	export type Application = vf.Application;
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum, Scheduler };
+	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
 
 }
-declare module 'vf-gui' {
-	import * as vfgui from 'UI';
-	export default vfgui;
+declare module 'src/vf-gui' {
+	import * as gui from 'src/UI';
+	export { gui };
 
-}
-declare type TAny = any;
-interface Window {
-    readonly clipboardData: DataTransfer | null;
-    gui: any;
-    module: any;
-    require: any;
-    exports: any;
 }
 declare interface ObjectConstructor {
     assign(...objects: Record<string, any>[]): Record<string, any>;
@@ -4141,15 +3975,15 @@ interface LifecycleHook {
      */
     $onRemoveStage(): void;
 }
-declare module 'core/UIBase' {
-	import { DisplayObject } from 'core/DisplayObject';
+declare module 'src/core/UIBase' {
+	import { DisplayObject } from 'src/core/DisplayObject';
 	export class UIBase extends DisplayObject implements Lifecycle {
 	    constructor();
 	}
 
 }
-declare module 'interaction/KeyboardEvent' {
-	import { DisplayObject } from 'core/DisplayObject'; class KeyboardSelectEvent {
+declare module 'src/interaction/KeyboardEvent' {
+	import { DisplayObject } from 'src/core/DisplayObject'; class KeyboardSelectEvent {
 	    /**
 	     * document的键盘事件
 	    */
@@ -4183,7 +4017,7 @@ declare module 'interaction/KeyboardEvent' {
 	export {};
 
 }
-declare module 'tween/private/PlaybackPosition' {
+declare module 'src/tween/private/PlaybackPosition' {
 	/**
 	 * 回放位置的相关操作函数
 	 */
@@ -4199,7 +4033,299 @@ declare module 'tween/private/PlaybackPosition' {
 	}
 
 }
+declare module 'test/TestAlign' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestAlign {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
 
-declare namespace gui{
-    export * from "UI";
 }
+declare module 'test/WebPlayerSize' {
+	 type ScaleMode = "noScale" | "showAll" | "noBorder" | "exactFit" | "fixedWidth" | "fixedHeight" | "fixedNarrow" | "fixedWide";
+	/**
+	 * @private
+	 * 更新播放器视口尺寸
+	 */
+	export default function updateViewSize(app: vf.Application, canvasScaleFactor: number | undefined, isWebGl: boolean | undefined, scaleMode: ScaleMode): void;
+	export {};
+
+}
+declare module 'test/TestApplication' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestApplication {
+	    constructor(thisObj: any, callback: (app: vf.Application, uiStage: vf.gui.Stage) => void);
+	    private uiStage;
+	    private app;
+	    private thisObj;
+	    private callback;
+	    private initTest;
+	    private resize;
+	    private updata;
+	}
+
+}
+declare module 'test/TestButton' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestButton {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private onClick;
+	    private onPress;
+	    private onHover;
+	}
+
+}
+declare module 'test/TestCheckBox' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestCheckBox {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getNewCheckBox;
+	    private getNewRadio;
+	    private onChange;
+	}
+
+}
+declare module 'test/TestCircle' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestCircle {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private onClick;
+	}
+
+}
+declare module 'test/TestConnectLine' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestConnectLine {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getNewRect;
+	    private getNewConnectLine;
+	}
+
+}
+declare module 'test/TestContainer' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestContainer {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestDrag' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestDrag {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getNewContainer;
+	}
+
+}
+declare module 'test/TestFollowLine' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestFollowLine {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestGridLayout' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestGridLayout {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private addContent;
+	}
+
+}
+declare module 'test/TestImage' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestImage {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestLabel' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestLabel {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getFontCssStyle;
+	}
+
+}
+declare module 'test/TestMouseCursor' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestMouseCursor {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getContainer;
+	}
+
+}
+declare module 'test/TestRect' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestRect {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private onClick;
+	}
+
+}
+declare module 'test/TestScrollingContainer' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestScrollingContainer {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private addSc;
+	}
+
+}
+declare module 'test/TestSlider' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestSlider {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestSpriteAnimated' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestSpriteAnimated {
+	    private onLoad;
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	}
+	/**
+	 *
+	 {"frames": {
+
+	    "1_role2-sheet0.png":
+	    {
+	        "frame": {"x":254,"y":1,"w":255,"h":391},
+	        "rotated": false,
+	        "trimmed": true,
+	        "spriteSourceSize": {"x":19,"y":3,"w":255,"h":391},
+	        "sourceSize": {"w":274,"h":394},
+	        "anchor": {"x":0.478102,"y":0.997462}
+	    },
+	    "1_role2-sheet1.png":
+	    {
+	        "frame": {"x":1,"y":1,"w":251,"h":394},
+	        "rotated": false,
+	        "trimmed": true,
+	        "spriteSourceSize": {"x":0,"y":0,"w":251,"h":394},
+	        "sourceSize": {"w":274,"h":394},
+	        "anchor": {"x":0.485401,"y":0.997462}
+	    },
+	    "1_role2-sheet2.png":
+	    {
+	        "frame": {"x":511,"y":1,"w":251,"h":391},
+	        "rotated": false,
+	        "trimmed": true,
+	        "spriteSourceSize": {"x":0,"y":3,"w":251,"h":391},
+	        "sourceSize": {"w":274,"h":394},
+	        "anchor": {"x":0.485401,"y":0.997462}
+	    }},
+	"animations": {
+	    "0": ["1_role2-sheet0.png"],
+	    "1": ["1_role2-sheet1.png","1_role2-sheet2.png"]
+	},
+	"meta": {
+	    "app": "https://www.codeandweb.com/texturepacker",
+	    "version": "1.0",
+	    "image": "1_role2.png",
+	    "format": "RGBA8888",
+	    "size": {"w":763,"h":396},
+	    "scale": "1",
+	    "smartupdate": "$TexturePacker:SmartUpdate:8d0d27b919b4fda6822284d52e1d67cd:c415d34ddf0629ae063141aa6244f453:ad483e3d8905e1e227b0a04d222a3ac4$"
+	}
+	}
+
+	 */ 
+
+}
+declare module 'test/TestTextInput' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTextInput {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestTicker' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTicker {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private update;
+	}
+
+}
+declare module 'test/TestTimeLine' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTimeLine {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/TestTween' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTween {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    protected createBiTree(node: Node, layer: number): void;
+	} class Node {
+	    constructor(parent?: Node, root?: vf.gui.Container);
+	    div: any;
+	    parent?: Node;
+	    isLeft: boolean;
+	    leftChild?: Node;
+	    rightChild?: Node;
+	}
+	export {};
+
+}
+declare module 'test/TestTween2' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTween2 {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
+declare module 'test/index' {
+	///   path="../gui.d.ts" />
+	export {};
+
+}
+
+    declare namespace vf.gui{
+        export * from "src/UI";
+    }
+    

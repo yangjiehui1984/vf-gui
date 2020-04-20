@@ -6,9 +6,8 @@ import { ComponentEvent } from "../interaction/Index";
 /**
  * 图片
  * 
- * @example let image = new gui.Image();
+ * @example let image = new vf.gui.Image();
  * 
- * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestImage
  */
@@ -21,21 +20,21 @@ export class Image extends DisplayObject implements MaskSprite{
 
     /** 可以支持遮罩的组件 */
     public maskSprite(){
-        return this._sprite as PIXI.Sprite;
+        return this._sprite as vf.Sprite;
     }
 
-    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
-    protected _texture: PIXI.Texture | undefined;
-    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+    protected _sprite: vf.Sprite | vf.TilingSprite | vf.NineSlicePlane | undefined;
+    protected _texture: vf.Texture | undefined;
+    protected _source: number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 
     /**
      * 图像路径或位图对象
      */
-    private _src: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-    public get src(): number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined {
+    private _src: number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+    public get src(): number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined {
         return this._src;
     }
-    public set src(value: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined) {
+    public set src(value: number | string | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined) {
         this._src = value;
         this.srcSystem();
     }
@@ -103,7 +102,7 @@ export class Image extends DisplayObject implements MaskSprite{
      * 测量组件尺寸
      */
     protected measure(): void {
-
+        //
     }
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
@@ -149,34 +148,34 @@ export class Image extends DisplayObject implements MaskSprite{
 
             }, this);
 
-            let sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
+            let sprite: vf.Sprite | vf.TilingSprite | vf.NineSlicePlane | undefined = this._sprite;
             
             try{
                 if (this.fillMode === "no-repeat") {
-                    if (sprite instanceof PIXI.Sprite) {
+                    if (sprite instanceof vf.Sprite) {
                         sprite.texture = texture;
                     } else {
-                        sprite = new PIXI.Sprite(texture);
+                        sprite = new vf.Sprite(texture);
                     }
                 } else if (this.fillMode === "repeat") {
-                    if (sprite instanceof PIXI.TilingSprite) {
+                    if (sprite instanceof vf.TilingSprite) {
                         sprite.texture = texture;
                     } else {
-                        sprite = new PIXI.TilingSprite(texture);
+                        sprite = new vf.TilingSprite(texture);
                     }
                 } else if (this.fillMode === "scale") {
-                    if (sprite instanceof PIXI.NineSlicePlane) {
+                    if (sprite instanceof vf.NineSlicePlane) {
                         sprite.texture = texture;
                     } else {
-                        sprite = new PIXI.NineSlicePlane(texture);
+                        sprite = new vf.NineSlicePlane(texture);
                     }
                 }
             }catch(e){
-                sprite = PIXI.Sprite.from(texture);
+                sprite = vf.Sprite.from(texture);
             }
 
             if (sprite && sprite.parent == undefined) {
-                this._sprite = container.addChild(sprite);
+                this._sprite = container.addChild(sprite) as vf.Sprite;
             }
             if(!invalidateDisplayList){
                 this.invalidateDisplayList();
@@ -194,10 +193,10 @@ export class Image extends DisplayObject implements MaskSprite{
         const sprite = this._sprite;
         const scale9Grid = this.scale9Grid;
 
-        if (sprite instanceof PIXI.TilingSprite) {
+        if (sprite instanceof vf.TilingSprite) {
             sprite.tileScale.set(scale9Grid[0], scale9Grid[1]);
             sprite.tilePosition.set(scale9Grid[2], scale9Grid[3]);
-        } else if (sprite instanceof PIXI.NineSlicePlane) {
+        } else if (sprite instanceof vf.NineSlicePlane) {
             if (scale9Grid[0] !== undefined) {
                 sprite.leftWidth = scale9Grid[0];
             }

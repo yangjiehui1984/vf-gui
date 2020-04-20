@@ -1,12 +1,14 @@
 
 /** 对象池*/
 class ObjectPool{
-    public constructor() {}
+    public constructor() {
+        //
+    }
  
     /**
 	 * 作为对象池的词典dict
 	 */
-    private objPoolDict = new Map<TAny,TAny[]>();
+    private objPoolDict = new Map<any,any[]>();
 	
     /**
 	 * 向对象池中放入对象，以便重复利用
@@ -32,13 +34,13 @@ class ObjectPool{
 	 * @return 取出的相应对象
 	 *
 	 */
-    public pop<T>(keyClass: T): TAny{
+    public pop<T>(keyClass: T): any{
 
         const objs = this.objPoolDict.get(keyClass);
         if(objs !== undefined && objs.length>0){
             return objs.pop();
         }
-        return new (keyClass as TAny)();
+        return new (keyClass as any)();
     }
 }
 
