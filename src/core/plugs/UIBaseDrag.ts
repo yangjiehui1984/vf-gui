@@ -184,7 +184,7 @@ export class UIBaseDrag implements Lifecycle {
                     drag.executeAction(e);
                 }
                 e.type = ComponentEvent.DRAG_TARGET;
-                this._dragPosition.set(e.data.tiltX,e.data.tiltX);
+                this._dragPosition.set(e.data.tiltX,e.data.tiltY);
                 this.executeDrop(e,value.path);
             }else if(value.type === ComponentEvent.DRAG_END) {
                 if(dragState !== 2){
@@ -196,7 +196,7 @@ export class UIBaseDrag implements Lifecycle {
                     e.data.global.x += 1;
                 }
                 e.type = ComponentEvent.DRAG_END;
-                this._dragPosition.set(e.data.tiltX,e.data.tiltX);
+                this._dragPosition.set(e.data.tiltX,e.data.tiltY);
                 drag.executeAction(e);
             }else{
                 drag.executeAction(e);

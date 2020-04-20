@@ -3162,7 +3162,7 @@ var UIBaseDrag = /** @class */ (function () {
                         drag.executeAction(e);
                     }
                     e.type = Index_1.ComponentEvent.DRAG_TARGET;
-                    this._dragPosition.set(e.data.tiltX, e.data.tiltX);
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltY);
                     this.executeDrop(e, value.path);
                 }
                 else if (value.type === Index_1.ComponentEvent.DRAG_END) {
@@ -3175,7 +3175,7 @@ var UIBaseDrag = /** @class */ (function () {
                         e.data.global.x += 1;
                     }
                     e.type = Index_1.ComponentEvent.DRAG_END;
-                    this._dragPosition.set(e.data.tiltX, e.data.tiltX);
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltY);
                     drag.executeAction(e);
                 }
                 else {
@@ -12655,10 +12655,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.22.1.1.22.1.1.22) ==1.1.22.1.1.22.1.1.22;
+//     return this.lastIndexOf(word, pos1.1.23.1.1.23.1.1.23) ==1.1.23.1.1.23.1.1.23;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.22";
+window.gui.version = "1.1.23";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
