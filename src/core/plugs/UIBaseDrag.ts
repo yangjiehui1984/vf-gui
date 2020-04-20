@@ -156,7 +156,7 @@ export class UIBaseDrag implements Lifecycle {
      */
     public dropGroup: string | undefined;
 
-    private _actionData: {type: string;data: PIXI.interaction.InteractionData;offset?: PIXI.Point;path?: number[]} | undefined;
+    private _actionData: {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path?: number[]} | undefined;
     
     /**
      * 获取当前的操作数据
@@ -166,7 +166,7 @@ export class UIBaseDrag implements Lifecycle {
     }
     public set actionData(data: string){
         const drag = this.drag;
-        const value = JSON.parse(data) as  {type: string;data: PIXI.interaction.InteractionData;offset?: PIXI.Point;path: number[]};
+        const value = JSON.parse(data) as  {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path: number[]};
         const e = new InteractionEvent();
         const dragState = this._dragState;
         e.type = value.type;

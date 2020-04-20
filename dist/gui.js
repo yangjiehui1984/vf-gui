@@ -2366,6 +2366,27 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
     DisplayObjectAbstract.prototype.getChildAt = function (index) {
         return this.uiChildren[index] || undefined;
     };
+    DisplayObjectAbstract.prototype.getChildUUID = function (uuid) {
+        var uiChildren = this.uiChildren;
+        var len = uiChildren.length;
+        for (var i = 0; i < len; i++) {
+            if (uiChildren[i].uuid == uuid) {
+                return uiChildren[i];
+            }
+        }
+        return undefined;
+    };
+    DisplayObjectAbstract.prototype.pathToDisplayObject = function (uuid) {
+        var display = this;
+        var len = uuid.length - 1;
+        for (var i = len; i >= 0; i--) {
+            if (display)
+                display = display.getChildUUID(uuid[i]);
+            else
+                display = undefined;
+        }
+        return display;
+    };
     /**
      * 移除已添加的UI组件
      * @param UIObject 要移除的UI组件
@@ -2979,6 +3000,15 @@ var UIBaseDrag = /** @class */ (function () {
         */
         this.dropInitialized = false;
         /**
+         * 临时属性，为了解决同步时的动作补齐
+         * 0 没有操作
+         * 1 开始拖动
+         * 2 拖动中
+         * 3 拖动结束
+         * 4 拖动到目标
+         */
+        this._dragState = 0;
+        /**
          * 位置
          *
          */
@@ -3089,6 +3119,57 @@ var UIBaseDrag = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(UIBaseDrag.prototype, "actionData", {
+        /**
+         * 获取当前的操作数据
+         */
+        get: function () {
+            return JSON.stringify(this._actionData);
+        },
+        set: function (data) {
+            var drag = this.drag;
+            var value = JSON.parse(data);
+            var e = new Index_1.InteractionEvent();
+            var dragState = this._dragState;
+            e.type = value.type;
+            e.data = value.data;
+            e.data.identifier = value.data.identifier * 1000;
+            e.signalling = true;
+            if (drag) {
+                if (value.type === Index_1.ComponentEvent.DRAG_TARGET) {
+                    if (dragState !== 2) {
+                        e.type = Index_1.ComponentEvent.DRAG_START;
+                        e.data.global.x -= 1;
+                        drag.executeAction(e);
+                        e.type = Index_1.ComponentEvent.DRAG_MOVE;
+                        e.data.global.x += 1;
+                        drag.executeAction(e);
+                    }
+                    e.type = Index_1.ComponentEvent.DRAG_TARGET;
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltY);
+                    this.executeDrop(e, value.path);
+                }
+                else if (value.type === Index_1.ComponentEvent.DRAG_END) {
+                    if (dragState !== 2) {
+                        e.type = Index_1.ComponentEvent.DRAG_START;
+                        e.data.global.x -= 1;
+                        drag.executeAction(e);
+                        e.type = Index_1.ComponentEvent.DRAG_MOVE;
+                        drag.executeAction(e);
+                        e.data.global.x += 1;
+                    }
+                    e.type = Index_1.ComponentEvent.DRAG_END;
+                    this._dragPosition.set(e.data.tiltX, e.data.tiltY);
+                    drag.executeAction(e);
+                }
+                else {
+                    drag.executeAction(e);
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     UIBaseDrag.prototype.clearDraggable = function () {
         if (this.dragInitialized) {
             this.dragInitialized = false;
@@ -3108,10 +3189,18 @@ var UIBaseDrag = /** @class */ (function () {
             this._dragPosition.set(0, 0);
             this.drag = new Index_1.DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
+            // this.drag.onDragPress = (e: InteractionEvent,isPress: boolean) => {
+            //     if(isPress){
+            //         this._actionData = {type:ComponentEvent.DRAG_START,data: e.data};
+            //     }else{
+            //         this._actionData = {type:ComponentEvent.DRAG_START,data: e.data};
+            //     }
+            // }
             this.drag.onDragStart = function (e) {
                 if (_this.target == undefined) {
                     return;
                 }
+                _this._dragState = 1;
                 var target = _this.target;
                 _this.$targetParent = target.parent;
                 if (_this._dragContainer == undefined && !_this.dragBoundary) {
@@ -3150,6 +3239,7 @@ var UIBaseDrag = /** @class */ (function () {
                             });
                         }
                     }
+                    _this._actionData = { type: Index_1.ComponentEvent.DRAG_START, data: e.data };
                     target.emit(Index_1.ComponentEvent.DRAG_START, target, e);
                 }
             };
@@ -3190,7 +3280,9 @@ var UIBaseDrag = /** @class */ (function () {
                             });
                         }
                     }
+                    _this._dragState = 2;
                     target.setPosition(_this._dragPosition.x, _this._dragPosition.y);
+                    _this._actionData = { type: Index_1.ComponentEvent.DRAG_MOVE, data: e.data, offset: offset };
                     target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
                 }
             };
@@ -3207,13 +3299,14 @@ var UIBaseDrag = /** @class */ (function () {
                         var parent = _this.$targetParent;
                         target.interactive = true;
                         var item = Index_1.DragDropController.getItem(target);
+                        var dragPosition = _this._dragPosition;
                         target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
-                                parent.container.toLocal(target.container.position, target.container.parent, _this._dragPosition);
+                                parent.container.toLocal(target.container.position, target.container.parent, dragPosition);
                                 parent.addChild(target);
-                                target.x = _this._dragPosition.x;
-                                target.y = _this._dragPosition.y;
+                                target.x = dragPosition.x;
+                                target.y = dragPosition.y;
                             }
                             if (_this.dragBounces && _this._containerStart) {
                                 target.x = _this._containerStart.x;
@@ -3233,6 +3326,10 @@ var UIBaseDrag = /** @class */ (function () {
                                 });
                             }
                         }
+                        _this._dragState = 3;
+                        e.data.tiltX = dragPosition.x;
+                        e.data.tiltY = dragPosition.y;
+                        _this._actionData = { type: Index_1.ComponentEvent.DRAG_END, data: e.data };
                         target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
                     }, 0);
                 }
@@ -3273,11 +3370,12 @@ var UIBaseDrag = /** @class */ (function () {
         if (item && item.dragOption.dragging) {
             item.dragOption.dragging = false;
             item.interactive = true;
+            var dragPosition = this._dragPosition;
             var parent_1 = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
             if (parent_1) {
-                parent_1.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
-                item.x = this._dragPosition.x;
-                item.y = this._dragPosition.y;
+                parent_1.container.toLocal(item.container.position, item.container.parent, dragPosition);
+                item.x = dragPosition.x;
+                item.y = dragPosition.y;
                 if (parent_1 != item.parent) {
                     parent_1.addChild(item);
                     parent_1.emit(Index_1.ComponentEvent.DROP_TARGET, parent_1, item, e);
@@ -3297,7 +3395,32 @@ var UIBaseDrag = /** @class */ (function () {
                     });
                 }
             }
+            this._dragState = 4;
+            e.data.tiltX = dragPosition.x;
+            e.data.tiltY = dragPosition.y;
+            item.dragOption._actionData = { type: Index_1.ComponentEvent.DRAG_TARGET, data: e.data, path: Utils_1.getDisplayPathUUID(parent_1) };
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
+        }
+    };
+    /**
+     * 同步数据临时的方法
+     */
+    UIBaseDrag.prototype.executeDrop = function (e, parsentPath) {
+        if (this.target && this.target.stage && parsentPath) {
+            var parent_2 = this.target.stage.pathToDisplayObject(parsentPath);
+            var item = this.target;
+            item.dragOption.dragging = false;
+            item.interactive = true;
+            if (parent_2) {
+                item.x = this._dragPosition.x;
+                item.y = this._dragPosition.y;
+                if (parent_2 != item.parent) {
+                    parent_2.addChild(item);
+                    parent_2.emit(Index_1.ComponentEvent.DROP_TARGET, parent_2, item, e);
+                }
+                this.$targetParent = parent_2;
+                item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
+            }
         }
     };
     UIBaseDrag.prototype.load = function () {
@@ -7258,6 +7381,7 @@ var InteractionEvent = /** @class */ (function (_super) {
     __extends(InteractionEvent, _super);
     function InteractionEvent() {
         var _this = _super.call(this) || this;
+        _this.signalling = false;
         _this.local = tempLocal;
         return _this;
     }
@@ -7728,6 +7852,7 @@ exports.getEventItem = getEventItem;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var Index_1 = __webpack_require__(/*! ./Index */ "./src/interaction/Index.ts");
 /**
  * 多拽相关的事件处理类
  *
@@ -7773,8 +7898,21 @@ var DragEvent = /** @class */ (function () {
             this.isStop = false;
         }
     };
+    DragEvent.prototype.executeAction = function (e) {
+        switch (e.type) {
+            case Index_1.ComponentEvent.DRAG_START:
+                this._onDragStart(e);
+                break;
+            case Index_1.ComponentEvent.DRAG_MOVE:
+                this._onDragMove(e);
+                break;
+            case Index_1.ComponentEvent.DRAG_END:
+                this._onDragEnd(e);
+                break;
+        }
+    };
     DragEvent.prototype._onDragStart = function (e) {
-        if (this.obj.dragStopPropagation)
+        if (this.obj.dragStopPropagation && e.stopPropagation)
             e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
@@ -7790,7 +7928,9 @@ var DragEvent = /** @class */ (function () {
             stage.on("touchcancel" /* touchcancel */, this._onDragEnd, this);
             this.bound = true;
         }
-        e.data.originalEvent.preventDefault();
+        if (e.data.originalEvent.preventDefault) {
+            e.data.originalEvent.preventDefault();
+        }
     };
     DragEvent.prototype._onDragMove = function (e) {
         if (e.data.identifier !== this.id)
@@ -11796,6 +11936,23 @@ function getStage(target) {
 }
 exports.getStage = getStage;
 /**
+ * 获取显示对象的路径
+ * @param target
+ * @param ids
+ */
+function getDisplayPathUUID(target, ids) {
+    if (ids === void 0) { ids = []; }
+    ids.push(target.uuid);
+    if (target.parent) {
+        if (target.parent instanceof Stage_1.Stage) {
+            return ids;
+        }
+        return getDisplayPathUUID(target.parent, ids);
+    }
+    return ids;
+}
+exports.getDisplayPathUUID = getDisplayPathUUID;
+/**
  * 快速设置矩形
  * @param sourcr
  * @param x
@@ -12063,7 +12220,7 @@ function getGuiClass(type) {
 }
 exports.getGuiClass = getGuiClass;
 function sayHello() {
-    vf.utils.versionPrint('gui' + vf.gui.version, 'https://vipkid-edu.github.io/vf-gui');
+    vf.utils.versionPrint('gui ' + vf.gui.version, 'https://vipkid-edu.github.io/vf-gui');
 }
 exports.sayHello = sayHello;
 
@@ -12090,13 +12247,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.2.4.1.2.4.1.2.4) ==1.2.4.1.2.4.1.2.4;
+//     return this.lastIndexOf(word, pos1.3.0.1.3.0.1.3.0) ==1.3.0.1.3.0.1.3.0;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.2.4";
+window.vf.gui.version = "1.3.0";
 
 
 /***/ })

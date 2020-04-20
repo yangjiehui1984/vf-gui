@@ -34,6 +34,8 @@ declare module 'src/event/InteractionEvent' {
 	export class InteractionEvent extends vf.interaction.InteractionEvent {
 	    constructor();
 	    local: vf.Point;
+	    path?: number[];
+	    signalling: boolean;
 	}
 
 }
@@ -230,6 +232,7 @@ declare module 'src/interaction/DragEvent' {
 	     */
 	    dragRestrictAxis?: "x" | "y";
 	    startEvent(): void;
+	    executeAction(e: InteractionEvent): void;
 	    private _onDragStart;
 	    private _onDragMove;
 	    private _onDragEnd;
@@ -1582,6 +1585,8 @@ declare module 'src/core/DisplayObjectAbstract' {
 	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
 	    getChildAt(index: number): DisplayObjectAbstract;
+	    getChildUUID(uuid: number): DisplayObjectAbstract | undefined;
+	    pathToDisplayObject(uuid: number[]): DisplayObjectAbstract | undefined;
 	    /**
 	     * 移除已添加的UI组件
 	     * @param UIObject 要移除的UI组件
@@ -2276,6 +2281,15 @@ declare module 'src/core/plugs/UIBaseDrag' {
 	     */
 	    private drag;
 	    /**
+	     * 临时属性，为了解决同步时的动作补齐
+	     * 0 没有操作
+	     * 1 开始拖动
+	     * 2 拖动中
+	     * 3 拖动结束
+	     * 4 拖动到目标
+	     */
+	    private _dragState;
+	    /**
 	     * 位置
 	     *
 	     */
@@ -2334,11 +2348,20 @@ declare module 'src/core/plugs/UIBaseDrag' {
 	     * 接收拖动掉落的分组名
 	     */
 	    dropGroup: string | undefined;
+	    private _actionData;
+	    /**
+	     * 获取当前的操作数据
+	     */
+	    actionData: string;
 	    protected clearDraggable(): void;
 	    protected initDraggable(): void;
 	    protected clearDroppable(): void;
 	    protected initDroppable(): void;
 	    private onDrop;
+	    /**
+	     * 同步数据临时的方法
+	     */
+	    private executeDrop;
 	    load(): void;
 	    release(): void;
 	}
@@ -2505,6 +2528,12 @@ declare module 'src/utils/Utils' {
 	 * @param DisplayObject
 	 */
 	export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage): Stage | undefined;
+	/**
+	 * 获取显示对象的路径
+	 * @param target
+	 * @param ids
+	 */
+	export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage, ids?: number[]): number[];
 	/**
 	 * 快速设置矩形
 	 * @param sourcr
