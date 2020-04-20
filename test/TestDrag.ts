@@ -11,6 +11,7 @@ export default class TestDrag {
 
 
         const c1 = this.getNewContainer("自由拖动");
+        c1.rect.name = "c1";
         c1.container.x = 15;
         c1.container.y = 15;
         uiStage.addChild(c1.container);
@@ -99,13 +100,44 @@ export default class TestDrag {
             c6.container.addChild(rect);
         }
 
+        const c8 = this.getNewContainer("自由拖动同步");
+        c8.rect.name = "c8";
+        c8.container.x = 265;
+        c8.container.y = 15;
+        uiStage.addChild(c8.container);
+        c8.rect.dragOption.draggable = true;
+        c8.rect.dragOption.dragContainer = uiStage; //拖动时，移动对象到舞台，防止遮挡
+        c8.rect.dragOption.dragBounces = true;
+        c8.rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
+        c1.rect.dragOption.dragGroup = "group1";
+        c1.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_START, () => {
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        }, this);
+        c1.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_MOVE, () => {
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        }, this);
+        c1.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_END, () => {
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        }, this);
+        c1.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_TARGET, () => {
+            console.log('vf.gui.Interaction.ComponentEvent.DRAG_TARGET1');
+            c8.rect.dragOption.actionData = c1.rect.dragOption.actionData;
+        }, this);
+        c8.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_TARGET, () => {
+            console.log('vf.gui.Interaction.ComponentEvent.DRAG_TARGET2');
+        }, this);
+        c8.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_START, () => {
+            console.log('vf.gui.Interaction.ComponentEvent.DRAG_START');
+        }, this);
+        c8.rect.on(vf.gui.Interaction.ComponentEvent.DRAG_MOVE, () => {
+            console.log('vf.gui.Interaction.ComponentEvent.DRAG_MOVE');
+        }, this);
     }
 
 
 
 
     private getNewContainer(str: string, color = 0xffffff, rectVisible = true) {
-
         /** 单背景色 */
         const childContainer = new vf.gui.Container();
         new vf.gui.Interaction.ClickEvent(childContainer, true);

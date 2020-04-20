@@ -1,6 +1,8 @@
 import {DisplayObject} from "../core/DisplayObject";
 import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
 import {InteractionEvent} from "../event/InteractionEvent";
+import { ComponentEvent } from "./Index";
+import { getDisplayPathUUID } from "../utils/Utils";
 
 /**
  * 多拽相关的事件处理类
@@ -50,6 +52,7 @@ export class DragEvent {
 
     public startEvent() {
 
+        
         if(this.isStop){
             this.obj.container.on(TouchMouseEventEnum.mousedown, this._onDragStart, this);
             this.obj.container.on(TouchMouseEventEnum.touchstart, this._onDragStart, this);
@@ -57,9 +60,23 @@ export class DragEvent {
         }
     }
 
+    public executeAction(e: InteractionEvent) {
+        switch(e.type){
+            case ComponentEvent.DRAG_START:
+                this._onDragStart(e);
+                break;
+            case ComponentEvent.DRAG_MOVE:
+                this._onDragMove(e);
+                break;
+            case ComponentEvent.DRAG_END:
+                this._onDragEnd(e);
+                break;    
+        }
+    }
+
 
     private _onDragStart(e: InteractionEvent) {
-        if(this.obj.dragStopPropagation)
+        if(this.obj.dragStopPropagation && e.stopPropagation)
             e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
@@ -77,7 +94,10 @@ export class DragEvent {
             this.bound = true;
         }
 
-        e.data.originalEvent.preventDefault();
+        if(e.data.originalEvent.preventDefault){
+            e.data.originalEvent.preventDefault();
+        }
+        
     }
 
     private _onDragMove(e: InteractionEvent) {

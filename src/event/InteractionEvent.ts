@@ -13,5 +13,7 @@ export class InteractionEvent extends vf.interaction.InteractionEvent {
         this.local = tempLocal;
     }
 
-    public local:vf.Point;
+    public local: vf.Point;
+    public path?: number[];
+    public signalling = false;
 }

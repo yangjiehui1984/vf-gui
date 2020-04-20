@@ -2,6 +2,7 @@ import {shared as TickerShared} from "./Ticker";
 import { DisplayLayoutAbstract } from "./DisplayLayoutAbstract";
 import { DisplayObject } from "./DisplayObject";
 import validatorShared from "./DisplayLayoutValidator";
+import { DisplayObjectAbstract } from "./DisplayObjectAbstract";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -33,6 +34,7 @@ export class Stage extends DisplayLayoutAbstract{
     public _stageWidth = 0;//调整缩放后的值
     public _stageHeight = 0;//调整缩放后的值
 
+    
     public get stageWidth(){
         return this._stageWidth;
     }

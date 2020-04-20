@@ -10,8 +10,8 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         super();
         this.uuid = uid();
         this.container = new ContainerBase();
-        this.container.on("added",this.$onAddStage,this);
-        this.container.on("removed",this.$onRemoveStage,this);
+        this.container.on("added", this.$onAddStage, this);
+        this.container.on("removed", this.$onRemoveStage, this);
     }
     /**
      * 全局唯一ID
@@ -46,7 +46,7 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
 
     /** 没有功能实现，内部编辑器 */
     public container: ContainerBase;
-    
+
     /** 添加显示对象，需集成Core */
     public addChild<T extends DisplayObjectAbstract>(item: T): T {
         if (this.container.children.length !== this.uiChildren.length) {
@@ -66,11 +66,11 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         item.parent = this as any;       
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
-        if(!item.initialized){
+        if (!item.initialized) {
             item.initialized = true;
             item.$onInit();
         }
-        index = Math.min(index,this.container.children.length);
+        index = Math.min(index, this.container.children.length);
         this.emit(ComponentEvent.ADD, this);
         this.container.addChildAt(item.container, index);
         return item;
@@ -78,6 +78,29 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
 
     public getChildAt(index: number) {
         return this.uiChildren[index] || undefined;
+    }
+
+    public getChildUUID(uuid: number) {
+        const uiChildren = this.uiChildren;
+        const len = uiChildren.length;
+        for (let i = 0; i < len; i++) {
+            if (uiChildren[i].uuid == uuid) {
+                return uiChildren[i];
+            }
+        }
+        return undefined;
+    }
+
+    public pathToDisplayObject(uuid: number[]) {
+        let display: undefined | DisplayObjectAbstract = this as DisplayObjectAbstract;
+        const len = uuid.length - 1;
+        for (let i = len; i >= 0; i--) {
+            if (display)
+                display = display.getChildUUID(uuid[i]);
+            else
+                display = undefined;
+        }
+        return display;
     }
 
     /**
@@ -89,11 +112,11 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         return this.removeChildAt(index);
     }
 
-    public removeChildAt<T>(index: number): T{   
-        index = Math.max(0,index);
-        index = Math.min(this.uiChildren.length,index);
+    public removeChildAt<T>(index: number): T {
+        index = Math.max(0, index);
+        index = Math.min(this.uiChildren.length, index);
         const item = this.uiChildren[index];
-        if(item){
+        if (item) {
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
@@ -108,7 +131,7 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
             this.removeChild(this.uiChildren[i]);
         }
     }
-    
+
     /**
      * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
      * 只影响父级的递归调用。
@@ -171,7 +194,7 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         }
         this._enabled = value;
         this.container.interactive = value;
-        this.container.interactiveChildren = value;      
+        this.container.interactiveChildren = value;
     }
 
     /**
@@ -194,8 +217,8 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         return this.removeAllListeners(event);
     }
 
-    public get stage(): Stage|undefined{
-        if(this.$stage == undefined){
+    public get stage(): Stage | undefined {
+        if (this.$stage == undefined) {
             this.$stage = getStage(this);
         }
         return this.$stage;
@@ -209,15 +232,15 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         this.$onLoad();
     }
     release(): void {
-        if(this.parent){
+        if (this.parent) {
             this.parent.removeChild(this);
         }
         this.$onRelease();
         this.$stage = undefined;
     }
 
-    $onInit(){
-        this.emit(ComponentEvent.CREATION_COMPLETE,this);
+    $onInit() {
+        this.emit(ComponentEvent.CREATION_COMPLETE, this);
     }
 
     $onLoad(){
@@ -228,17 +251,17 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         //
     }
 
-    $onAddStage(){
+    $onAddStage() {
         this.checkInvalidateFlag();
         this.emit(ComponentEvent.ADDED, this);
     }
-    $onRemoveStage(){
+    $onRemoveStage() {
         this.checkInvalidateFlag();
         this.parent = undefined;
         this.emit(ComponentEvent.REMOVEED, this);
     }
 
-    
+
 }
 
 

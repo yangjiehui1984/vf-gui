@@ -17,9 +17,10 @@ vf-gui简称`gui`是基于VFJS引擎，使用TypeScript语言开发的开源UI�
 
 ## 安装(Setup) 
 
-1. <script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script>
-2. <script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
-
+```
+<script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script>
+<script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
+```
 
 ### 创建方式(Usage)：
 
