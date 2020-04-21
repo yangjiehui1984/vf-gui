@@ -3039,6 +3039,10 @@ var UIBaseDrag = /** @class */ (function () {
          * 是否启用回弹，在移动到非接收方时，回弹到原始位置
          */
         this.dragBounces = false;
+        /**
+         * 拖拽时的鼠标状态
+         */
+        this.dragMoveCursor = 'pointer';
         this.target = target;
         this.target.plugs.set(UIBaseDrag.key, this);
     }
@@ -3262,6 +3266,9 @@ var UIBaseDrag = /** @class */ (function () {
                     return;
                 }
                 var target = _this.target;
+                if (target.stage && target.stage.app) {
+                    target.stage.app.view.style.cursor = _this.dragMoveCursor;
+                }
                 if (_this.dragging && target.stage) {
                     var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
                     var y = containerStart_1.y + (offset.y / target.stage.scaleY) - stageOffset_1.y;
@@ -3341,6 +3348,9 @@ var UIBaseDrag = /** @class */ (function () {
                                 });
                             }
                         }
+                        if (target.stage && target.stage.app) {
+                            target.stage.app.view.style.cursor = target.style.cursor;
+                        }
                         _this._dragState = 3;
                         e.data.tiltX = dragPosition.x;
                         e.data.tiltY = dragPosition.y;
@@ -3409,6 +3419,9 @@ var UIBaseDrag = /** @class */ (function () {
                         message: 'drag target,item pos'
                     });
                 }
+            }
+            if (target.stage && target.stage.app) {
+                target.stage.app.view.style.cursor = target.style.cursor;
             }
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;
@@ -12265,13 +12278,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.2.1.3.2.1.3.2) ==1.3.2.1.3.2.1.3.2;
+//     return this.lastIndexOf(word, pos1.3.3.1.3.3.1.3.3) ==1.3.3.1.3.3.1.3.3;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.2";
+window.vf.gui.version = "1.3.3";
 
 
 /***/ })

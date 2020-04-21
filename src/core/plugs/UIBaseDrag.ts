@@ -92,6 +92,10 @@ export class UIBaseDrag implements Lifecycle {
      * 是否启用回弹，在移动到非接收方时，回弹到原始位置
      */
     public dragBounces = false;
+    /**
+     * 拖拽时的鼠标状态
+     */
+    public dragMoveCursor = 'pointer';
 
     /**
      * 限制拖动抽,XY,X抽或Y抽
@@ -297,6 +301,11 @@ export class UIBaseDrag implements Lifecycle {
                     return;
                 }
                 const target = this.target;
+                
+                if(target.stage && target.stage.app){
+                    target.stage.app.view.style.cursor = this.dragMoveCursor;
+                }
+
                 if (this.dragging && target.stage) {
                     const x = containerStart.x + (offset.x / target.stage.scaleX) - stageOffset.x;
                     const y = containerStart.y + (offset.y / target.stage.scaleY) - stageOffset.y;
@@ -378,15 +387,17 @@ export class UIBaseDrag implements Lifecycle {
                             }
 
                         }
+                        if(target.stage && target.stage.app){
+                            target.stage.app.view.style.cursor = target.style.cursor;
+                        }
                         this._dragState = 3;
                         e.data.tiltX = dragPosition.x;
                         e.data.tiltY = dragPosition.y;
                         this._actionData = {type:ComponentEvent.DRAG_END,data: e.data};
                         target.emit(ComponentEvent.DRAG_END, target, e);
-
-
                     }, 0);
                 }
+                
 
             };
         }
@@ -455,6 +466,9 @@ export class UIBaseDrag implements Lifecycle {
                     });
                 }
 
+            }
+            if(target.stage && target.stage.app){
+                target.stage.app.view.style.cursor = target.style.cursor;
             }
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;

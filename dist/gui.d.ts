@@ -2325,6 +2325,10 @@ declare module 'src/core/plugs/UIBaseDrag' {
 	     */
 	    dragBounces: boolean;
 	    /**
+	     * 拖拽时的鼠标状态
+	     */
+	    dragMoveCursor: string;
+	    /**
 	     * 限制拖动抽,XY,X抽或Y抽
 	     */
 	    private _dragRestrictAxis?;
