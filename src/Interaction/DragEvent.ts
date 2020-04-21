@@ -2,7 +2,6 @@ import {DisplayObject} from "../core/DisplayObject";
 import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
 import {InteractionEvent} from "../event/InteractionEvent";
 import { ComponentEvent } from "./Index";
-import { getDisplayPathUUID } from "../utils/Utils";
 
 /**
  * 多拽相关的事件处理类

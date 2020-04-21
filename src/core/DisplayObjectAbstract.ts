@@ -17,10 +17,12 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
      * 全局唯一ID
      */
     public readonly uuid: number;
+
+    public id = '';
     /**
      * 自定义组价名
      */
-    public name = "";
+    public name = '';
     /**
      * @private
      * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
@@ -80,7 +82,7 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         return this.uiChildren[index] || undefined;
     }
 
-    public getChildUUID(uuid: number) {
+    public getChildByUUID(uuid: number) {
         const uiChildren = this.uiChildren;
         const len = uiChildren.length;
         for (let i = 0; i < len; i++) {
@@ -91,12 +93,23 @@ export class DisplayObjectAbstract extends vf.utils.EventEmitter implements Life
         return undefined;
     }
 
-    public pathToDisplayObject(uuid: number[]) {
+    public _getChildById(id: string) {
+        const uiChildren = this.uiChildren;
+        const len = uiChildren.length;
+        for (let i = 0; i < len; i++) {
+            if (uiChildren[i].id === id) {
+                return uiChildren[i];
+            }
+        }
+        return undefined;
+    }
+
+    public getChildByPath(ids: string[]) {
         let display: undefined | DisplayObjectAbstract = this as DisplayObjectAbstract;
-        const len = uuid.length - 1;
+        const len = ids.length - 1;
         for (let i = len; i >= 0; i--) {
             if (display)
-                display = display.getChildUUID(uuid[i]);
+                display = display._getChildById(ids[i]);
             else
                 display = undefined;
         }

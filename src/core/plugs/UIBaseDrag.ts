@@ -3,7 +3,7 @@ import { DragEvent, DragDropController, InteractionEvent, ComponentEvent } from 
 import { TouchMouseEventEnum } from "../../interaction/TouchMouseEventEnum";
 import { DisplayObjectAbstract } from "../DisplayObjectAbstract";
 import { Stage } from "../Stage";
-import { getDisplayObject, debug, now, getDisplayPathUUID } from "../../utils/Utils";
+import { getDisplayObject, debug, getDisplayPathById } from "../../utils/Utils";
 
 
 /**
@@ -156,7 +156,7 @@ export class UIBaseDrag implements Lifecycle {
      */
     public dropGroup: string | undefined;
 
-    private _actionData: {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path?: number[]} | undefined;
+    private _actionData: {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path?: string[]} | undefined;
     
     /**
      * 获取当前的操作数据
@@ -166,7 +166,7 @@ export class UIBaseDrag implements Lifecycle {
     }
     public set actionData(data: string){
         const drag = this.drag;
-        const value = JSON.parse(data) as  {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path: number[]};
+        const value = JSON.parse(data) as  {type: string;data: vf.interaction.InteractionData;offset?: vf.Point;path: string[]};
         const e = new InteractionEvent();
         const dragState = this._dragState;
         e.type = value.type;
@@ -455,7 +455,7 @@ export class UIBaseDrag implements Lifecycle {
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;
             e.data.tiltY = dragPosition.y;
-            item.dragOption._actionData = {type:ComponentEvent.DRAG_TARGET,data: e.data,path:getDisplayPathUUID(parent)};
+            item.dragOption._actionData = {type:ComponentEvent.DRAG_TARGET,data: e.data,path:getDisplayPathById(parent)};
             item.emit(ComponentEvent.DRAG_TARGET, item, e);
             
         }
@@ -464,9 +464,9 @@ export class UIBaseDrag implements Lifecycle {
     /**
      * 同步数据临时的方法
      */
-    private executeDrop(e: InteractionEvent,parsentPath: number[]){
+    private executeDrop(e: InteractionEvent,parsentPath: string[]){
         if(this.target && this.target.stage && parsentPath) {
-            const parent = this.target.stage.pathToDisplayObject(parsentPath);
+            const parent = this.target.stage.getChildByPath(parsentPath);
             const item = this.target;
             item.dragOption.dragging = false;
             item.interactive = true;

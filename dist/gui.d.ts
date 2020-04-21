@@ -1553,6 +1553,7 @@ declare module 'src/core/DisplayObjectAbstract' {
 	     * 全局唯一ID
 	     */
 	    readonly uuid: number;
+	    id: string;
 	    /**
 	     * 自定义组价名
 	     */
@@ -1585,8 +1586,9 @@ declare module 'src/core/DisplayObjectAbstract' {
 	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
 	    getChildAt(index: number): DisplayObjectAbstract;
-	    getChildUUID(uuid: number): DisplayObjectAbstract | undefined;
-	    pathToDisplayObject(uuid: number[]): DisplayObjectAbstract | undefined;
+	    getChildByUUID(uuid: number): DisplayObjectAbstract | undefined;
+	    _getChildById(id: string): DisplayObjectAbstract | undefined;
+	    getChildByPath(ids: string[]): DisplayObjectAbstract | undefined;
 	    /**
 	     * 移除已添加的UI组件
 	     * @param UIObject 要移除的UI组件
@@ -2529,11 +2531,11 @@ declare module 'src/utils/Utils' {
 	 */
 	export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage): Stage | undefined;
 	/**
-	 * 获取显示对象的路径
+	 * 获取显示对象的路径(解析json需要的id，并不是uuid)
 	 * @param target
 	 * @param ids
 	 */
-	export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage, ids?: number[]): number[];
+	export function getDisplayPathById(target: DisplayObject | DisplayObjectAbstract | Stage, ids?: string[]): string[];
 	/**
 	 * 快速设置矩形
 	 * @param sourcr
