@@ -89,18 +89,23 @@ export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage):
 }
 
 /**
- * 获取显示对象的路径
+ * 获取显示对象的路径(解析json需要的id，并不是uuid)
  * @param target 
  * @param ids 
  */
-export function getDisplayPathUUID(target: DisplayObject | DisplayObjectAbstract | Stage,ids: number[] = []): number[]{
+export function getDisplayPathById(target: DisplayObject | DisplayObjectAbstract | Stage,ids: string[] = []): string[]{
 
-    ids.push(target.uuid);
+    if(target.id === ''){
+        return ids;
+    }
+
+    ids.push(target.id);
+    
     if(target.parent){
         if (target.parent instanceof Stage) {
             return ids;
         }
-        return getDisplayPathUUID(target.parent,ids);
+        return getDisplayPathById(target.parent,ids);
     }
     return ids;
 }

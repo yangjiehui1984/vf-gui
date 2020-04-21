@@ -2307,10 +2307,11 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
     __extends(DisplayObjectAbstract, _super);
     function DisplayObjectAbstract() {
         var _this = _super.call(this) || this;
+        _this.id = '';
         /**
          * 自定义组价名
          */
-        _this.name = "";
+        _this.name = '';
         /**
          * @private
          * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
@@ -2366,7 +2367,7 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
     DisplayObjectAbstract.prototype.getChildAt = function (index) {
         return this.uiChildren[index] || undefined;
     };
-    DisplayObjectAbstract.prototype.getChildUUID = function (uuid) {
+    DisplayObjectAbstract.prototype.getChildByUUID = function (uuid) {
         var uiChildren = this.uiChildren;
         var len = uiChildren.length;
         for (var i = 0; i < len; i++) {
@@ -2376,12 +2377,22 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
         }
         return undefined;
     };
-    DisplayObjectAbstract.prototype.pathToDisplayObject = function (uuid) {
+    DisplayObjectAbstract.prototype._getChildById = function (id) {
+        var uiChildren = this.uiChildren;
+        var len = uiChildren.length;
+        for (var i = 0; i < len; i++) {
+            if (uiChildren[i].id === id) {
+                return uiChildren[i];
+            }
+        }
+        return undefined;
+    };
+    DisplayObjectAbstract.prototype.getChildByPath = function (ids) {
         var display = this;
-        var len = uuid.length - 1;
+        var len = ids.length - 1;
         for (var i = len; i >= 0; i--) {
             if (display)
-                display = display.getChildUUID(uuid[i]);
+                display = display._getChildById(ids[i]);
             else
                 display = undefined;
         }
@@ -2989,6 +3000,7 @@ var UIBaseDrag = /** @class */ (function () {
      * 构造函数
      */
     function UIBaseDrag(target) {
+        this.oldInteractiveChildren = false;
         /**
          * 可拖动初始化
          *  @default
@@ -3027,6 +3039,10 @@ var UIBaseDrag = /** @class */ (function () {
          * 是否启用回弹，在移动到非接收方时，回弹到原始位置
          */
         this.dragBounces = false;
+        /**
+         * 拖拽时的鼠标状态
+         */
+        this.dragMoveCursor = 'pointer';
         this.target = target;
         this.target.plugs.set(UIBaseDrag.key, this);
     }
@@ -3203,6 +3219,7 @@ var UIBaseDrag = /** @class */ (function () {
                 _this._dragState = 1;
                 var target = _this.target;
                 _this.$targetParent = target.parent;
+                _this.oldInteractiveChildren = target.interactiveChildren;
                 if (_this._dragContainer == undefined && !_this.dragBoundary) {
                     _this._dragContainer = _this.target.stage;
                 }
@@ -3211,6 +3228,7 @@ var UIBaseDrag = /** @class */ (function () {
                     target.emit(Index_1.ComponentEvent.DRAG_START_BEFORE, target, e);
                     _this.dragging = true;
                     target.interactive = false;
+                    target.interactiveChildren = false;
                     containerStart_1.copyFrom(target.container.position);
                     if (_this._dragContainer) {
                         var c = void 0;
@@ -3248,6 +3266,9 @@ var UIBaseDrag = /** @class */ (function () {
                     return;
                 }
                 var target = _this.target;
+                if (target.stage && target.stage.app) {
+                    target.stage.app.view.style.cursor = _this.dragMoveCursor;
+                }
                 if (_this.dragging && target.stage) {
                     var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
                     var y = containerStart_1.y + (offset.y / target.stage.scaleY) - stageOffset_1.y;
@@ -3298,6 +3319,7 @@ var UIBaseDrag = /** @class */ (function () {
                         var target = _this.target;
                         var parent = _this.$targetParent;
                         target.interactive = true;
+                        target.interactiveChildren = _this.oldInteractiveChildren;
                         var item = Index_1.DragDropController.getItem(target);
                         var dragPosition = _this._dragPosition;
                         target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
@@ -3325,6 +3347,9 @@ var UIBaseDrag = /** @class */ (function () {
                                     message: 'parent,end pos'
                                 });
                             }
+                        }
+                        if (target.stage && target.stage.app) {
+                            target.stage.app.view.style.cursor = target.style.cursor;
                         }
                         _this._dragState = 3;
                         e.data.tiltX = dragPosition.x;
@@ -3395,10 +3420,13 @@ var UIBaseDrag = /** @class */ (function () {
                     });
                 }
             }
+            if (target.stage && target.stage.app) {
+                target.stage.app.view.style.cursor = target.style.cursor;
+            }
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;
             e.data.tiltY = dragPosition.y;
-            item.dragOption._actionData = { type: Index_1.ComponentEvent.DRAG_TARGET, data: e.data, path: Utils_1.getDisplayPathUUID(parent_1) };
+            item.dragOption._actionData = { type: Index_1.ComponentEvent.DRAG_TARGET, data: e.data, path: Utils_1.getDisplayPathById(parent_1) };
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
     };
@@ -3407,7 +3435,7 @@ var UIBaseDrag = /** @class */ (function () {
      */
     UIBaseDrag.prototype.executeDrop = function (e, parsentPath) {
         if (this.target && this.target.stage && parsentPath) {
-            var parent_2 = this.target.stage.pathToDisplayObject(parsentPath);
+            var parent_2 = this.target.stage.getChildByPath(parsentPath);
             var item = this.target;
             item.dragOption.dragging = false;
             item.interactive = true;
@@ -11936,22 +11964,25 @@ function getStage(target) {
 }
 exports.getStage = getStage;
 /**
- * 获取显示对象的路径
+ * 获取显示对象的路径(解析json需要的id，并不是uuid)
  * @param target
  * @param ids
  */
-function getDisplayPathUUID(target, ids) {
+function getDisplayPathById(target, ids) {
     if (ids === void 0) { ids = []; }
-    ids.push(target.uuid);
+    if (target.id === '') {
+        return ids;
+    }
+    ids.push(target.id);
     if (target.parent) {
         if (target.parent instanceof Stage_1.Stage) {
             return ids;
         }
-        return getDisplayPathUUID(target.parent, ids);
+        return getDisplayPathById(target.parent, ids);
     }
     return ids;
 }
-exports.getDisplayPathUUID = getDisplayPathUUID;
+exports.getDisplayPathById = getDisplayPathById;
 /**
  * 快速设置矩形
  * @param sourcr
@@ -12247,13 +12278,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.0.1.3.0.1.3.0) ==1.3.0.1.3.0.1.3.0;
+//     return this.lastIndexOf(word, pos1.3.3.1.3.3.1.3.3) ==1.3.3.1.3.3.1.3.3;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.0";
+window.vf.gui.version = "1.3.3";
 
 
 /***/ })

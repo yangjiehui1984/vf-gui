@@ -14,6 +14,7 @@ export default class TestDrag {
         c1.rect.name = "c1";
         c1.container.x = 15;
         c1.container.y = 15;
+        c1.rect.style.cursor = 'pointer';
         uiStage.addChild(c1.container);
         c1.rect.dragOption.draggable = true;
         c1.rect.dragOption.dragContainer = uiStage; //拖动时，移动对象到舞台，防止遮挡
