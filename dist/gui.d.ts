@@ -2268,6 +2268,7 @@ declare module 'src/core/plugs/UIBaseDrag' {
 	    static key: string;
 	    private target;
 	    $targetParent: DisplayObject | Stage | undefined;
+	    private oldInteractiveChildren;
 	    /**
 	     * 可拖动初始化
 	     *  @default

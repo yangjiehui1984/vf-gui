@@ -3000,6 +3000,7 @@ var UIBaseDrag = /** @class */ (function () {
      * 构造函数
      */
     function UIBaseDrag(target) {
+        this.oldInteractiveChildren = false;
         /**
          * 可拖动初始化
          *  @default
@@ -3214,6 +3215,7 @@ var UIBaseDrag = /** @class */ (function () {
                 _this._dragState = 1;
                 var target = _this.target;
                 _this.$targetParent = target.parent;
+                _this.oldInteractiveChildren = target.interactiveChildren;
                 if (_this._dragContainer == undefined && !_this.dragBoundary) {
                     _this._dragContainer = _this.target.stage;
                 }
@@ -3222,6 +3224,7 @@ var UIBaseDrag = /** @class */ (function () {
                     target.emit(Index_1.ComponentEvent.DRAG_START_BEFORE, target, e);
                     _this.dragging = true;
                     target.interactive = false;
+                    target.interactiveChildren = false;
                     containerStart_1.copyFrom(target.container.position);
                     if (_this._dragContainer) {
                         var c = void 0;
@@ -3309,6 +3312,7 @@ var UIBaseDrag = /** @class */ (function () {
                         var target = _this.target;
                         var parent = _this.$targetParent;
                         target.interactive = true;
+                        target.interactiveChildren = _this.oldInteractiveChildren;
                         var item = Index_1.DragDropController.getItem(target);
                         var dragPosition = _this._dragPosition;
                         target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
@@ -12261,13 +12265,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.1.1.3.1.1.3.1) ==1.3.1.1.3.1.1.3.1;
+//     return this.lastIndexOf(word, pos1.3.2.1.3.2.1.3.2) ==1.3.2.1.3.2.1.3.2;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.1";
+window.vf.gui.version = "1.3.2";
 
 
 /***/ })

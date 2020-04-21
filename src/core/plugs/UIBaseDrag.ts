@@ -24,6 +24,7 @@ export class UIBaseDrag implements Lifecycle {
 
     private target: DisplayObject | undefined;
     public $targetParent: DisplayObject | Stage | undefined;
+    private oldInteractiveChildren = false;
     /** 
      * 可拖动初始化
      *  @default
@@ -245,6 +246,7 @@ export class UIBaseDrag implements Lifecycle {
                 this._dragState = 1;
                 const target = this.target;
                 this.$targetParent = target.parent;
+                this.oldInteractiveChildren = target.interactiveChildren;
 
                 if (this._dragContainer == undefined && !this.dragBoundary) {
                     this._dragContainer = this.target.stage;
@@ -255,6 +257,7 @@ export class UIBaseDrag implements Lifecycle {
                     target.emit(ComponentEvent.DRAG_START_BEFORE, target, e);
                     this.dragging = true;
                     target.interactive = false;
+                    target.interactiveChildren = false;
                     containerStart.copyFrom(target.container.position);
                     if (this._dragContainer) {
                         let c: DisplayObjectAbstract | undefined;
@@ -345,6 +348,7 @@ export class UIBaseDrag implements Lifecycle {
                         const target = this.target;
                         const parent = this.$targetParent;
                         target.interactive = true;
+                        target.interactiveChildren = this.oldInteractiveChildren;
                         const item = DragDropController.getItem(target);
                         const dragPosition = this._dragPosition;
                         target.emit(ComponentEvent.DRAG_END_BEFORE, target, e);
