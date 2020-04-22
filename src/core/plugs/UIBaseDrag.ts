@@ -303,7 +303,8 @@ export class UIBaseDrag implements Lifecycle {
                 const target = this.target;
                 
                 if(target.stage && target.stage.app){
-                    target.stage.app.view.style.cursor = this.dragMoveCursor;
+                    const interaction = (target.stage.app.renderer as vf.Renderer).plugins.interaction;
+                    interaction.cursor = this.dragMoveCursor;
                 }
 
                 if (this.dragging && target.stage) {
@@ -468,7 +469,8 @@ export class UIBaseDrag implements Lifecycle {
 
             }
             if(target.stage && target.stage.app){
-                target.stage.app.view.style.cursor = target.style.cursor;
+                const interaction = (target.stage.app.renderer as vf.Renderer).plugins.interaction;
+                interaction.cursor = target.style.cursor;
             }
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;

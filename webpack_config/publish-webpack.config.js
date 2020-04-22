@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'production',
-    devtool: 'source-map',
+    // devtool: 'source-map',
     entry: './src/vf-gui.ts',
     module: {
         rules: [
