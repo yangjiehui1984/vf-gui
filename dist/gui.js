@@ -3267,7 +3267,8 @@ var UIBaseDrag = /** @class */ (function () {
                 }
                 var target = _this.target;
                 if (target.stage && target.stage.app) {
-                    target.stage.app.view.style.cursor = _this.dragMoveCursor;
+                    var interaction = target.stage.app.renderer.plugins.interaction;
+                    interaction.cursor = _this.dragMoveCursor;
                 }
                 if (_this.dragging && target.stage) {
                     var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
@@ -3421,7 +3422,8 @@ var UIBaseDrag = /** @class */ (function () {
                 }
             }
             if (target.stage && target.stage.app) {
-                target.stage.app.view.style.cursor = target.style.cursor;
+                var interaction = target.stage.app.renderer.plugins.interaction;
+                interaction.cursor = target.style.cursor;
             }
             this._dragState = 4;
             e.data.tiltX = dragPosition.x;
