@@ -12280,13 +12280,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.3.1.3.3.1.3.3) ==1.3.3.1.3.3.1.3.3;
+//     return this.lastIndexOf(word, pos1.3.5.1.3.5.1.3.5) ==1.3.5.1.3.5.1.3.5;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.3";
+window.vf.gui.version = "1.3.5";
 
 
 /***/ })
