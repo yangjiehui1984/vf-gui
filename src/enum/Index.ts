@@ -1,3 +1,4 @@
 import * as FollowLineEnum from "./FollowLineEnum";
+import * as TracingEnum from "./TracingEnum"
 
-export {FollowLineEnum};
+export {FollowLineEnum, TracingEnum};
