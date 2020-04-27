@@ -880,6 +880,7 @@ export class Tracing extends DisplayObject {
             tempTraceIndexArr,
             result,
         };
+        
         this.emit(ComponentEvent.CHANGE, this, JSON.stringify(obj));
     }
 
@@ -942,11 +943,6 @@ export class Tracing extends DisplayObject {
         if(this.mode === TracingEnum.Mode.Teach){
             this.clearGuide();
         }
-        //这里不需要发送
-        // this.emitTracingMsg(
-        //     TracingEnum.Operate.Clear
-        // );
-        //如果是auto或teach模式，清除后重新开始
         this.start();
     }
 
@@ -964,6 +960,7 @@ export class Tracing extends DisplayObject {
         } else {
             this._messageCache = this._messageCache.concat(data);
         }
+
         this.invalidateProperties();
     }
 
