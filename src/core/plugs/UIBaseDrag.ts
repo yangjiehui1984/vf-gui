@@ -17,7 +17,8 @@ export class UIBaseDrag implements Lifecycle {
      */
     public constructor(target: DisplayObject) {
         this.target = target;
-        this.target.plugs.set(UIBaseDrag.key, this);
+        target.plugs.set(UIBaseDrag.key, this);
+        target.dragStopPropagation = true;
     }
 
     public static key = "UIBaseDrag";
