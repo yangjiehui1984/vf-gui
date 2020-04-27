@@ -940,9 +940,7 @@ export class Tracing extends DisplayObject {
         if (this._tween) {
             (this._tween as Tween).release();
         }
-        if(this.mode === TracingEnum.Mode.Teach){
-            this.clearGuide();
-        }
+        this.clearGuide();
         this.start();
     }
 
