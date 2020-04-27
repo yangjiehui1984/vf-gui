@@ -75,8 +75,9 @@ export class DragEvent {
 
 
     private _onDragStart(e: InteractionEvent) {
-        if(this.obj.dragStopPropagation && e.stopPropagation)
-            e.stopPropagation();
+        if(this.obj.dragStopPropagation &&  e.data.originalEvent.stopPropagation){
+            e.data.originalEvent.stopPropagation();
+        }
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
 
@@ -100,7 +101,9 @@ export class DragEvent {
     }
 
     private _onDragMove(e: InteractionEvent) {
-
+        if(this.obj.dragStopPropagation &&  e.data.originalEvent.stopPropagation){
+            e.data.originalEvent.stopPropagation();
+        }
         if (e.data.identifier !== this.id) return;
         this.mouse.copyFrom(e.data.global);
         this.offset.set(this.mouse.x - this.start.x, this.mouse.y - this.start.y);
@@ -128,6 +131,8 @@ export class DragEvent {
     }
 
     private _onDragEnd(e: InteractionEvent) {
+        if(this.obj.dragStopPropagation && e.stopPropagation)
+            e.stopPropagation();
         if (e.data.identifier !== this.id) return; 
         if (this.bound && this.obj.stage) {
             const stage = this.obj.stage.container;

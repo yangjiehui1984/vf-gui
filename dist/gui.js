@@ -3044,7 +3044,8 @@ var UIBaseDrag = /** @class */ (function () {
          */
         this.dragMoveCursor = 'pointer';
         this.target = target;
-        this.target.plugs.set(UIBaseDrag.key, this);
+        target.plugs.set(UIBaseDrag.key, this);
+        target.dragStopPropagation = true;
     }
     Object.defineProperty(UIBaseDrag.prototype, "dragDropEventId", {
         /**
@@ -7942,8 +7943,9 @@ var DragEvent = /** @class */ (function () {
         }
     };
     DragEvent.prototype._onDragStart = function (e) {
-        if (this.obj.dragStopPropagation && e.stopPropagation)
-            e.stopPropagation();
+        if (this.obj.dragStopPropagation && e.data.originalEvent.stopPropagation) {
+            e.data.originalEvent.stopPropagation();
+        }
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
         if (!this.bound && this.obj.parent && this.obj.stage) {
@@ -7963,6 +7965,9 @@ var DragEvent = /** @class */ (function () {
         }
     };
     DragEvent.prototype._onDragMove = function (e) {
+        if (this.obj.dragStopPropagation && e.data.originalEvent.stopPropagation) {
+            e.data.originalEvent.stopPropagation();
+        }
         if (e.data.identifier !== this.id)
             return;
         this.mouse.copyFrom(e.data.global);
@@ -7989,6 +7994,8 @@ var DragEvent = /** @class */ (function () {
         this.onDragMove && this.onDragMove.call(this.obj, e, this.offset, this);
     };
     DragEvent.prototype._onDragEnd = function (e) {
+        if (this.obj.dragStopPropagation && e.stopPropagation)
+            e.stopPropagation();
         if (e.data.identifier !== this.id)
             return;
         if (this.bound && this.obj.stage) {
@@ -12280,13 +12287,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.5.1.3.5.1.3.5) ==1.3.5.1.3.5.1.3.5;
+//     return this.lastIndexOf(word, pos1.3.6.1.3.6.1.3.6) ==1.3.6.1.3.6.1.3.6;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.5";
+window.vf.gui.version = "1.3.6";
 
 
 /***/ })
