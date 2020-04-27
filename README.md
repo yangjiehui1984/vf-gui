@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/vf-gui.svg)](https://badge.fury.io/js/vf-gui)
+[![npm version](https://badge.fury.io/js/vf-gui.svg)](https://badge.fury.io/js/vf-gui)""""
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/vf-gui)
 
 ## vf-gui
@@ -67,7 +67,7 @@ vf-gui简称`gui`是基于VFJS引擎，使用TypeScript语言开发的开源UI�
 | vf.gui.Tween | 缓动 |
 | vf.gui.Timeline | 缓动 |
 | vf.gui.Utils | 工具类 |
-
+| vf.gui.Tracing | 笔画临摹组件 |
 
 计划中：
 
