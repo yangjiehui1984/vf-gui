@@ -14,6 +14,8 @@ import { Tween } from "../tween/Tween";
  *
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
  */
+const GUIDE_SPRITE =
+    "data:image/png;base64,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";
 const POS_DISTANCE = 7;
 /** 优化曲率，小于这个弧度视为直线，把当前点优化掉 */
 const MAX_ARC = 0.09; // 5度
@@ -129,7 +131,7 @@ export class Tracing extends DisplayObject {
      */
     private _mode: TracingEnum.Mode = TracingEnum.Mode.Check;
     public set mode(value: TracingEnum.Mode) {
-        if(this._mode !== value){
+        if (this._mode !== value) {
             this._mode = value;
             this.clear();
         }
@@ -160,7 +162,7 @@ export class Tracing extends DisplayObject {
     /**
      * 背景图，mask模式用于画线后漏出来
      */
-    private _maskBgSprite:
+    private _renderBgSprite:
         | number
         | string
         | vf.Texture
@@ -168,13 +170,13 @@ export class Tracing extends DisplayObject {
         | HTMLCanvasElement
         | HTMLVideoElement
         | undefined;
-    public get maskBgSprite() {
-        return this._maskBgSprite;
+    public get renderBgSprite() {
+        return this._renderBgSprite;
     }
-    public set maskBgSprite(value) {
-        this._maskBgSprite = value;
+    public set renderBgSprite(value) {
+        this._renderBgSprite = value;
         this._renderMode = 1;
-        this.setMaskBgSprite();
+        this.setRenderBgSprite();
     }
 
     /**
@@ -292,9 +294,9 @@ export class Tracing extends DisplayObject {
     /**
      * mask背景图
      */
-    private setMaskBgSprite() {
-        const { container, maskBgSprite } = this;
-        const texture = getTexture(maskBgSprite);
+    private setRenderBgSprite() {
+        const { container, renderBgSprite } = this;
+        const texture = getTexture(renderBgSprite);
         let sprite: vf.Sprite | undefined;
         try {
             sprite = new vf.Sprite(texture);
@@ -312,7 +314,7 @@ export class Tracing extends DisplayObject {
     /**
      * 开始，适用于audo和teach模式
      */
-    private start(){
+    private start() {
         if (this.mode === TracingEnum.Mode.Auto) {
             setTimeout(() => {
                 this.auto();
@@ -320,9 +322,7 @@ export class Tracing extends DisplayObject {
         } else if (this.mode === TracingEnum.Mode.Teach) {
             //教学模式，需要引导手势
             if (!this._guideSprite) {
-                this._guideSprite = vf.Sprite.from(
-                    "//ic-static.vipkid.com.cn/course/material/DEMO1-U1-LC1-L1/guide_pointer.png"
-                );
+                this._guideSprite = vf.Sprite.from(GUIDE_SPRITE);
             }
             setTimeout(() => {
                 this.container.removeChild(this._guideSprite as vf.Sprite);
@@ -392,7 +392,7 @@ export class Tracing extends DisplayObject {
     clearGuide() {
         clearTimeout(this._guideTime);
         const guideSprite = this._guideSprite as vf.Sprite;
-        if(guideSprite){
+        if (guideSprite) {
             guideSprite.visible = false;
         }
         this._newLineFlag = true;
@@ -413,10 +413,10 @@ export class Tracing extends DisplayObject {
             point = this.autoNextPoint() as { x: number; y: number };
         }
         this._curLocalPos.set(point.x, point.y);
-        if (this._autoComplete){
+        if (this._autoComplete) {
             this.emit(ComponentEvent.COMPLETE, this, { mode: this.mode, value: TracingEnum.Result.Complete });
             return;
-        } 
+        }
         this.drawWithAnimation();
     }
 
@@ -610,7 +610,7 @@ export class Tracing extends DisplayObject {
      */
     private checkTeach(): boolean {
         let flag = true;
-        if(this._lineId != 1){
+        if (this._lineId != 1) {
             this._realTraceIndexArr.shift();
         }
         if (this._realTraceIndexArr.length != this._groupStatusArr[this._lineId - 1].points.length) {
@@ -629,16 +629,14 @@ export class Tracing extends DisplayObject {
                 this._tracePointObjArr[item].flag = false;
             });
         }
-        if(this._lineId < this._groupStatusArr.length)
-        {
+        if (this._lineId < this._groupStatusArr.length) {
             this._realTraceIndexArr = [];
-            if(this._lineId != 0){
+            if (this._lineId != 0) {
                 const firstIndex = this._groupStatusArr[this._lineId].points[0] - 1;
                 this._realTraceIndexArr.push(firstIndex);
             }
             this.guide();
-        }
-        else{
+        } else {
             //教学完成
             this.emit(ComponentEvent.COMPLETE, this, { mode: this.mode, value: TracingEnum.Result.Complete });
         }
@@ -716,7 +714,7 @@ export class Tracing extends DisplayObject {
         }
         const curLocal = this.container.toLocal(e.local, thisObj.container);
         if (isPress) {
-            if (this.mode === TracingEnum.Mode.Teach){
+            if (this.mode === TracingEnum.Mode.Teach) {
                 this.clearGuide();
             }
             this._drawing = true;
@@ -812,7 +810,7 @@ export class Tracing extends DisplayObject {
     private getDataStrByPosCache(): string {
         const { _posCache } = this;
         if (_posCache.length == 0) {
-            return '';
+            return "";
         }
         // 稀疏位置点，通过曲率
         const finalX = [_posCache[0].x];
@@ -864,8 +862,8 @@ export class Tracing extends DisplayObject {
      */
     private emitTracingMsg(
         operate: number = TracingEnum.Operate.Add,
-        lineId = '',
-        data = '',
+        lineId = "",
+        data = "",
         lineStyle: any = {},
         realTraceIndexArr: number[] = [],
         tempTraceIndexArr: number[] = [],
@@ -880,7 +878,7 @@ export class Tracing extends DisplayObject {
             tempTraceIndexArr,
             result,
         };
-        
+
         this.emit(ComponentEvent.CHANGE, this, JSON.stringify(obj));
     }
 
@@ -922,7 +920,7 @@ export class Tracing extends DisplayObject {
             }
         });
         this._lines.clear();
-        if(this._renderMode == 1){
+        if (this._renderMode == 1) {
             const graphic = this.getGraphics("mask", this._lineStyle);
             (this._bgSprite as vf.Sprite).mask = graphic;
         }
@@ -934,9 +932,9 @@ export class Tracing extends DisplayObject {
         this._autoComplete = false;
         this._newLineFlag = true;
         this._result = TracingEnum.Result.Uncomplete;
-        this._tracePointObjArr.forEach(item => {
+        this._tracePointObjArr.forEach((item) => {
             item.flag = false;
-        })
+        });
         if (this._tween) {
             (this._tween as Tween).release();
         }

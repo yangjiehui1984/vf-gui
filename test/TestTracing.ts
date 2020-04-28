@@ -112,7 +112,7 @@ export default class TestTracing {
         this.tracing.mode = 0;
         uiStage.addChild(this.tracing);
         this.tracing.traceSprite = "assets/tracing/fan.png";
-        this.tracing.maskBgSprite = "assets/tracing/maskBg.png";
+        this.tracing.renderBgSprite = "assets/tracing/maskBg.png";
         //tracing.lineTexture = 'assets/tracing/dino.png';
         this.tracing.tracePoints = tracePoints;
 
@@ -130,7 +130,7 @@ export default class TestTracing {
         this.tracing.mode = 0;
         uiStage.addChild(this.tracing2);
         this.tracing2.traceSprite = "assets/tracing/fan.png";
-        this.tracing2.maskBgSprite = "assets/tracing/maskBg.png";
+        this.tracing2.renderBgSprite = "assets/tracing/maskBg.png";
         //tracing2.lineTexture = 'assets/tracing/dino.png';
         this.tracing2.tracePoints = tracePoints;
 
