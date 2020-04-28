@@ -3415,9 +3415,28 @@ declare module 'src/enum/FollowLineEnum' {
 	}
 
 }
+declare module 'src/enum/TracingEnum' {
+	export const enum Operate {
+	    Add = 0,
+	    Clear = 1
+	}
+	export const enum Mode {
+	    Check = 0,
+	    Teach = 1,
+	    Auto = 2
+	}
+	export const enum Result {
+	    Uncomplete = 0,
+	    Correct = 1,
+	    Incorrect = 2,
+	    Complete = 3
+	}
+
+}
 declare module 'src/enum/Index' {
 	import * as FollowLineEnum from 'src/enum/FollowLineEnum';
-	export { FollowLineEnum };
+	import * as TracingEnum from 'src/enum/TracingEnum';
+	export { FollowLineEnum, TracingEnum };
 
 }
 declare module 'src/display/FollowLine' {
@@ -3592,6 +3611,188 @@ declare module 'src/display/ConnectLine' {
 	    release(): void;
 	}
 	export {};
+
+}
+declare module 'src/display/Tracing' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { ClickEvent } from 'src/interaction/Index';
+	import { TracingEnum } from 'src/enum/Index';
+	export class Tracing extends DisplayObject {
+	    constructor();
+	    protected clickEvent: ClickEvent;
+	    private _renderMode;
+	    private _guideSprite;
+	    private _bgSprite;
+	    private _lines;
+	    private _realTraceIndexArr;
+	    private _tempTraceIndexArr;
+	    private _lineStyle;
+	    private _posCache;
+	    private _drawing;
+	    private _lastLocalPos;
+	    private _curLocalPos;
+	    private _autoComplete;
+	    private _curIndex;
+	    private _tracePointObjArr;
+	    private _result;
+	    private _groupStatusArr;
+	    private _lineId;
+	    private _newLineFlag;
+	    private _pointId;
+	    private _messageCache;
+	    private _tween;
+	    private _guideTime;
+	    /**
+	     * debug
+	     */
+	    private _debug;
+	    debug: boolean;
+	    /**
+	     * 模式
+	     */
+	    private _mode;
+	    mode: TracingEnum.Mode;
+	    /**
+	     * 文字轨迹图
+	     */
+	    private _traceSprite;
+	    traceSprite: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    /**
+	     * 背景图，mask模式用于画线后漏出来
+	     */
+	    private _renderBgSprite;
+	    renderBgSprite: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    /**
+	     * 轨迹点,二维数组
+	     */
+	    private _tracePoints;
+	    tracePoints: {
+	        x: number;
+	        y: number;
+	    }[][];
+	    /**
+	     * 线宽
+	     */
+	    private _lineWidth;
+	    lineWidth: number;
+	    /**
+	     * 颜色
+	     */
+	    private _lineColor;
+	    lineColor: number;
+	    /**
+	     * 检测精度
+	     */
+	    private _precision;
+	    precision: number;
+	    /**
+	     * 位图
+	     */
+	    private _lineTexture;
+	    lineTexture: string | number | undefined;
+	    /**
+	     * 画笔样式
+	     */
+	    private setLineStyle;
+	    /**
+	     * 轨迹图
+	     */
+	    private setTraceSprite;
+	    /**
+	     * mask背景图
+	     */
+	    private setRenderBgSprite;
+	    /**
+	     * 开始，适用于audo和teach模式
+	     */
+	    private start;
+	    /**
+	     * 教学引导
+	     */
+	    private guide;
+	    private playGuideAnimal;
+	    /**
+	     * 清除教学引导
+	     */
+	    clearGuide(): void;
+	    /**
+	     * 自动绘制
+	     */
+	    private auto;
+	    private drawWithAnimation;
+	    private autoNextPoint;
+	    /**
+	     * 更新显示列表,子类重写，实现布局
+	     */
+	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+	    $onInit(): void;
+	    $onRelease(): void;
+	    /**
+	     * 检测触摸点和轨迹点
+	     * @param point
+	     */
+	    private checkTrace;
+	    /**
+	     * 检查暂存区,抬起时检测暂存区中的点是否在一个笔画上
+	     */
+	    private checkTemp;
+	    /**
+	     * 检查group
+	     */
+	    private checkResult;
+	    /**
+	     * 教学模式检查
+	     */
+	    private checkTeach;
+	    /**
+	     * 画线
+	     * @param lineId
+	     * @param data
+	     * @param from
+	     * @param to
+	     * @param lineStyle
+	     */
+	    private drawLine;
+	    /**
+	     * 绘图
+	     * @param graphics
+	     * @param posList
+	     */
+	    private draw;
+	    /**
+	     * 本地绘制
+	     * @param graphics
+	     */
+	    private localDraw;
+	    private onPress;
+	    private onMove;
+	    /**
+	     *
+	     * @param lineId
+	     * @param lineStyle
+	     */
+	    private getGraphics;
+	    private getDataStrByPosCache;
+	    /**
+	     * 发送一个笔画的msg
+	     * @param lineId
+	     * @param data
+	     */
+	    private emitTracingMsg;
+	    private onMessage;
+	    /**
+	     * clear
+	     */
+	    clear(): void;
+	    /**
+	     * @private
+	     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+	     */
+	    protected commitProperties(): void;
+	    setData(data: string | string[]): void;
+	    source: string | string[];
+	}
 
 }
 declare module 'src/event/SchedulerEvent' {
@@ -3894,6 +4095,15 @@ declare module 'src/UI' {
 	 */
 	import { ConnectLine } from 'src/display/ConnectLine';
 	/**
+	 * 临摹组件
+	 *
+	 * @example let Tracing = new vf.gui.Tracing();
+	 *
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
+	 */
+	import { Tracing } from 'src/display/Tracing';
+	/**
 	 * 完整的缓动曲线列表
 	 *
 	 * @example vf.gui.Easing.Linear.None;
@@ -3935,7 +4145,7 @@ declare module 'src/UI' {
 	import { Scheduler } from 'src/core/Scheduler';
 	export type Application = vf.Application;
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
+	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
 
 }
 declare module 'src/vf-gui' {
@@ -4016,6 +4226,109 @@ declare module 'src/core/UIBase' {
 	export class UIBase extends DisplayObject implements Lifecycle {
 	    constructor();
 	}
+
+}
+declare module 'src/enum/ComponentEvent' {
+	/**
+	 * 特定属性改变时,通常为了去系统事件区分，UI组件的事件名为大写
+	 * 1. CheckBox 的 checked 改变时
+	 * 2. Label 的 text 改变时
+	 * 3. SpriteAnimated 的 animationName 改变时
+	 * 4. Button 文字改变
+	 * 5. ScrollingContainer 拖动改变时
+	 * 6. Slider 滑动改变后
+	 * 7. SpriteAnimated 动画改变后
+	 * 8. ConnectLine 连线完成时
+	 * 9. Tracing 临摹完成一个笔画
+	 */
+	export const CHANGE = "CHANGE";
+	/**
+	 * 状态改变中
+	 *
+	 * slider 滑动时
+	 */
+	export const CHANGEING = "CHANGEING";
+	/**
+	 * 状态切换完成时
+	 *
+	 * 1. SpriteAnimated 每次播放完时，触发(loop = false时)
+	 * 2. Image 图片加载完成时
+	 * 3. Slider 滑动完成
+	 * 4. Timeline  每次播放完时，触发(loop = false时)
+	 * 5. FollowLine 完成一次划线
+	 * 6. Tracing 临摹全部完成
+	 */
+	export const COMPLETE = "COMPLETE";
+	/**
+	 * 状态发生改变时
+	 */
+	export const STATE_CHANGE = "STATE_CHANGE";
+	/**
+	 * 状态切换完成时
+	 *
+	 * SpriteAnimated 每次播放完时，，触发(loop = true时)
+	 */
+	export const LOOP = "LOOP";
+	/**
+	 * 组件被添加前
+	 */
+	export const ADD = "add";
+	/**
+	 * 组件被添加时
+	 */
+	export const ADDED = "added";
+	/**
+	 * 组件被移除时
+	 */
+	export const REMOVEED = "removed";
+	/**
+	 * 组件大小改变后
+	 */
+	export const RESIZE = "RESIZE";
+	/**
+	 * 组件位置移动
+	 */
+	export const MOVE = "MOVE";
+	/**
+	 * 组件创建完成后
+	 */
+	export const CREATION_COMPLETE = "CREATION_COMPLETE";
+	/**
+	 * 组件拖动开始之前
+	 */
+	export const DRAG_START_BEFORE = "DRAG_START_BEFORE";
+	/**
+	 * 组件拖动开始时
+	 */
+	export const DRAG_START = "DRAG_START";
+	/**
+	 * 组件拖动结束之前
+	 */
+	export const DRAG_END_BEFORE = "DRAG_END_BEFORE";
+	/**
+	 * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
+	 */
+	export const DRAG_END = "DRAG_END";
+	/**
+	 * 组件拖动中
+	 */
+	export const DRAG_MOVE = "DRAG_MOVE";
+	/**
+	 * 组件拖动到接收目标中之前
+	 */
+	export const DRAG_TARGET_BEFORE = "DRAG_TARGET_BEFORE";
+	/**
+	 * 组件拖动到接收目标中
+	 */
+	export const DRAG_TARGET = "DRAG_TARGET";
+	/**
+	 * 有拖拽物掉落到此容器时触发
+	 */
+	export const DROP_TARGET = "DROP_TARGET";
+	/**
+	 * 播放音效 {name,mode}
+	 */
+	export const PLAY_AUDIO = "PLAY_AUDIO";
 
 }
 declare module 'src/interaction/KeyboardEvent' {
@@ -4325,6 +4638,19 @@ declare module 'test/TestTimeLine' {
 	export default class TestTimeLine {
 	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
 	    private onLoad;
+	}
+
+}
+declare module 'test/TestTracing' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestTracing {
+	    private tracing;
+	    private tracing2;
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getNewRadio;
+	    private onChange;
 	}
 
 }
