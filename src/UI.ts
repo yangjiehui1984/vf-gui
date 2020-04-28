@@ -147,6 +147,15 @@ import { FollowLine } from "./display/FollowLine";
  */
 import { ConnectLine } from "./display/ConnectLine";
 /**
+ * 临摹组件
+ *
+ * @example let Tracing = new vf.gui.Tracing();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
+ */
+import { Tracing } from "./display/Tracing"
+/**
  * 完整的缓动曲线列表
  * 
  * @example vf.gui.Easing.Linear.None;
@@ -195,6 +204,6 @@ export declare type Application = vf.Application;
 /** 请不要在编写UI组件内部使用本类 */
 export {
     Filter, Utils, Stage, Container, ScrollingContainer, Slider,
-    Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction,
+    Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, Interaction,
     DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler
 };
