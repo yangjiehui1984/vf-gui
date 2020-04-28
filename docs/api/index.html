@@ -62,7 +62,7 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<p><a href="https://badge.fury.io/js/vf-gui"><img src="https://badge.fury.io/js/vf-gui.svg" alt="npm version"></a>
+				<p><a href="https://badge.fury.io/js/vf-gui"><img src="https://badge.fury.io/js/vf-gui.svg" alt="npm version"></a>&quot;&quot;&quot;&quot;
 				<img src="https://img.shields.io/bundlephobia/minzip/vf-gui" alt="npm bundle size"></p>
 				<a href="#vf-gui" id="vf-gui" style="color: inherit; text-decoration: none;">
 					<h2>vf-gui</h2>
@@ -82,11 +82,8 @@
 				<a href="#安装setup" id="安装setup" style="color: inherit; text-decoration: none;">
 					<h2>安装(Setup)</h2>
 				</a>
-				<ol>
-					<li><script src="http://unpkg.com/@vf.js/vf/dist/vf.min.js"></script></li>
-					<li><script src="http://unpkg.com/@vf.js/gui/dist/gui.min.js"></script>
-					</li>
-				</ol>
+				<pre><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/@vf.js/vf/dist/vf.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://unpkg.com/@vf.js/gui/dist/gui.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 				<a href="#创建方式usage：" id="创建方式usage：" style="color: inherit; text-decoration: none;">
 					<h3>创建方式(Usage)：</h3>
 				</a>
@@ -193,6 +190,10 @@
 							<td>vf.gui.Utils</td>
 							<td>工具类</td>
 						</tr>
+						<tr>
+							<td>vf.gui.Tracing</td>
+							<td>笔画临摹组件</td>
+						</tr>
 				</tbody></table>
 				<p>计划中：</p>
 				<pre><code><span class="hljs-meta">Recording/Audio</span> <span class="hljs-string">- 麦克风</span>
@@ -242,7 +243,13 @@
 						<a href="enums/keyevent.html" class="tsd-kind-icon">Key<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-enum">
+						<a href="enums/mode.html" class="tsd-kind-icon">Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/operate.html" class="tsd-kind-icon">Operate</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/result.html" class="tsd-kind-icon">Result</a>
 					</li>
 					<li class=" tsd-kind-enum">
 						<a href="enums/role.html" class="tsd-kind-icon">Role</a>
@@ -360,6 +367,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/timeline.html" class="tsd-kind-icon">Timeline</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/tracing.html" class="tsd-kind-icon">Tracing</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/tween.html" class="tsd-kind-icon">Tween</a>
@@ -489,6 +499,9 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#frame_ms" class="tsd-kind-icon">FRAME_<wbr>MS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#guide_sprite" class="tsd-kind-icon">GUIDE_<wbr>SPRITE</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#loop" class="tsd-kind-icon">LOOP</a>
@@ -806,7 +819,7 @@
 						<a href="globals.html#getdisplayobject" class="tsd-kind-icon">get<wbr>Display<wbr>Object</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#getdisplaypathuuid" class="tsd-kind-icon">get<wbr>Display<wbr>PathUUID</a>
+						<a href="globals.html#getdisplaypathbyid" class="tsd-kind-icon">get<wbr>Display<wbr>Path<wbr>ById</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#geteventitem" class="tsd-kind-icon">get<wbr>Event<wbr>Item</a>
