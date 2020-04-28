@@ -273,6 +273,16 @@ exports.FollowLine = FollowLine_1.FollowLine;
 var ConnectLine_1 = __webpack_require__(/*! ./display/ConnectLine */ "./src/display/ConnectLine.ts");
 exports.ConnectLine = ConnectLine_1.ConnectLine;
 /**
+ * 临摹组件
+ *
+ * @example let Tracing = new vf.gui.Tracing();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
+ */
+var Tracing_1 = __webpack_require__(/*! ./display/Tracing */ "./src/display/Tracing.ts");
+exports.Tracing = Tracing_1.Tracing;
+/**
  * 完整的缓动曲线列表
  *
  * @example vf.gui.Easing.Linear.None;
@@ -6776,6 +6786,943 @@ exports.TextInput = TextInput;
 
 /***/ }),
 
+/***/ "./src/display/Tracing.ts":
+/*!********************************!*\
+  !*** ./src/display/Tracing.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Utils_2 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Tween_1 = __webpack_require__(/*! ../tween/Tween */ "./src/tween/Tween.ts");
+/**
+ * 临摹组件
+ *
+ * @example let Tracing = new vf.gui.Tracing();
+ *
+ * @namespace vf.gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
+ */
+var GUIDE_SPRITE = "data:image/png;base64,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";
+var POS_DISTANCE = 7;
+/** 优化曲率，小于这个弧度视为直线，把当前点优化掉 */
+var MAX_ARC = 0.09; // 5度
+/** 点数字转换成字符的数位 */
+var DIGIT = 90;
+/** 字符列表 ascii */
+var NUMBER_TO_STR = "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}";
+/** 压缩比例，有损压缩 */
+var COMPRESS_RATE = 2;
+/** 最大宽度 */
+var MAX_WIDTH = 1500;
+/** 为了把点都变成正数所用 */
+var POSITIVE = MAX_WIDTH / 2;
+/** 将一个x，y坐标转换成3个字符，宽高不能超过MAX_WIDTH */
+function getStrFromPos(x, y) {
+    x = Math.min(Math.max(0, x), MAX_WIDTH);
+    y = Math.min(Math.max(0, y), MAX_WIDTH);
+    // 有损压缩
+    var compX = Math.floor(x / COMPRESS_RATE);
+    var compY = Math.floor(y / COMPRESS_RATE);
+    var n1 = compX % DIGIT;
+    var n2 = compY % DIGIT;
+    var n3 = Math.floor(compX / DIGIT) * 10 + Math.floor(compY / DIGIT);
+    return NUMBER_TO_STR[n1] + NUMBER_TO_STR[n2] + NUMBER_TO_STR[n3];
+}
+/** 将字符串转换成坐标数字列表 */
+function getVecListFromStr(str, from, to) {
+    var list = [];
+    for (var index = from; index < to; index += 3) {
+        var n1 = str.charCodeAt(index) - 36;
+        var n2 = str.charCodeAt(index + 1) - 36;
+        var n3 = str.charCodeAt(index + 2) - 36;
+        var n12 = Math.floor(n3 / 10);
+        var n22 = n3 % 10;
+        var compX = n1 + n12 * DIGIT;
+        var compY = n2 + n22 * DIGIT;
+        var realX = compX * COMPRESS_RATE;
+        var realY = compY * COMPRESS_RATE;
+        list.push(realX);
+        list.push(realY);
+    }
+    return list;
+}
+var Tracing = /** @class */ (function (_super) {
+    __extends(Tracing, _super);
+    function Tracing() {
+        var _this = _super.call(this) || this;
+        _this._renderMode = 0; //绘图模式  0-graphics drawLine  1-mask
+        _this._realTraceIndexArr = []; //实际临摹轨迹
+        _this._tempTraceIndexArr = []; //暂存区
+        _this._lineStyle = {}; //线条样式
+        _this._posCache = []; //绘图的坐标缓存
+        _this._drawing = false; //是否正在画线
+        _this._lastLocalPos = new vf.Point(); //上一次的触点
+        _this._curLocalPos = new vf.Point(); //当前触点
+        _this._autoComplete = false; //自动绘制是否完成
+        _this._curIndex = -1; //当前index
+        _this._tracePointObjArr = [];
+        _this._result = 0 /* Uncomplete */; //临摹结果
+        _this._groupStatusArr = []; //每个笔画的状态
+        _this._lineId = 0; //绘制笔画id
+        _this._newLineFlag = true; //是否是新笔画
+        _this._pointId = 0; //绘制的笔画的轨迹点id
+        _this._messageCache = []; //需要处理的消息列表
+        /**
+         * debug
+         */
+        _this._debug = false;
+        /**
+         * 模式
+         */
+        _this._mode = 0 /* Check */;
+        /**
+         * 轨迹点,二维数组
+         */
+        _this._tracePoints = [];
+        /**
+         * 线宽
+         */
+        _this._lineWidth = 10;
+        /**
+         * 颜色
+         */
+        _this._lineColor = 0xff0000;
+        /**
+         * 检测精度
+         */
+        _this._precision = 20;
+        _this._lines = new Map();
+        _this.clickEvent = new Index_1.ClickEvent(_this, true);
+        _this.clickEvent.isOpenLocalPoint = true;
+        return _this;
+    }
+    Object.defineProperty(Tracing.prototype, "debug", {
+        get: function () {
+            return this._debug;
+        },
+        set: function (value) {
+            this._debug = value;
+            if (this._tracePointObjArr.length > 0) {
+                var graphic_1 = new vf.Graphics();
+                this.container.addChild(graphic_1);
+                this._tracePointObjArr.forEach(function (item) {
+                    graphic_1.beginFill(0x00ff00);
+                    graphic_1.drawCircle(item.point.x, item.point.y, 5);
+                    graphic_1.endFill();
+                });
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "mode", {
+        get: function () {
+            return this._mode;
+        },
+        set: function (value) {
+            if (this._mode !== value) {
+                this._mode = value;
+                this.clear();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "traceSprite", {
+        get: function () {
+            return this._traceSprite;
+        },
+        set: function (value) {
+            this._traceSprite = value;
+            this.setTraceSprite();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "renderBgSprite", {
+        get: function () {
+            return this._renderBgSprite;
+        },
+        set: function (value) {
+            this._renderBgSprite = value;
+            this._renderMode = 1;
+            this.setRenderBgSprite();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "tracePoints", {
+        get: function () {
+            return this._tracePoints;
+        },
+        set: function (value) {
+            var _this = this;
+            this._tracePoints = value;
+            var pointIndex = 0;
+            this._groupStatusArr = [];
+            this._tracePoints.forEach(function (group, index) {
+                var groupStatus = {
+                    flag: false,
+                    points: [],
+                };
+                _this._groupStatusArr.push(groupStatus);
+                group.forEach(function (point) {
+                    groupStatus.points.push(pointIndex++);
+                    _this._tracePointObjArr.push({
+                        flag: false,
+                        point: new vf.Point(point.x, point.y),
+                    });
+                });
+            });
+            if (this.debug) {
+                var graphic_2 = new vf.Graphics();
+                this.container.addChild(graphic_2);
+                this._tracePointObjArr.forEach(function (item) {
+                    graphic_2.beginFill(0x00ff00);
+                    graphic_2.drawCircle(item.point.x, item.point.y, 5);
+                    graphic_2.endFill();
+                });
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "lineWidth", {
+        get: function () {
+            return this._lineWidth;
+        },
+        set: function (value) {
+            this._lineWidth = value;
+            this.setLineStyle();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "lineColor", {
+        get: function () {
+            return this._lineColor;
+        },
+        set: function (value) {
+            this._lineColor = value;
+            this.setLineStyle();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "precision", {
+        get: function () {
+            return this._precision;
+        },
+        set: function (value) {
+            this._precision = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tracing.prototype, "lineTexture", {
+        get: function () {
+            return this._lineTexture;
+        },
+        set: function (value) {
+            this._lineTexture = value;
+            this.setLineStyle();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * 画笔样式
+     */
+    Tracing.prototype.setLineStyle = function () {
+        this._lineStyle = {
+            width: this.lineWidth,
+            color: this.lineColor,
+            texture: this.lineTexture,
+        };
+    };
+    /**
+     * 轨迹图
+     */
+    Tracing.prototype.setTraceSprite = function () {
+        var _a = this, container = _a.container, traceSprite = _a.traceSprite;
+        var texture = Utils_2.getTexture(traceSprite);
+        var sprite;
+        try {
+            sprite = new vf.Sprite(texture);
+        }
+        catch (e) {
+            sprite = vf.Sprite.from(texture);
+        }
+        if (sprite && sprite.parent == undefined) {
+            container.addChild(sprite);
+        }
+    };
+    /**
+     * mask背景图
+     */
+    Tracing.prototype.setRenderBgSprite = function () {
+        var _a = this, container = _a.container, renderBgSprite = _a.renderBgSprite;
+        var texture = Utils_2.getTexture(renderBgSprite);
+        var sprite;
+        try {
+            sprite = new vf.Sprite(texture);
+        }
+        catch (e) {
+            sprite = vf.Sprite.from(texture);
+        }
+        if (sprite && sprite.parent == undefined) {
+            container.addChild(sprite);
+            this._bgSprite = sprite;
+        }
+        var graphic = this.getGraphics("mask", this._lineStyle);
+        this._bgSprite.mask = graphic;
+    };
+    /**
+     * 开始，适用于audo和teach模式
+     */
+    Tracing.prototype.start = function () {
+        var _this = this;
+        if (this.mode === 2 /* Auto */) {
+            setTimeout(function () {
+                _this.auto();
+            }, 1000); //自动播放，1s后开始
+        }
+        else if (this.mode === 1 /* Teach */) {
+            //教学模式，需要引导手势
+            if (!this._guideSprite) {
+                this._guideSprite = vf.Sprite.from(GUIDE_SPRITE);
+            }
+            setTimeout(function () {
+                _this.container.removeChild(_this._guideSprite);
+                _this.container.addChild(_this._guideSprite);
+                _this.guide();
+            }, 1000);
+        }
+    };
+    /**
+     * 教学引导
+     */
+    Tracing.prototype.guide = function () {
+        var _this = this;
+        var guideSprite = this._guideSprite;
+        if (this._pointId >= this.tracePoints[this._lineId].length) {
+            this._newLineFlag = true;
+            guideSprite.visible = false;
+            this._pointId = 0;
+            clearTimeout(this._guideTime);
+            this._guideTime = setTimeout(function () {
+                _this.guide();
+            }, 3000);
+            return;
+        }
+        var point = this.tracePoints[this._lineId][this._pointId++];
+        if (this._newLineFlag) {
+            guideSprite.visible = true;
+            this._newLineFlag = false;
+            this._lastLocalPos.set(point.x, point.y);
+            point = this.tracePoints[this._lineId][this._pointId++];
+        }
+        this._curLocalPos.set(point.x, point.y);
+        this.playGuideAnimal();
+    };
+    Tracing.prototype.playGuideAnimal = function () {
+        var _this = this;
+        var distance = Utils_1.pointDistance(this._lastLocalPos, this._curLocalPos);
+        var startPos = this._lastLocalPos.clone();
+        var endPos = this._curLocalPos.clone();
+        var curPos = this._curLocalPos.clone();
+        this._lastLocalPos.copyFrom(this._curLocalPos);
+        var from = { dt: 0 };
+        var to = { dt: distance };
+        this._tween = new Tween_1.Tween(from)
+            .to(to, 500)
+            .on(Tween_1.Tween.Event.update, function (obj) {
+            var dt = Math.ceil(obj.dt);
+            var x = (dt * (endPos.x - startPos.x)) / distance + startPos.x;
+            var y = (dt * (endPos.y - startPos.y)) / distance + startPos.y;
+            curPos.set(x, y);
+            _this._guideSprite.x = x;
+            _this._guideSprite.y = y;
+        })
+            .once(Tween_1.Tween.Event.complete, function (obj) {
+            if (_this._tween) {
+                _this._tween.removeAllListeners();
+                _this._tween.release();
+            }
+            _this.guide();
+        })
+            .start();
+    };
+    /**
+     * 清除教学引导
+     */
+    Tracing.prototype.clearGuide = function () {
+        clearTimeout(this._guideTime);
+        var guideSprite = this._guideSprite;
+        if (guideSprite) {
+            guideSprite.visible = false;
+        }
+        this._newLineFlag = true;
+        this._pointId = 0;
+        this._tween && this._tween.release();
+    };
+    /**
+     * 自动绘制
+     */
+    Tracing.prototype.auto = function () {
+        var point = this.autoNextPoint();
+        if (this._newLineFlag) {
+            this._newLineFlag = false;
+            this._lastLocalPos.set(point.x, point.y);
+            this._posCache = [];
+            this._posCache.push(this._lastLocalPos.clone());
+            point = this.autoNextPoint();
+        }
+        this._curLocalPos.set(point.x, point.y);
+        if (this._autoComplete) {
+            this.emit(Index_1.ComponentEvent.COMPLETE, this, { mode: this.mode, value: 3 /* Complete */ });
+            return;
+        }
+        this.drawWithAnimation();
+    };
+    Tracing.prototype.drawWithAnimation = function () {
+        var _this = this;
+        var distance = Utils_1.pointDistance(this._lastLocalPos, this._curLocalPos);
+        var startPos = this._lastLocalPos.clone();
+        var endPos = this._curLocalPos.clone();
+        var curPos = this._curLocalPos.clone();
+        this._lastLocalPos.copyFrom(this._curLocalPos);
+        var from = { dt: 0 };
+        var to = { dt: distance };
+        this._tween = new Tween_1.Tween(from)
+            .to(to, 500)
+            .on(Tween_1.Tween.Event.update, function (obj) {
+            var dt = Math.ceil(obj.dt);
+            var x = (dt * (endPos.x - startPos.x)) / distance + startPos.x;
+            var y = (dt * (endPos.y - startPos.y)) / distance + startPos.y;
+            curPos.set(x, y);
+            _this._posCache.push(curPos.clone());
+            var graphics = _this.getGraphics(_this._lineId.toString(), _this._lineStyle);
+            _this.localDraw(graphics);
+        })
+            .once(Tween_1.Tween.Event.complete, function (obj) {
+            _this._tween.removeAllListeners();
+            _this._tween.release();
+            _this.auto();
+        })
+            .start();
+    };
+    Tracing.prototype.autoNextPoint = function () {
+        if (this._pointId >= this.tracePoints[this._lineId].length) {
+            this._newLineFlag = true;
+            this._lineId++;
+            this._pointId = 0;
+            if (this._lineId >= this.tracePoints.length) {
+                //绘制全部完成
+                this._autoComplete = true;
+                this._pointId = 0;
+                this._lineId = 0;
+                return { x: 0, y: 0 };
+            }
+        }
+        var point = this.tracePoints[this._lineId][this._pointId];
+        this._pointId++;
+        return point;
+    };
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    Tracing.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+        this.container.hitArea = new vf.Rectangle(0, 0, this.width, this.height);
+    };
+    Tracing.prototype.$onInit = function () {
+        //由于绑定的可能非当前显示对象，所以此处不可以使用this.on("xxxx")
+        this.clickEvent.getTarget().on(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().on(Index_1.TouchMouseEvent.onMove, this.onMove, this);
+        this.setLineStyle();
+    };
+    Tracing.prototype.$onRelease = function () {
+        this.clickEvent.getTarget().off(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().off(Index_1.TouchMouseEvent.onMove, this.onMove, this);
+        this.clickEvent.remove();
+    };
+    /**
+     * 检测触摸点和轨迹点
+     * @param point
+     */
+    Tracing.prototype.checkTrace = function (point) {
+        var _this = this;
+        if (this.tracePoints.length == 0) {
+            this._result = 1 /* Correct */;
+            return;
+        }
+        this._curIndex = -1;
+        for (var i = 0; i < this._tracePointObjArr.length; ++i) {
+            if (!this._tracePointObjArr[i].flag &&
+                Utils_1.pointDistance(point, this._tracePointObjArr[i].point) < this.precision) {
+                this._tracePointObjArr[i].flag = true;
+                this._curIndex = i;
+                break;
+            }
+        }
+        if (this._curIndex === -1)
+            return;
+        if (this._realTraceIndexArr.length === 0 && this._curIndex === 0) {
+            this._realTraceIndexArr.push(this._curIndex);
+            return;
+        }
+        if (this._curIndex === this._realTraceIndexArr[this._realTraceIndexArr.length - 1] + 1) {
+            this._realTraceIndexArr.push(this._curIndex);
+            this._tempTraceIndexArr.forEach(function (item) {
+                _this._tracePointObjArr[item].flag = false;
+            });
+            this._tempTraceIndexArr = [];
+        }
+        else {
+            this._tempTraceIndexArr.push(this._curIndex);
+            if (this._tempTraceIndexArr.length > 3) {
+                //暂存区超过4个，不再容错了
+                this._realTraceIndexArr = this._realTraceIndexArr.concat(this._tempTraceIndexArr);
+                this._tempTraceIndexArr = [];
+            }
+            else {
+                //
+            }
+        }
+        if (this.debug) {
+            console.log("实际轨迹：", this._realTraceIndexArr, "暂存区：", this._tempTraceIndexArr, "result:", this._result);
+        }
+    };
+    /**
+     * 检查暂存区,抬起时检测暂存区中的点是否在一个笔画上
+     */
+    Tracing.prototype.checkTemp = function () {
+        var _this = this;
+        if (this._tempTraceIndexArr.length < 2)
+            return;
+        //检查temp中的点是否在一个笔画上,如果是，则认为这是一次有效画线而非误触,否则就算误触,退回到待触发数组
+        var groupIndexArr = [];
+        this._tempTraceIndexArr.forEach(function (element) {
+            _this._groupStatusArr.forEach(function (item, index) {
+                if (item.points.indexOf(element) !== -1) {
+                    groupIndexArr.push(index);
+                }
+            });
+        });
+        if (new Set(groupIndexArr).size === 1) {
+            this._realTraceIndexArr = this._realTraceIndexArr.concat(this._tempTraceIndexArr);
+            this._tempTraceIndexArr = [];
+        }
+        else {
+            this._tempTraceIndexArr.forEach(function (item) {
+                _this._tracePointObjArr[item].flag = false;
+            });
+            this._tempTraceIndexArr = [];
+        }
+    };
+    /**
+     * 检查group
+     */
+    // private checkGroup() {}
+    Tracing.prototype.checkResult = function () {
+        var _this = this;
+        if (this._realTraceIndexArr.length === 0)
+            return;
+        if (this._realTraceIndexArr.length + this._tempTraceIndexArr.length == this._tracePointObjArr.length) {
+            //结束了
+            this._realTraceIndexArr = this._realTraceIndexArr.concat(this._tempTraceIndexArr);
+            this._tempTraceIndexArr = [];
+            this._result = 1 /* Correct */;
+            var preIndex_1 = -1;
+            this._realTraceIndexArr.forEach(function (item) {
+                if (item > preIndex_1) {
+                    preIndex_1 = item;
+                }
+                else {
+                    _this._result = 2 /* Incorrect */;
+                }
+            });
+            this.emit(Index_1.ComponentEvent.COMPLETE, this, { mode: this.mode, value: this._result });
+        }
+        else {
+            this._result = 0 /* Uncomplete */;
+            if (this._realTraceIndexArr[0] != 0) {
+                this._result = 2 /* Incorrect */;
+            }
+            else {
+                var preIndex_2 = -1;
+                this._realTraceIndexArr.forEach(function (item) {
+                    if (item < preIndex_2) {
+                        _this._result = 2 /* Incorrect */;
+                    }
+                    else {
+                        preIndex_2 = item;
+                    }
+                });
+            }
+            if (this._result != 0 /* Uncomplete */) {
+                this.emit(Index_1.ComponentEvent.COMPLETE, this, { mode: this.mode, value: this._result });
+            }
+        }
+    };
+    /**
+     * 教学模式检查
+     */
+    Tracing.prototype.checkTeach = function () {
+        var _this = this;
+        var flag = true;
+        if (this._lineId != 1) {
+            this._realTraceIndexArr.shift();
+        }
+        if (this._realTraceIndexArr.length != this._groupStatusArr[this._lineId - 1].points.length) {
+            flag = false;
+        }
+        else {
+            for (var i = 0; i < this._groupStatusArr[this._lineId - 1].points.length; ++i) {
+                if (this._realTraceIndexArr[i] != this._groupStatusArr[this._lineId - 1].points[i]) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        if (!flag) {
+            this._lineId--;
+            this._realTraceIndexArr.forEach(function (item) {
+                _this._tracePointObjArr[item].flag = false;
+            });
+        }
+        if (this._lineId < this._groupStatusArr.length) {
+            this._realTraceIndexArr = [];
+            if (this._lineId != 0) {
+                var firstIndex = this._groupStatusArr[this._lineId].points[0] - 1;
+                this._realTraceIndexArr.push(firstIndex);
+            }
+            this.guide();
+        }
+        else {
+            //教学完成
+            this.emit(Index_1.ComponentEvent.COMPLETE, this, { mode: this.mode, value: 3 /* Complete */ });
+        }
+        return flag;
+    };
+    /**
+     * 画线
+     * @param lineId
+     * @param data
+     * @param from
+     * @param to
+     * @param lineStyle
+     */
+    Tracing.prototype.drawLine = function (lineId, data, from, to, lineStyle) {
+        var graphics = this.getGraphics(lineId, lineStyle);
+        var posList = getVecListFromStr(data, from, to);
+        this.draw(graphics, posList);
+    };
+    /**
+     * 绘图
+     * @param graphics
+     * @param posList
+     */
+    Tracing.prototype.draw = function (graphics, posList) {
+        var lastX = posList[0] - POSITIVE;
+        var lastY = posList[1] - POSITIVE;
+        graphics.moveTo(lastX, lastY);
+        // 利用贝塞尔将线平滑化
+        var realList = [];
+        for (var index = 2; index < posList.length; index += 2) {
+            var x = posList[index] - POSITIVE;
+            var y = posList[index + 1] - POSITIVE;
+            var halfX = lastX + (x - lastX) * 0.5;
+            var halfY = lastY + (y - lastY) * 0.5;
+            realList.push(halfX, halfY, x, y);
+            lastX = x;
+            lastY = y;
+        }
+        graphics.lineTo(realList[0], realList[1]);
+        for (var index = 2; index < realList.length - 2; index += 4) {
+            var cx = realList[index];
+            var cy = realList[index + 1];
+            var x = realList[index + 2];
+            var y = realList[index + 3];
+            graphics.quadraticCurveTo(cx, cy, x, y);
+        }
+        graphics.lineTo(realList[realList.length - 2], realList[realList.length - 1]);
+    };
+    /**
+     * 本地绘制
+     * @param graphics
+     */
+    Tracing.prototype.localDraw = function (graphics) {
+        this._posCache.forEach(function (item, index) {
+            if (index == 0) {
+                graphics.moveTo(item.x, item.y);
+            }
+            else {
+                graphics.lineTo(item.x, item.y);
+            }
+        });
+    };
+    Tracing.prototype.onPress = function (e, thisObj, isPress) {
+        e.stopPropagation();
+        if (this.mode === 2 /* Auto */) {
+            //自动播放，不可操作
+            return;
+        }
+        var curLocal = this.container.toLocal(e.local, thisObj.container);
+        if (isPress) {
+            if (this.mode === 1 /* Teach */) {
+                this.clearGuide();
+            }
+            this._drawing = true;
+            this._lastLocalPos.copyFrom(curLocal);
+            this._posCache = [this._lastLocalPos.clone()];
+            this.checkTrace(this._lastLocalPos);
+        }
+        else {
+            if (this._posCache.length === 1) {
+                //仅有一个点
+                var newPoint = this._lastLocalPos.clone(); //在附近新建一个点，保证第一个触点也能画出来
+                newPoint.set(newPoint.x, newPoint.y - POS_DISTANCE);
+                this._posCache.push(newPoint);
+                var graphics = this.getGraphics(this._lineId.toString(), this._lineStyle);
+                this.localDraw(graphics);
+            }
+            this._drawing = false;
+            this.checkTemp();
+            if (this.mode === 0 /* Check */) {
+                this.checkResult();
+            }
+            this.emitTracingMsg(0 /* Add */, this._lineId.toString(), this.getDataStrByPosCache(), this._lineStyle, this._realTraceIndexArr, this._tempTraceIndexArr, this._result);
+            ++this._lineId;
+            if (this.mode === 1 /* Teach */) {
+                this.checkTeach();
+            }
+        }
+    };
+    Tracing.prototype.onMove = function (e, thisObj) {
+        e.stopPropagation();
+        if (this.mode == 2 /* Auto */) {
+            //自动播放，不可操作
+            return;
+        }
+        if (this._drawing) {
+            var curLocal = this.container.toLocal(e.local, thisObj.container);
+            if (Utils_1.pointDistance(curLocal, this._lastLocalPos) >= POS_DISTANCE) {
+                this._lastLocalPos.copyFrom(curLocal);
+                this._posCache.push(this._lastLocalPos.clone());
+                var graphics = this.getGraphics(this._lineId.toString(), this._lineStyle);
+                this.localDraw(graphics);
+                this.checkTrace(this._lastLocalPos);
+            }
+        }
+    };
+    /**
+     *
+     * @param lineId
+     * @param lineStyle
+     */
+    Tracing.prototype.getGraphics = function (lineId, lineStyle) {
+        if (this._renderMode === 1) {
+            lineId = "mask";
+        }
+        var key = "line_" + lineId;
+        if (this._lines.has(key)) {
+            return this._lines.get(key);
+        }
+        var graphics = new vf.Graphics();
+        graphics.interactive = false;
+        graphics.interactiveChildren = false;
+        graphics.name = key;
+        this.container.addChild(graphics);
+        this._lines.set(key, graphics);
+        lineStyle = Utils_1.deepCopy(lineStyle);
+        lineStyle.color = lineStyle.texture ? 0xffffff : lineStyle.color;
+        lineStyle.texture = lineStyle.texture ? Utils_2.getTexture(this.lineTexture) : vf.Texture.WHITE;
+        lineStyle.alpha = 1;
+        lineStyle.cap = "round";
+        lineStyle.join = "round";
+        if (this._renderMode === 0) {
+            graphics.lineTextureStyle(lineStyle);
+        }
+        else {
+            graphics.lineTextureStyle({
+                width: lineStyle.width,
+                color: 0xff0000,
+            });
+        }
+        return graphics;
+    };
+    Tracing.prototype.getDataStrByPosCache = function () {
+        var _posCache = this._posCache;
+        if (_posCache.length == 0) {
+            return "";
+        }
+        // 稀疏位置点，通过曲率
+        var finalX = [_posCache[0].x];
+        var finalY = [_posCache[0].y];
+        var lastLastPos = _posCache[0];
+        var lastPos = _posCache[1];
+        var sumAngle = 0;
+        for (var index = 2; index < _posCache.length; index++) {
+            var pos = _posCache[index];
+            var pos1 = Utils_1.pointSub(lastPos, lastLastPos);
+            var pos2 = Utils_1.pointSub(pos, lastPos);
+            var angle = Utils_1.pointSignAngle(pos1, pos2);
+            if (angle > MAX_ARC || angle < -MAX_ARC || sumAngle > MAX_ARC || sumAngle < -MAX_ARC) {
+                finalX.push(lastPos.x);
+                finalY.push(lastPos.y);
+                sumAngle = 0;
+            }
+            else {
+                sumAngle += angle;
+            }
+            lastLastPos = lastPos;
+            lastPos = pos;
+        }
+        finalX.push(_posCache[_posCache.length - 1].x);
+        finalY.push(_posCache[_posCache.length - 1].y);
+        var finalStrList = [];
+        for (var index = 0; index < finalX.length; index++) {
+            var x = finalX[index] + POSITIVE;
+            var y = finalY[index] + POSITIVE;
+            var str = getStrFromPos(x, y);
+            finalStrList.push(str);
+        }
+        var finalStr = finalStrList.join("");
+        return finalStr;
+    };
+    /**
+     * 发送一个笔画的msg
+     * @param lineId
+     * @param data
+     */
+    Tracing.prototype.emitTracingMsg = function (operate, lineId, data, lineStyle, realTraceIndexArr, tempTraceIndexArr, result) {
+        if (operate === void 0) { operate = 0 /* Add */; }
+        if (lineId === void 0) { lineId = ""; }
+        if (data === void 0) { data = ""; }
+        if (lineStyle === void 0) { lineStyle = {}; }
+        if (realTraceIndexArr === void 0) { realTraceIndexArr = []; }
+        if (tempTraceIndexArr === void 0) { tempTraceIndexArr = []; }
+        if (result === void 0) { result = 0; }
+        var obj = {
+            operate: operate,
+            lineId: lineId,
+            data: data,
+            lineStyle: lineStyle,
+            realTraceIndexArr: realTraceIndexArr,
+            tempTraceIndexArr: tempTraceIndexArr,
+            result: result,
+        };
+        this.emit(Index_1.ComponentEvent.CHANGE, this, JSON.stringify(obj));
+    };
+    Tracing.prototype.onMessage = function () {
+        var _messageCache = this._messageCache;
+        if (_messageCache.length > 0) {
+            while (_messageCache.length > 0) {
+                var message = _messageCache.pop();
+                var _a = JSON.parse(message), operate = _a.operate, lineId = _a.lineId, data = _a.data, lineStyle = _a.lineStyle, realTraceIndexArr = _a.realTraceIndexArr, tempTraceIndexArr = _a.tempTraceIndexArr, result = _a.result;
+                this._realTraceIndexArr = realTraceIndexArr;
+                this._tempTraceIndexArr = tempTraceIndexArr;
+                this._result = result;
+                if (this._result != 0 /* Uncomplete */) {
+                    //临摹完成，返回结果
+                    this.emit(Index_1.ComponentEvent.COMPLETE, this, { mode: this.mode, value: this._result });
+                }
+                switch (operate) {
+                    case 0 /* Add */:
+                        this.drawLine(lineId, data, 0, data.length, lineStyle);
+                        break;
+                    case 1 /* Clear */:
+                        this.clear();
+                        break;
+                }
+            }
+        }
+    };
+    /**
+     * clear
+     */
+    Tracing.prototype.clear = function () {
+        this._lines.forEach(function (value, key) {
+            if (value.parent) {
+                value.parent.removeChild(value);
+                value.destroy();
+            }
+        });
+        this._lines.clear();
+        if (this._renderMode == 1) {
+            var graphic = this.getGraphics("mask", this._lineStyle);
+            this._bgSprite.mask = graphic;
+        }
+        this._lineId = 0;
+        this._pointId = 0;
+        this._realTraceIndexArr = [];
+        this._tempTraceIndexArr = [];
+        this._posCache = [];
+        this._autoComplete = false;
+        this._newLineFlag = true;
+        this._result = 0 /* Uncomplete */;
+        this._tracePointObjArr.forEach(function (item) {
+            item.flag = false;
+        });
+        if (this._tween) {
+            this._tween.release();
+        }
+        this.clearGuide();
+        this.start();
+    };
+    /**
+     * @private
+     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+     */
+    Tracing.prototype.commitProperties = function () {
+        this.onMessage();
+    };
+    Tracing.prototype.setData = function (data) {
+        if (typeof data === "string") {
+            this._messageCache.push(data);
+        }
+        else {
+            this._messageCache = this._messageCache.concat(data);
+        }
+        this.invalidateProperties();
+    };
+    Object.defineProperty(Tracing.prototype, "source", {
+        set: function (data) {
+            this.setData(data);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Tracing;
+}(DisplayObject_1.DisplayObject));
+exports.Tracing = Tracing;
+
+
+/***/ }),
+
 /***/ "./src/display/private/HtmlInput.ts":
 /*!******************************************!*\
   !*** ./src/display/private/HtmlInput.ts ***!
@@ -7238,6 +8185,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 var FollowLineEnum = __webpack_require__(/*! ./FollowLineEnum */ "./src/enum/FollowLineEnum.ts");
 exports.FollowLineEnum = FollowLineEnum;
+var TracingEnum = __webpack_require__(/*! ./TracingEnum */ "./src/enum/TracingEnum.ts");
+exports.TracingEnum = TracingEnum;
+
+
+/***/ }),
+
+/***/ "./src/enum/TracingEnum.ts":
+/*!*********************************!*\
+  !*** ./src/enum/TracingEnum.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -12287,13 +13250,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.6.1.3.6.1.3.6) ==1.3.6.1.3.6.1.3.6;
+//     return this.lastIndexOf(word, pos1.3.8.1.3.8.1.3.8) ==1.3.8.1.3.8.1.3.8;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.6";
+window.vf.gui.version = "1.3.8";
 
 
 /***/ })

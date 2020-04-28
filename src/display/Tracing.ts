@@ -526,6 +526,7 @@ export class Tracing extends DisplayObject {
                 this._realTraceIndexArr = this._realTraceIndexArr.concat(this._tempTraceIndexArr);
                 this._tempTraceIndexArr = [];
             } else {
+                //
             }
         }
         if (this.debug) {
