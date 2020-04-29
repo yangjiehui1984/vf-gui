@@ -175,12 +175,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
                 if(!_filterMap.has(key)){
                     const filter = new cls();
                     _filterMap.set(key,filter);
-                    containerFilters.push(filter);
+                    
                     Object.defineProperty(_filterProxy, key, {
                         get: function () {
+                            const index = containerFilters.indexOf(filter);
+                            if(index === -1){
+                                containerFilters.push(filter);
+                            }
                             return filter;
                         },
                         set(val) {
+                            console.log(val)
                             if(val == null || val == ''){
                                 const index = containerFilters.indexOf(filter);
                                 if(index>=0){

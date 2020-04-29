@@ -2144,12 +2144,16 @@ var DisplayObject = /** @class */ (function (_super) {
                     if (!_filterMap_1.has(key)) {
                         var filter_1 = new cls();
                         _filterMap_1.set(key, filter_1);
-                        containerFilters_1.push(filter_1);
                         Object.defineProperty(_filterProxy_1, key, {
                             get: function () {
+                                var index = containerFilters_1.indexOf(filter_1);
+                                if (index === -1) {
+                                    containerFilters_1.push(filter_1);
+                                }
                                 return filter_1;
                             },
                             set: function (val) {
+                                console.log(val);
                                 if (val == null || val == '') {
                                     var index = containerFilters_1.indexOf(filter_1);
                                     if (index >= 0) {
@@ -13250,13 +13254,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.8.1.3.8.1.3.8) ==1.3.8.1.3.8.1.3.8;
+//     return this.lastIndexOf(word, pos1.3.9.1.3.9.1.3.9) ==1.3.9.1.3.9.1.3.9;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.8";
+window.vf.gui.version = "1.3.9";
 
 
 /***/ })
