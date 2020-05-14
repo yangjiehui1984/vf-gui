@@ -1,89 +1,77 @@
-// import gui from "../src/vf-gui";
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../dist/gui.d.ts" />
 
-// export default class TestScrollBar {
+export default class TestScrollBar {
 
-//     public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
-//         this.onLoad(app,uiStage)
-//     }
+    public constructor(app: vf.Application, uiStage: vf.gui.Stage) {
+        this.onLoad(app,uiStage)
+    }
 
-//     private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
+    private onLoad(app: vf.Application, uiStage: vf.gui.Stage) {
 
-//         let t = new vf.gui.Label("scrooll 组件，配合ScrollingContainer一起使用");
-//         t.y = 20;
-//         uiStage.addChild(t);
+        const title = new vf.gui.Label("scrooll 组件，配合ScrollingContainer一起使用");
+        title.y = 20;
+        uiStage.addChild(title);
 
-//         let sc = this.addSc(uiStage, 50, 100, "拖拽进度条或拖拽图片");
-//         /** 滑动条容器 vertical = false */
-//         let vscrollBar = new vf.gui.ScrollBar(0, 1);//参数2设置sourceTrack的9宫拉伸
-//         vscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
-//         vscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
-//         vscrollBar.x = sc.x - 30;
-//         vscrollBar.y = sc.y;
-//         vscrollBar.width = 10;
-//         vscrollBar.height = sc.height;
-//         vscrollBar.scrollingContainer = sc;//绑定vf.gui.ScrollingContainer
-//         vscrollBar.value = 0;
-//         vscrollBar.vertical = true;
-//         vscrollBar.autohide = true; //当内容不需要滚动时，隐藏
-//         uiStage.addChild(vscrollBar);
+        const sc = this.getScrollingContainer(uiStage, 50, 100, "拖拽进度条或拖拽图片");
 
-//         /** 滑动条容器 vertical = true */
-//         let hscrollBar = new vf.gui.ScrollBar(0, 1);
-//         hscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
-//         hscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
-//         hscrollBar.x = sc.x;
-//         hscrollBar.y = sc.y + sc.height + 20;
-//         hscrollBar.width = sc.width;
-//         hscrollBar.height = 10;
-//         hscrollBar.scrollingContainer = sc;//绑定vf.gui.ScrollingContainer
-//         hscrollBar.value = 0;
-//         hscrollBar.vertical = false;
-//         hscrollBar.autohide = true;
-//         uiStage.addChild(hscrollBar);
-
-//     }
+        /** 滑动条容器 vertical = false */
+        const vscrollBar = new vf.gui.ScrollBar();//参数2设置sourceTrack的9宫拉伸
+        vscrollBar.thumb = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAIAAABvrngfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo1NEJCQkM0RjAxRjIxMUU1OUIxODkzNzZCOTg5NDdBQyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo1NEJCQkM1MDAxRjIxMUU1OUIxODkzNzZCOTg5NDdBQyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkYxOUJGMjdFMDFGMDExRTU5QjE4OTM3NkI5ODk0N0FDIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU0QkJCQzRFMDFGMjExRTU5QjE4OTM3NkI5ODk0N0FDIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+m4wp+wAAABdJREFUeNpi0Wm5xoAKmBgwADWFAAIMAK5qAZXBXGqKAAAAAElFTkSuQmCC`;
+        vscrollBar.track = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAIAAABvrngfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozQ0JERjUzNDAxRUUxMUU1OUIxODkzNzZCOTg5NDdBQyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyQUExMDQ2QzAxRUYxMUU1OUIxODkzNzZCOTg5NDdBQyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjNDQkRGNTMyMDFFRTExRTU5QjE4OTM3NkI5ODk0N0FDIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjNDQkRGNTMzMDFFRTExRTU5QjE4OTM3NkI5ODk0N0FDIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+KKOhfwAAABdJREFUeNpiefHiBQMqYGLAANQUAggwADUDAscAbnM3AAAAAElFTkSuQmCC";
+        vscrollBar.x = 0;
+        vscrollBar.y = 0;
+        vscrollBar.width = 20;
+        vscrollBar.height = sc.height;
+        vscrollBar.source = sc;//绑定vf.gui.ScrollingContainer
+        vscrollBar.vertical = true;//位置必须在实例后
+        vscrollBar.autohide = true; //当内容不需要滚动时，隐藏
+        vscrollBar.value = 0;
+        sc.addChild(vscrollBar);
 
 
-//     private addSc(uiStage: vf.gui.Stage, x: number, y: number, label: string) {
-//         let sc = new vf.gui.ScrollingContainer();
-//         sc.x = x;
-//         sc.y = y;
-//         sc.scrollX = true;
-//         sc.scrollY = true;
-//         sc.dragScrolling = true;
-//         sc.expandMask = 2;
-//         sc.softness = 0.2;
-//         sc.width = 300;
-//         sc.height = 200;
+        // /** 滑动条容器 vertical = true */
+        // let hscrollBar = new vf.gui.ScrollBar(0, 1);
+        // hscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
+        // hscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
+        // hscrollBar.x = sc.x;
+        // hscrollBar.y = sc.y + sc.height + 20;
+        // hscrollBar.width = sc.width;
+        // hscrollBar.height = 10;
+        // hscrollBar.scrollingContainer = sc;//绑定vf.gui.ScrollingContainer
+        // hscrollBar.value = 0;
+        // hscrollBar.vertical = false;
+        // hscrollBar.autohide = true;
+        // uiStage.addChild(hscrollBar);
+
+    }
 
 
-//         for (let i = 0; i < 1; ++i) {
-//             this.addSp(sc, i);
-//         }
+    private getScrollingContainer(uiStage: vf.gui.Stage, x: number, y: number, label: string) {
+        const sc = new vf.gui.ScrollingContainer();
+        sc.x = x;
+        sc.y = y;
+        sc.width = 500;
+        sc.height = 300;
 
+        const img = new vf.gui.Image();
+        img.src = "assets/sprite.png";
+        img.y = 0;
+        sc.addChild(img);
 
-//         let t = new vf.gui.Text(label, new vf.gui.TextStyle({ fill: 0x00ffcc }));
-//         t.y = 0;
-//         sc.addChild(t);
+        const img2 = new vf.gui.Image();
+        img2.src = "assets/dino.png";
+        img2.y = 700;
+        sc.addChild(img2);
 
-//         let rect = new vf.gui.Rect();
-//         rect.drawRoundedRect(-5, -5, 310, 210, 1);
-//         rect.x = x;
-//         rect.y = y;
-//         uiStage.addChild(rect);
-//         uiStage.addChild(sc);
-//         return sc;
-//     }
+        const t = new vf.gui.Label(label);
+        t.y = 0;
+        sc.addChild(t);
 
-//     private addSp(sc: vf.gui.ScrollingContainer, i: number) {
+        uiStage.addChild(sc);
+        return sc;
+    }
 
-//         let sp = new vf.gui.Image();
-//         sp.source = "assets/sprite.png";
-//         sp.y = i * 620;
-//         sc.addChild(sp);
-
-//     }
-
-// }
+}
 
 
