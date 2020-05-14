@@ -2140,7 +2140,12 @@ declare module 'src/layout/CSSStyle' {
 	     * 多行文本(wordWrap = true) - 对齐方式
 	     * */
 	    private _textAlign;
-	    textAlign: "left" | "right" | "center";
+		textAlign: "left" | "right" | "center";
+		/**
+	     * 多行文本(wordWrap = true) - 垂直对齐方式
+	     * */
+	    private _verticalAlign;
+	    verticalAlign: "top" | "bottom" | "middle";
 	    /**
 	     * 多行文本(wordWrap = true) - 行高
 	     * */

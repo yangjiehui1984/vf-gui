@@ -552,6 +552,19 @@ export class CSSStyle {
 
     }
     /**
+     * 多行文本(wordWrap = true) - 垂直对齐方式
+     * */
+    private _verticalAlign: "top" | "bottom" | "middle" = "middle";
+    public get verticalAlign() {
+        return this._verticalAlign;
+    }
+    public set verticalAlign(value) {
+        this._verticalAlign = value;
+        CSSFunction.updateFontStyle(this.parent, "verticalAlign", value);
+        CSSFunction.updateFontStyle(this.parent, "align", value);
+
+    }
+    /**
      * 多行文本(wordWrap = true) - 行高
      * */
     private _lineHeight?: number;

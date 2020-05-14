@@ -5209,7 +5209,17 @@ var Label = /** @class */ (function (_super) {
             }
         }
         if (!isNaN(values[UIKeys.explicitHeight])) {
-            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
+            switch (this.style.verticalAlign) {
+                case "top":
+                    this.sprite.y = 0;
+                    break;
+                case "bottom":
+                    this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height;
+                    break;
+                case "middle":
+                    this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
+                    break;
+            }
         }
     };
     Label.prototype.release = function () {
@@ -9968,6 +9978,10 @@ var CSSStyle = /** @class */ (function () {
          * 多行文本(wordWrap = true) - 对齐方式
          * */
         this._textAlign = "center";
+        /**
+         * 多行文本(wordWrap = true) - 垂直对齐方式
+         * */
+        this._verticalAlign = "middle";
         /** 字体大小 */
         this._fontSize = 22;
         /** 字体样式 */
@@ -10544,6 +10558,18 @@ var CSSStyle = /** @class */ (function () {
         set: function (value) {
             this._textAlign = value;
             CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+            CSSFunction.updateFontStyle(this.parent, "align", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "verticalAlign", {
+        get: function () {
+            return this._verticalAlign;
+        },
+        set: function (value) {
+            this._verticalAlign = value;
+            CSSFunction.updateFontStyle(this.parent, "verticalAlign", value);
             CSSFunction.updateFontStyle(this.parent, "align", value);
         },
         enumerable: true,
