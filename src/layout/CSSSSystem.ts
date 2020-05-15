@@ -147,8 +147,11 @@ export function maskImage(target: DisplayObject){
     target.$mask = undefined;
     const style = target.style;
     const container = target.container;
-    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | vf.Graphics | string;
+    let maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | vf.Graphics | string;
 
+    if(maskdisplay == null && style.maskImage instanceof vf.Graphics){
+        maskdisplay = style.maskImage as vf.Graphics;
+    }
     if(maskdisplay == null || maskdisplay === ''){
         return;
     }

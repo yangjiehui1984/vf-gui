@@ -154,7 +154,16 @@ import { ConnectLine } from "./display/ConnectLine";
  *
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTracing
  */
-import { Tracing } from "./display/Tracing"
+import { Tracing } from "./display/Tracing";
+/**
+ * 滚动组件
+ *
+ * @example let scrollBar = new vf.gui.ScrollBar();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/ScrollBar
+ */
+import { ScrollBar } from "./display/ScrollBar"
 /**
  * 完整的缓动曲线列表
  * 
@@ -216,6 +225,6 @@ export declare type Application = vf.Application;
 /** 请不要在编写UI组件内部使用本类 */
 export {
     Audio,Filter, Utils, Stage, Container, ScrollingContainer, Slider,
-    Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, Interaction,
+    Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, ScrollBar, Interaction,
     DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler
 };

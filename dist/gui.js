@@ -283,6 +283,16 @@ exports.ConnectLine = ConnectLine_1.ConnectLine;
 var Tracing_1 = __webpack_require__(/*! ./display/Tracing */ "./src/display/Tracing.ts");
 exports.Tracing = Tracing_1.Tracing;
 /**
+ * 滚动组件
+ *
+ * @example let scrollBar = new vf.gui.ScrollBar();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/ScrollBar
+ */
+var ScrollBar_1 = __webpack_require__(/*! ./display/ScrollBar */ "./src/display/ScrollBar.ts");
+exports.ScrollBar = ScrollBar_1.ScrollBar;
+/**
  * 完整的缓动曲线列表
  *
  * @example vf.gui.Easing.Linear.None;
@@ -5457,7 +5467,17 @@ var Label = /** @class */ (function (_super) {
             }
         }
         if (!isNaN(values[UIKeys.explicitHeight])) {
-            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
+            switch (this.style.verticalAlign) {
+                case "top":
+                    this.sprite.y = 0;
+                    break;
+                case "bottom":
+                    this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height;
+                    break;
+                case "middle":
+                    this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
+                    break;
+            }
         }
     };
     Label.prototype.release = function () {
@@ -5630,6 +5650,220 @@ exports.Rect = Rect;
 
 /***/ }),
 
+/***/ "./src/display/ScrollBar.ts":
+/*!**********************************!*\
+  !*** ./src/display/ScrollBar.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Slider_1 = __webpack_require__(/*! ./Slider */ "./src/display/Slider.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+/**
+ * UI 带有滚动条的容器
+ */
+var ScrollBar = /** @class */ (function (_super) {
+    __extends(ScrollBar, _super);
+    function ScrollBar() {
+        var _this = _super.call(this) || this;
+        /**
+         * 是的自动隐藏滚动条
+         */
+        _this.autohide = false;
+        _this._hidden = false;
+        _this.thumbImg.on(Index_1.ComponentEvent.COMPLETE, _this.onThumbLoadComplete, _this);
+        return _this;
+    }
+    ScrollBar.prototype.toggleHidden = function (hidden) {
+        if (this.autohide) {
+            // if (hidden && !this._hidden) {
+            //     Tween.to(this, { alpha: 0 }, 200).start();
+            //     this._hidden = true;
+            // }
+            // else if (!hidden && this._hidden) {
+            //     Tween.to(this, { alpha: 1 }, 200).start();
+            //     this._hidden = false;
+            // }
+        }
+    };
+    ScrollBar.prototype.onThumbLoadComplete = function (rectangle, source) {
+        this.alignToContainer();
+    };
+    ScrollBar.prototype.triggerValueChanging = function () {
+        _super.prototype.triggerValueChanging.call(this);
+        var scrollingContainer = this._scrollingContainer;
+        if (scrollingContainer) {
+            var sizeAmt = scrollingContainer._height / scrollingContainer.innerContainer.height || 0.001;
+            if (sizeAmt < 1)
+                scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
+        }
+    };
+    Object.defineProperty(ScrollBar.prototype, "source", {
+        get: function () {
+            return this._source;
+        },
+        set: function (value) {
+            if (this._source === value) {
+                return;
+            }
+            this._source = value;
+            this.invalidateProperties();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ScrollBar.prototype.commitProperties = function () {
+        if (this._scrollingContainer !== Utils.getDisplayObject(this._source, this)) {
+            if (this._scrollingContainer) {
+                this._scrollingContainer.off(Index_1.ComponentEvent.CHANGE, this.alignToContainer, this);
+                this._scrollingContainer.off(Index_1.ComponentEvent.RESIZE, this.alignToContainer, this);
+            }
+            var scrollingContainer_1 = this._scrollingContainer = Utils.getDisplayObject(this._source, this);
+            scrollingContainer_1.dragScrolling = true;
+            scrollingContainer_1.expandMask = 2;
+            scrollingContainer_1.softness = 0.2;
+            scrollingContainer_1.on(Index_1.ComponentEvent.CHANGE, this.alignToContainer, this);
+            scrollingContainer_1.on(Index_1.ComponentEvent.RESIZE, this.alignToContainer, this);
+        }
+        var scrollingContainer = this._scrollingContainer;
+        if (scrollingContainer) {
+            if (this.vertical) {
+                scrollingContainer.scrollY = true;
+            }
+            else {
+                scrollingContainer.scrollX = true;
+            }
+            this.alignToContainer();
+        }
+    };
+    ScrollBar.prototype.alignToContainer = function () {
+        if (this._scrollingContainer) {
+            var _thumb = this.thumbImg;
+            if (this.vertical) {
+                _thumb.style.width = '100%';
+            }
+            else {
+                _thumb.style.height = '100%';
+            }
+            var newPos = void 0;
+            var size = void 0;
+            var xORy = this.vertical ? "y" : "x";
+            var widthORheight = this.vertical ? "height" : "width";
+            var topORleft = this.vertical ? "top" : "left";
+            var scrollingContainer = this._scrollingContainer;
+            var innerContainer = scrollingContainer.innerContainer;
+            var _posAmt = !innerContainer[widthORheight] ? 0 : -(innerContainer[xORy] / innerContainer[widthORheight]);
+            var sizeAmt = !innerContainer[widthORheight] ? 1 : scrollingContainer["_" + widthORheight] / innerContainer[widthORheight];
+            //update amt
+            var diff = innerContainer[widthORheight] - scrollingContainer["_" + widthORheight];
+            this._amt = !scrollingContainer["_" + widthORheight] || !diff ? 0 : -(innerContainer[xORy] / diff);
+            var self_1 = this;
+            if (sizeAmt >= 1) {
+                size = self_1["_" + widthORheight];
+                //_thumb[topORleft] = size * 0.5;
+                this.toggleHidden(true);
+            }
+            else {
+                size = self_1["_" + widthORheight] * sizeAmt;
+                if (this._amt > 1) {
+                    size -= (self_1["_" + widthORheight] - size) * (this._amt - 1);
+                }
+                else if (this._amt < 0) {
+                    size -= (self_1["_" + widthORheight] - size) * -this._amt;
+                }
+                // if (this._amt < 0) {
+                //     newPos = size * 0.5;
+                // }
+                // else if (this._amt > 1) {
+                //     newPos = self["_" + widthORheight] - size * 0.5;
+                // }
+                // else {
+                //     newPos = (_posAmt * self["_" + widthORheight]) + (size * 0.5);
+                // }
+                //_thumb[topORleft] = newPos;
+                this.toggleHidden(false);
+            }
+            _thumb[widthORheight] = size;
+            this.updatePosition();
+        }
+    };
+    ScrollBar.prototype.onDragMove = function (event, offset) {
+        if (this._thumbDrag.id == event.data.identifier) {
+            this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
+            // if(this._amt < 0.26){
+            //     this._amt = 0;
+            // }
+            // if(this._amt > 0.75){
+            //     this._amt = 1;
+            // }
+            this.triggerValueChanging();
+            this.updatePosition();
+        }
+        else if (this._trackDrag && this._trackDrag.id == event.data.identifier) {
+            this.updatePositionToMouse(event.data.global, false);
+        }
+    };
+    ScrollBar.prototype.updatePosition = function (soft) {
+        this.updateLayout();
+        var val = 0;
+        var thumbImg = this.thumbImg;
+        var tracklightImg = this.tracklightImg;
+        if (this.vertical) {
+            val = this._height * this._amt;
+            var minheight = thumbImg.height / 2;
+            var maxheight = this.height - minheight;
+            if (val < minheight) {
+                val = minheight;
+            }
+            if (val > maxheight) {
+                val = maxheight;
+            }
+            thumbImg.y = val;
+        }
+        else {
+            val = this._width * this._amt;
+            var thumbImgWidth = thumbImg.width / 2;
+            var maxwidth = this.width - thumbImgWidth;
+            if (val < thumbImgWidth) {
+                val = thumbImgWidth;
+            }
+            if (val > maxwidth) {
+                val = maxwidth;
+            }
+            thumbImg.x = val;
+        }
+    };
+    ScrollBar.prototype.release = function () {
+        _super.prototype.release.call(this);
+        //this.offAll();
+        this.thumbImg.off(Index_1.ComponentEvent.COMPLETE);
+        this._scrollingContainer = undefined;
+        this._source = undefined;
+    };
+    return ScrollBar;
+}(Slider_1.Slider));
+exports.ScrollBar = ScrollBar;
+
+
+/***/ }),
+
 /***/ "./src/display/ScrollingContainer.ts":
 /*!*******************************************!*\
   !*** ./src/display/ScrollingContainer.ts ***!
@@ -5661,6 +5895,7 @@ var MouseScrollEvent_1 = __webpack_require__(/*! ../interaction/MouseScrollEvent
 var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 var ContainerBase_1 = __webpack_require__(/*! ../core/ContainerBase */ "./src/core/ContainerBase.ts");
+var ScrollBar_1 = __webpack_require__(/*! ./ScrollBar */ "./src/display/ScrollBar.ts");
 /**
  * 可滚动的容器
  *
@@ -5677,7 +5912,7 @@ var ScrollingContainer = /** @class */ (function (_super) {
          * 是否启动拖拽滚动
          * @default true
          */
-        _this._dragScrolling = true;
+        _this._dragScrolling = false;
         /**
          * 滚动的阻力或柔度 (0-1)
          * @default 0.5
@@ -5716,14 +5951,6 @@ var ScrollingContainer = /** @class */ (function (_super) {
          */
         _this.innerBounds = new vf.Rectangle();
         /**
-         * 拖动处理类
-         */
-        _this.dragEvent = new DragEvent_1.DragEvent(_this);
-        /**
-         * 鼠标滚动
-         */
-        _this.mouseScrollEvent = new MouseScrollEvent_1.MouseScrollEvent(_this, true);
-        /**
          * 是否滚动中
          */
         _this.scrolling = false;
@@ -5740,41 +5967,10 @@ var ScrollingContainer = /** @class */ (function (_super) {
         _this._Position = new vf.Point();
         _this._Speed = new vf.Point();
         _this._stop = false;
+        _this.isInitDrag = false;
         _this.container.addChild(_this._innerContainer);
         _this.container.name = "ScrollingContainer";
         _this._innerContainer.name = "innerContainer";
-        var _graphics = new vf.Graphics();
-        _graphics.clear();
-        _graphics.beginFill(0xffcc00);
-        _graphics.drawRoundedRect(0, 0, 200, 200, 0);
-        _graphics.endFill();
-        _this.style.maskImage = _graphics;
-        _this.dragEvent.onDragStart = function () {
-            if (!_this.scrolling) {
-                _this._containerStart.copyFrom(_this._innerContainer.position);
-                _this._Position.copyFrom(_this._innerContainer.position);
-                _this.scrolling = true;
-                _this.setScrollPosition();
-                Ticker.shared.addUpdateEvent(_this.updateScrollPosition, _this);
-            }
-        };
-        _this.dragEvent.onDragMove = function (e, offset) {
-            if (_this.scrollX)
-                _this._targetPosition.x = _this._containerStart.x + offset.x;
-            if (_this.scrollY)
-                _this._targetPosition.y = _this._containerStart.y + offset.y;
-        };
-        _this.dragEvent.onDragEnd = function () {
-            if (_this.scrolling) {
-                _this.scrolling = false;
-                Ticker.shared.removeUpdateEvent(_this.updateScrollPosition, _this);
-            }
-        };
-        var scrollSpeed = new vf.Point();
-        _this.mouseScrollEvent.onMouseScroll = function (e, delta) {
-            scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
-            _this.setScrollPosition(scrollSpeed);
-        };
         return _this;
     }
     Object.defineProperty(ScrollingContainer.prototype, "dragScrolling", {
@@ -5785,26 +5981,71 @@ var ScrollingContainer = /** @class */ (function (_super) {
             this._dragScrolling = value;
             //Drag scroll and Mouse scroll
             if (value) {
-                this.mouseScrollEvent.startEvent();
-                this.dragEvent.startEvent();
+                this.initDrag();
+                this.mouseScrollEvent && this.mouseScrollEvent.startEvent();
+                this.dragEvent && this.dragEvent.startEvent();
             }
             else {
-                this.mouseScrollEvent.stopEvent();
-                this.dragEvent.stopEvent();
+                this.mouseScrollEvent && this.mouseScrollEvent.stopEvent();
+                this.dragEvent && this.dragEvent.stopEvent();
             }
         },
         enumerable: true,
         configurable: true
     });
+    ScrollingContainer.prototype.initDrag = function () {
+        var _this = this;
+        if (this.isInitDrag) {
+            return;
+        }
+        this.dragEvent = new DragEvent_1.DragEvent(this);
+        this.mouseScrollEvent = new MouseScrollEvent_1.MouseScrollEvent(this, true);
+        this.isInitDrag = true;
+        var _graphics = new vf.Graphics();
+        _graphics.clear();
+        _graphics.beginFill(0xffcc00);
+        _graphics.drawRoundedRect(0, 0, 200, 200, 0);
+        _graphics.endFill();
+        this.style.maskImage = _graphics;
+        this.dragEvent.onDragStart = function () {
+            if (!_this.scrolling) {
+                _this._containerStart.copyFrom(_this._innerContainer.position);
+                _this._Position.copyFrom(_this._innerContainer.position);
+                _this.scrolling = true;
+                _this.setScrollPosition();
+                Ticker.shared.addUpdateEvent(_this.updateScrollPosition, _this);
+            }
+        };
+        this.dragEvent.onDragMove = function (e, offset) {
+            if (_this.scrollX)
+                _this._targetPosition.x = _this._containerStart.x + offset.x;
+            if (_this.scrollY)
+                _this._targetPosition.y = _this._containerStart.y + offset.y;
+        };
+        this.dragEvent.onDragEnd = function () {
+            if (_this.scrolling) {
+                _this.scrolling = false;
+                Ticker.shared.removeUpdateEvent(_this.updateScrollPosition, _this);
+            }
+        };
+        var scrollSpeed = new vf.Point();
+        this.mouseScrollEvent.onMouseScroll = function (e, delta) {
+            scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
+            _this.setScrollPosition(scrollSpeed);
+        };
+    };
     ScrollingContainer.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         if (this._lastWidth != unscaledWidth || this._lastHeight != unscaledHeight) {
             _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
-            var _of = this.expandMask;
-            this.style.maskPosition = [_of, _of];
-            this._lastWidth = unscaledWidth;
-            this._lastHeight = unscaledHeight;
-            this.style.maskSize = [unscaledWidth, unscaledHeight];
+            this._lastWidth = this._innerContainer.width;
+            this._lastHeight = this._innerContainer.height;
+            if (this.style.maskImage) {
+                var _of = this.expandMask;
+                this.style.maskPosition = [_of, _of];
+                this.style.maskSize = [unscaledWidth, unscaledHeight];
+            }
             this.setScrollPosition();
+            this.emit(Index_1.ComponentEvent.RESIZE, this);
         }
     };
     ScrollingContainer.prototype.setScrollPosition = function (speed) {
@@ -5818,14 +6059,32 @@ var ScrollingContainer = /** @class */ (function (_super) {
             this.updateScrollPosition(0);
         }
     };
+    Object.defineProperty(ScrollingContainer.prototype, "innerContainer", {
+        get: function () {
+            return this._innerContainer;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ScrollingContainer.prototype.addChildAt = function (item, index) {
         if (item.parent) {
             item.parent.removeChild(item);
         }
         item.parent = this;
+        item.$nestLevel = this.$nestLevel + 1;
+        if (!item.initialized) {
+            item.initialized = true;
+            item.$onInit();
+        }
         index = Math.min(this._innerContainer.children.length, index);
-        this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
+        this.emit(Index_1.ComponentEvent.ADD, this);
+        if (item instanceof ScrollBar_1.ScrollBar) {
+            this.container.addChildAt(item.container, index);
+        }
+        else {
+            this._innerContainer.addChildAt(item.container, index);
+        }
         this.getInnerBounds(true);
         return item;
     };
@@ -5950,6 +6209,12 @@ var ScrollingContainer = /** @class */ (function (_super) {
         this._innerContainer.position[direction] = Math.round(this._Position[direction]);
         this.updateScrollBars();
     };
+    ScrollingContainer.prototype.release = function () {
+        _super.prototype.release.call(this);
+        //this.offAll();
+        this.dragEvent && this.dragEvent.remove();
+        this.mouseScrollEvent && this.mouseScrollEvent.remove();
+    };
     return ScrollingContainer;
 }(Container_1.Container));
 exports.ScrollingContainer = ScrollingContainer;
@@ -6012,12 +6277,12 @@ var Slider = /** @class */ (function (_super) {
         _this._localMousePosition = new vf.Point();
         _this._lastChange = 0;
         _this._lastChanging = 0;
-        _this._thumbDrag = new Index_1.DragEvent(_this);
-        _this._trackDrag = new Index_1.DragEvent(_this);
         /** 状态展示 */
         _this.trackImg = new Image_1.Image();
         _this.thumbImg = new Image_1.Image();
         _this.tracklightImg = new Image_1.Image();
+        _this._thumbDrag = new Index_1.DragEvent(_this.thumbImg);
+        _this._trackDrag = new Index_1.DragEvent(_this.trackImg);
         _this._value = 0;
         /**
          * 最小值
@@ -6032,15 +6297,17 @@ var Slider = /** @class */ (function (_super) {
          */
         _this._vertical = false;
         _this.isExcValueSystem = false;
-        _this._thumbDrag.onDragPress = _this.onPress;
-        _this._thumbDrag.onDragStart = _this.onDragStart;
-        _this._thumbDrag.onDragMove = _this.onDragMove;
-        _this._thumbDrag.onDragEnd = _this.onDragEnd;
-        _this._trackDrag.onDragPress = _this.onPress;
-        _this._trackDrag.onDragStart = _this.onDragStart;
-        _this._trackDrag.onDragMove = _this.onDragMove;
-        _this._trackDrag.onDragEnd = _this.onDragEnd;
+        _this._thumbDrag.onDragPress = _this.onPress.bind(_this);
+        _this._thumbDrag.onDragStart = _this.onDragStart.bind(_this);
+        _this._thumbDrag.onDragMove = _this.onDragMove.bind(_this);
+        _this._thumbDrag.onDragEnd = _this.onDragEnd.bind(_this);
+        _this._trackDrag.onDragPress = _this.onPress.bind(_this);
+        // this._trackDrag.onDragStart = this.onDragStart;
+        // this._trackDrag.onDragMove = this.onDragMove;
+        // this._trackDrag.onDragEnd = this.onDragEnd;
         _this.thumbImg.container.name = "thumbImg";
+        _this.thumbImg.fillMode = "scale";
+        _this.thumbImg.scale9Grid = [0, 0, 0, 0];
         _this.thumbImg.anchorX = 0.5;
         _this.thumbImg.anchorY = 0.5;
         _this.thumbImg.on(Index_1.ComponentEvent.COMPLETE, _this.onImgload, _this);
@@ -6058,6 +6325,16 @@ var Slider = /** @class */ (function (_super) {
         _this.addChild(_this.thumbImg);
         return _this;
     }
+    Object.defineProperty(Slider.prototype, "trackScale9Grid", {
+        /**
+         * 设置拖拽图，9切方式
+         */
+        set: function (value) {
+            this.thumbImg.scale9Grid = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(Slider.prototype, "value", {
         /**
          * 当前值
@@ -6105,6 +6382,7 @@ var Slider = /** @class */ (function (_super) {
         set: function (value) {
             this._vertical = value;
             this.updateLayout();
+            this.invalidateProperties();
         },
         enumerable: true,
         configurable: true
@@ -6187,6 +6465,7 @@ var Slider = /** @class */ (function (_super) {
         }
     };
     Slider.prototype.updatePosition = function (soft) {
+        this.updateLayout();
         var val = 0;
         var thumbImg = this.thumbImg;
         var tracklightImg = this.tracklightImg;
@@ -10104,6 +10383,9 @@ function maskImage(target) {
     var style = target.style;
     var container = target.container;
     var maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
+    if (maskdisplay == null && style.maskImage instanceof vf.Graphics) {
+        maskdisplay = style.maskImage;
+    }
     if (maskdisplay == null || maskdisplay === '') {
         return;
     }
@@ -10216,6 +10498,10 @@ var CSSStyle = /** @class */ (function () {
          * 多行文本(wordWrap = true) - 对齐方式
          * */
         this._textAlign = "center";
+        /**
+         * 多行文本(wordWrap = true) - 垂直对齐方式
+         * */
+        this._verticalAlign = "middle";
         /** 字体大小 */
         this._fontSize = 22;
         /** 字体样式 */
@@ -10792,6 +11078,18 @@ var CSSStyle = /** @class */ (function () {
         set: function (value) {
             this._textAlign = value;
             CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+            CSSFunction.updateFontStyle(this.parent, "align", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "verticalAlign", {
+        get: function () {
+            return this._verticalAlign;
+        },
+        set: function (value) {
+            this._verticalAlign = value;
+            CSSFunction.updateFontStyle(this.parent, "verticalAlign", value);
             CSSFunction.updateFontStyle(this.parent, "align", value);
         },
         enumerable: true,
@@ -13498,13 +13796,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.9.1.3.9.1.3.9) ==1.3.9.1.3.9.1.3.9;
+//     return this.lastIndexOf(word, pos1.3.11.1.3.11.1.3.11) ==1.3.11.1.3.11.1.3.11;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.9";
+window.vf.gui.version = "1.3.11";
 
 
 /***/ })
