@@ -182,7 +182,19 @@ import { Tween } from "./tween/Tween";
  * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestTimeLine
  */
 import { Timeline } from "./tween/Timeline";
-
+/**
+ * 音频
+ * 
+ * 
+ * 
+ * 估计是能播放  没毛病
+ * 
+ * @example let audio = new vf.gui.Audio(“地址或者是arrbuffer”);
+ * 
+ * 
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestAudio
+ */
+import { Audio } from "./display/Audio";
 /**
  * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
  */
@@ -203,7 +215,7 @@ export declare type Application = vf.Application;
 
 /** 请不要在编写UI组件内部使用本类 */
 export {
-    Filter, Utils, Stage, Container, ScrollingContainer, Slider,
+    Audio,Filter, Utils, Stage, Container, ScrollingContainer, Slider,
     Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, Interaction,
     DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler
 };

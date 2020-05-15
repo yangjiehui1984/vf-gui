@@ -313,6 +313,20 @@ exports.Tween = Tween_1.Tween;
 var Timeline_1 = __webpack_require__(/*! ./tween/Timeline */ "./src/tween/Timeline.ts");
 exports.Timeline = Timeline_1.Timeline;
 /**
+ * 音频
+ *
+ *
+ *
+ * 估计是能播放  没毛病
+ *
+ * @example let audio = new vf.gui.Audio(“地址或者是arrbuffer”);
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestAudio
+ */
+var Audio_1 = __webpack_require__(/*! ./display/Audio */ "./src/display/Audio.ts");
+exports.Audio = Audio_1.Audio;
+/**
  * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
  */
 var Interaction = __webpack_require__(/*! ./interaction/Index */ "./src/interaction/Index.ts");
@@ -3527,6 +3541,236 @@ var UIClick = /** @class */ (function () {
     return UIClick;
 }());
 exports.UIClick = UIClick;
+
+
+/***/ }),
+
+/***/ "./src/display/Audio.ts":
+/*!******************************!*\
+  !*** ./src/display/Audio.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+/**
+ * 文本
+ *
+ *
+ *
+ *
+ *
+ *
+ * @example let audio = new vf.gui.Audio();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
+ */
+var Audio = /** @class */ (function (_super) {
+    __extends(Audio, _super);
+    function Audio() {
+        var _this = _super.call(this) || this;
+        _this._autoplay = false;
+        _this._loop = false;
+        _this._playbackRate = 1;
+        _this._volume = 1;
+        if (_this._src)
+            _this.initAudio();
+        return _this;
+    }
+    Audio.prototype.initAudio = function () {
+        var _this = this;
+        var o = {
+            autoplay: this._autoplay,
+            loop: this._loop,
+            playbackRate: this._playbackRate,
+            volume: this._volume
+        };
+        this.audio = vf.AudioEngine.Ins().createAudio(this.uuid.toString(), this._src, o);
+        /**
+        * 需要上报的事件
+        */
+        this.audio.on("canplaythrough", function (e) {
+            _this.emit("canplaythrough", e);
+        });
+        this.audio.on("play", function (e) {
+            _this.emit("play", e);
+        });
+        this.audio.on("pause", function (e) {
+            _this.emit("pause", e);
+        });
+        this.audio.on("error", function (e) {
+            _this.emit("error", e);
+        });
+        this.audio.on("timeupdate", function (e) {
+            _this.emit("timeupdate", e);
+        });
+        this.audio.on("ended", function (e) {
+            _this.emit("ended", e);
+        });
+    };
+    Object.defineProperty(Audio.prototype, "src", {
+        get: function () {
+            return this._src;
+        },
+        //支持的参数们~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        /**
+        * 设置src 支持3种 url base64 arraybuffer;
+        */
+        set: function (value) {
+            var o = Utils_1.getSound(value);
+            if (typeof (o) === "object" && o.url) {
+                this._src = o.url;
+            }
+            else {
+                this._src = value;
+            }
+            this.audio && this.dispose();
+            this.initAudio();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "autoplay", {
+        get: function () {
+            return this._autoplay;
+        },
+        set: function (value) {
+            this._autoplay = value;
+            if (this.audio)
+                this.audio.autoplay = this._autoplay;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "loop", {
+        get: function () {
+            return this.audio.loop;
+        },
+        set: function (value) {
+            this._loop = value;
+            if (this.audio)
+                this.audio.loop = this._loop;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "playbackRate", {
+        get: function () {
+            return this.audio.playbackRate;
+        },
+        set: function (value) {
+            this._playbackRate = value;
+            if (this.audio)
+                this.audio.playbackRate = this._playbackRate;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "volume", {
+        get: function () {
+            return this.audio.volume;
+        },
+        set: function (value) {
+            this._volume = value;
+            if (this.audio)
+                this.audio.volume = this._volume;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "duration", {
+        /*只读的属性们*/
+        get: function () {
+            return this.audio.duration;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "paused", {
+        get: function () {
+            return this.audio.paused;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+    * 支持的方法们~~~··~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *    */
+    /**
+     * 声音播放接口
+     *
+     *  await sound.play()
+     *
+     * @param {number} [offset] - 声音的开始偏移值
+     * @param {number} [length] - 声音持续时间（以秒为单位）
+     */
+    Audio.prototype.play = function (time, offset, length) {
+        this.audio && this.audio.play(offset, length);
+    };
+    /**
+    * 停止声音
+    * @param time (optional) X秒后停止声音。默认情况下立即停止
+    */
+    Audio.prototype.stop = function (time) {
+        this.audio && this.audio.stop(time);
+    };
+    /**
+    * 暂停声音
+    */
+    Audio.prototype.pause = function () {
+        this.audio && this.audio.pause();
+    };
+    /**
+    * 释放
+    */
+    Audio.prototype.dispose = function () {
+        this.audio && this.audio.dispose();
+    };
+    Object.defineProperty(Audio.prototype, "isReadyToPlay", {
+        /**
+        * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        */
+        get: function () {
+            return this.audio._isReadyToPlay;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "isPlaying", {
+        get: function () {
+            return this.audio._isPlaying;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "isPause", {
+        get: function () {
+            return this.audio._isPause;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Audio;
+}(DisplayObject_1.DisplayObject));
+exports.Audio = Audio;
 
 
 /***/ }),
