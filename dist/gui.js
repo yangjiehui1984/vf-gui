@@ -2833,6 +2833,10 @@ var Stage = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this._stageWidth = 0; //调整缩放后的值
         _this._stageHeight = 0; //调整缩放后的值
+        /**
+         * 是否组织原始数据继续传递
+         */
+        _this.originalEventPreventDefault = false;
         _this.width = width;
         _this.height = height;
         _this._stageWidth = width;
@@ -3581,12 +3585,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 /**
- * 文本
+ * 音频组件
  *
+ * 准备完成 canplaythrough
  *
+ * 播放事件 play
  *
+ * 暂停事件 pause
  *
+ * 错误事件 error
  *
+ * 播放时间改变 timeupdate
+ *
+ * 播放完成 ended
  *
  * @example let audio = new vf.gui.Audio();
  *
@@ -3601,8 +3612,6 @@ var Audio = /** @class */ (function (_super) {
         _this._loop = false;
         _this._playbackRate = 1;
         _this._volume = 1;
-        if (_this._src)
-            _this.initAudio();
         return _this;
     }
     Audio.prototype.initAudio = function () {
@@ -3619,22 +3628,22 @@ var Audio = /** @class */ (function (_super) {
         */
         this.audio.on("canplaythrough", function (e) {
             _this.emit("canplaythrough", e);
-        });
+        }, this);
         this.audio.on("play", function (e) {
             _this.emit("play", e);
-        });
+        }, this);
         this.audio.on("pause", function (e) {
             _this.emit("pause", e);
-        });
+        }, this);
         this.audio.on("error", function (e) {
             _this.emit("error", e);
-        });
+        }), this;
         this.audio.on("timeupdate", function (e) {
             _this.emit("timeupdate", e);
         });
         this.audio.on("ended", function (e) {
             _this.emit("ended", e);
-        });
+        }, this);
     };
     Object.defineProperty(Audio.prototype, "src", {
         get: function () {
@@ -3653,7 +3662,7 @@ var Audio = /** @class */ (function (_super) {
                 this._src = value;
             }
             this.audio && this.dispose();
-            this.initAudio();
+            this.invalidateProperties();
         },
         enumerable: true,
         configurable: true
@@ -3664,44 +3673,54 @@ var Audio = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._autoplay = value;
-            if (this.audio)
-                this.audio.autoplay = this._autoplay;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "loop", {
         get: function () {
-            return this.audio.loop;
+            if (this.audio) {
+                return this.audio.loop;
+            }
+            return false;
         },
         set: function (value) {
             this._loop = value;
-            if (this.audio)
+            if (this.audio) {
                 this.audio.loop = this._loop;
+            }
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "playbackRate", {
         get: function () {
-            return this.audio.playbackRate;
+            if (this.audio) {
+                return this.audio.playbackRate;
+            }
+            return 0;
         },
         set: function (value) {
             this._playbackRate = value;
-            if (this.audio)
+            if (this.audio) {
                 this.audio.playbackRate = this._playbackRate;
+            }
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "volume", {
         get: function () {
-            return this.audio.volume;
+            if (this.audio) {
+                return this.audio.volume;
+            }
+            return 0;
         },
         set: function (value) {
             this._volume = value;
-            if (this.audio)
+            if (this.audio) {
                 this.audio.volume = this._volume;
+            }
         },
         enumerable: true,
         configurable: true
@@ -3709,14 +3728,20 @@ var Audio = /** @class */ (function (_super) {
     Object.defineProperty(Audio.prototype, "duration", {
         /*只读的属性们*/
         get: function () {
-            return this.audio.duration;
+            if (this.audio) {
+                return this.audio.duration;
+            }
+            return 0;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "paused", {
         get: function () {
-            return this.audio.paused;
+            if (this.audio) {
+                return this.audio.paused;
+            }
+            return false;
         },
         enumerable: true,
         configurable: true
@@ -3752,32 +3777,14 @@ var Audio = /** @class */ (function (_super) {
     * 释放
     */
     Audio.prototype.dispose = function () {
-        this.audio && this.audio.dispose();
+        if (this.audio) {
+            this.audio.removeAllListeners();
+            this.audio.dispose();
+        }
     };
-    Object.defineProperty(Audio.prototype, "isReadyToPlay", {
-        /**
-        * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        */
-        get: function () {
-            return this.audio._isReadyToPlay;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Audio.prototype, "isPlaying", {
-        get: function () {
-            return this.audio._isPlaying;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Audio.prototype, "isPause", {
-        get: function () {
-            return this.audio._isPause;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    Audio.prototype.commitProperties = function () {
+        this.initAudio();
+    };
     return Audio;
 }(DisplayObject_1.DisplayObject));
 exports.Audio = Audio;
@@ -9175,7 +9182,9 @@ var ClickEvent = /** @class */ (function () {
                 this.time = now;
             }
         }
-        e.data.originalEvent.preventDefault();
+        if (this.obj.stage && this.obj.stage.originalEventPreventDefault) {
+            e.data.originalEvent.preventDefault();
+        }
     };
     ClickEvent.prototype.emitTouchEvent = function (event, e, args) {
         if (Utils_1.debug) {
@@ -13796,13 +13805,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.11.1.3.11.1.3.11) ==1.3.11.1.3.11.1.3.11;
+//     return this.lastIndexOf(word, pos1.3.12.1.3.12.1.3.12) ==1.3.12.1.3.12.1.3.12;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.11";
+window.vf.gui.version = "1.3.12";
 
 
 /***/ })

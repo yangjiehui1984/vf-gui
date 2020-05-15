@@ -158,8 +158,9 @@ export class ClickEvent {
                 this.time = now;
             }
         }
-
-        e.data.originalEvent.preventDefault();
+        if(this.obj.stage && this.obj.stage.originalEventPreventDefault){
+            e.data.originalEvent.preventDefault();
+        }
     }
 
     private emitTouchEvent(event: string | symbol, e: InteractionEvent, args?: boolean) {

@@ -1527,6 +1527,10 @@ declare module 'src/core/Stage' {
 	    app?: vf.Application;
 	    _stageWidth: number;
 	    _stageHeight: number;
+	    /**
+	     * 是否组织原始数据继续传递
+	     */
+	    originalEventPreventDefault: boolean;
 	    readonly stageWidth: number;
 	    readonly stageHeight: number;
 	    scaleX: number;
@@ -3842,12 +3846,19 @@ declare module 'src/display/Tracing' {
 declare module 'src/display/Audio' {
 	import { DisplayObject } from 'src/core/DisplayObject';
 	/**
-	 * 文本
+	 * 音频组件
 	 *
+	 * 准备完成 canplaythrough
 	 *
+	 * 播放事件 play
 	 *
+	 * 暂停事件 pause
 	 *
+	 * 错误事件 error
 	 *
+	 * 播放时间改变 timeupdate
+	 *
+	 * 播放完成 ended
 	 *
 	 * @example let audio = new vf.gui.Audio();
 	 *
@@ -3855,7 +3866,7 @@ declare module 'src/display/Audio' {
 	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
 	 */
 	export class Audio extends DisplayObject {
-	    private audio;
+	    private audio?;
 	    private _src;
 	    private _autoplay;
 	    private _loop;
@@ -3871,8 +3882,8 @@ declare module 'src/display/Audio' {
 	    loop: any;
 	    playbackRate: any;
 	    volume: any;
-	    readonly duration: any;
-	    readonly paused: any;
+	    readonly duration: number;
+	    readonly paused: boolean;
 	    /**
 	    * 支持的方法们~~~··~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	    *    */
@@ -3898,12 +3909,7 @@ declare module 'src/display/Audio' {
 	    * 释放
 	    */
 	    dispose(): void;
-	    /**
-	    * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	    */
-	    readonly isReadyToPlay: any;
-	    readonly isPlaying: any;
-	    readonly isPause: any;
+	    protected commitProperties(): void;
 	}
 
 }
@@ -4279,48 +4285,12 @@ declare module 'src/UI' {
 	import { Scheduler } from 'src/core/Scheduler';
 	export type Application = vf.Application;
 	/** 请不要在编写UI组件内部使用本类 */
-
 	export { Audio, Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, ScrollBar, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
 
 }
 declare module 'src/vf-gui' {
 	import * as gui from 'src/UI';
 	export { gui };
-
-}
-declare module 'src/Interaction/KeyboardEvent' {
-	import { DisplayObject } from 'src/core/DisplayObject'; class KeyboardSelectEvent {
-	    /**
-	     * document的键盘事件
-	    */
-	    constructor();
-	    private obj;
-	    private ctrlDown;
-	    private shiftDown;
-	    private shiftKey;
-	    private ctrlKey;
-	    private cmdKey;
-	    private isAddEvent;
-	    private keyDownEventBind;
-	    private keyUpEventBind;
-	    private pasteEventBind;
-	    private copyEventBind;
-	    private cutEventBind;
-	    private addEvent;
-	    private removeEvent;
-	    protected keyDownEvent(e: KeyboardEvent): void;
-	    protected keyUpEvent(e: KeyboardEvent): void;
-	    protected copyEvent(e: ClipboardEvent): void;
-	    protected cutEvent(e: ClipboardEvent): void;
-	    protected pasteEvent(e: ClipboardEvent): void;
-	    focus(obj: DisplayObject): void;
-	    blur(): void;
-	}
-	/**
-	 * KeyboardSelectEvent 的实例
-	 */
-	export const keyboardShared: KeyboardSelectEvent;
-	export {};
 
 }
 declare interface ObjectConstructor {
@@ -4501,6 +4471,41 @@ declare module 'src/enum/ComponentEvent' {
 	export const PLAY_AUDIO = "PLAY_AUDIO";
 
 }
+declare module 'src/interaction/KeyboardEvent' {
+	import { DisplayObject } from 'src/core/DisplayObject'; class KeyboardSelectEvent {
+	    /**
+	     * document的键盘事件
+	    */
+	    constructor();
+	    private obj;
+	    private ctrlDown;
+	    private shiftDown;
+	    private shiftKey;
+	    private ctrlKey;
+	    private cmdKey;
+	    private isAddEvent;
+	    private keyDownEventBind;
+	    private keyUpEventBind;
+	    private pasteEventBind;
+	    private copyEventBind;
+	    private cutEventBind;
+	    private addEvent;
+	    private removeEvent;
+	    protected keyDownEvent(e: KeyboardEvent): void;
+	    protected keyUpEvent(e: KeyboardEvent): void;
+	    protected copyEvent(e: ClipboardEvent): void;
+	    protected cutEvent(e: ClipboardEvent): void;
+	    protected pasteEvent(e: ClipboardEvent): void;
+	    focus(obj: DisplayObject): void;
+	    blur(): void;
+	}
+	/**
+	 * KeyboardSelectEvent 的实例
+	 */
+	export const keyboardShared: KeyboardSelectEvent;
+	export {};
+
+}
 declare module 'src/tween/private/PlaybackPosition' {
 	/**
 	 * 回放位置的相关操作函数
@@ -4548,6 +4553,15 @@ declare module 'test/TestApplication' {
 	    private initTest;
 	    private resize;
 	    private updata;
+	}
+
+}
+declare module 'test/TestAudio' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestAudio {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
 	}
 
 }
@@ -4697,15 +4711,6 @@ declare module 'test/TestSlider' {
 	///   path="../gui.d.ts" />
 	///   types="@vf.js/vf" />
 	export default class TestSlider {
-	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
-	    private onLoad;
-	}
-
-}
-declare module 'test/TestSound' {
-	///   path="../gui.d.ts" />
-	///   types="@vf.js/vf" />
-	export default class TestAudio {
 	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
 	    private onLoad;
 	}
