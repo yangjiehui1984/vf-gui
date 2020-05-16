@@ -33,8 +33,11 @@ export class Stage extends DisplayLayoutAbstract{
     public app?: vf.Application;
     public _stageWidth = 0;//调整缩放后的值
     public _stageHeight = 0;//调整缩放后的值
+    /**
+     * 是否组织原始数据继续传递
+     */
+    public originalEventPreventDefault = false;
 
-    
     public get stageWidth(){
         return this._stageWidth;
     }

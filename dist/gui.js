@@ -323,6 +323,20 @@ exports.Tween = Tween_1.Tween;
 var Timeline_1 = __webpack_require__(/*! ./tween/Timeline */ "./src/tween/Timeline.ts");
 exports.Timeline = Timeline_1.Timeline;
 /**
+ * 音频
+ *
+ *
+ *
+ * 估计是能播放  没毛病
+ *
+ * @example let audio = new vf.gui.Audio(“地址或者是arrbuffer”);
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestAudio
+ */
+var Audio_1 = __webpack_require__(/*! ./display/Audio */ "./src/display/Audio.ts");
+exports.Audio = Audio_1.Audio;
+/**
  * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
  */
 var Interaction = __webpack_require__(/*! ./interaction/Index */ "./src/interaction/Index.ts");
@@ -2819,6 +2833,10 @@ var Stage = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this._stageWidth = 0; //调整缩放后的值
         _this._stageHeight = 0; //调整缩放后的值
+        /**
+         * 是否组织原始数据继续传递
+         */
+        _this.originalEventPreventDefault = false;
         _this.width = width;
         _this.height = height;
         _this._stageWidth = width;
@@ -3537,6 +3555,239 @@ var UIClick = /** @class */ (function () {
     return UIClick;
 }());
 exports.UIClick = UIClick;
+
+
+/***/ }),
+
+/***/ "./src/display/Audio.ts":
+/*!******************************!*\
+  !*** ./src/display/Audio.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+/**
+ * 音频组件
+ *
+ * 准备完成 canplaythrough
+ *
+ * 播放事件 play
+ *
+ * 暂停事件 pause
+ *
+ * 错误事件 error
+ *
+ * 播放时间改变 timeupdate
+ *
+ * 播放完成 ended
+ *
+ * @example let audio = new vf.gui.Audio();
+ *
+ *
+ * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
+ */
+var Audio = /** @class */ (function (_super) {
+    __extends(Audio, _super);
+    function Audio() {
+        var _this = _super.call(this) || this;
+        _this._autoplay = false;
+        _this._loop = false;
+        _this._playbackRate = 1;
+        _this._volume = 1;
+        return _this;
+    }
+    Audio.prototype.initAudio = function () {
+        var _this = this;
+        var o = {
+            autoplay: this._autoplay,
+            loop: this._loop,
+            playbackRate: this._playbackRate,
+            volume: this._volume
+        };
+        this.audio = vf.AudioEngine.Ins().createAudio(this.uuid.toString(), this._src, o);
+        /**
+        * 需要上报的事件
+        */
+        this.audio.on("canplaythrough", function (e) {
+            _this.emit("canplaythrough", e);
+        }, this);
+        this.audio.on("play", function (e) {
+            _this.emit("play", e);
+        }, this);
+        this.audio.on("pause", function (e) {
+            _this.emit("pause", e);
+        }, this);
+        this.audio.on("error", function (e) {
+            _this.emit("error", e);
+        }), this;
+        this.audio.on("timeupdate", function (e) {
+            _this.emit("timeupdate", e);
+        });
+        this.audio.on("ended", function (e) {
+            _this.emit("ended", e);
+        }, this);
+    };
+    Object.defineProperty(Audio.prototype, "src", {
+        get: function () {
+            return this._src;
+        },
+        //支持的参数们~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        /**
+        * 设置src 支持3种 url base64 arraybuffer;
+        */
+        set: function (value) {
+            var o = Utils_1.getSound(value);
+            if (typeof (o) === "object" && o.url) {
+                this._src = o.url;
+            }
+            else {
+                this._src = value;
+            }
+            this.audio && this.dispose();
+            this.invalidateProperties();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "autoplay", {
+        get: function () {
+            return this._autoplay;
+        },
+        set: function (value) {
+            this._autoplay = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "loop", {
+        get: function () {
+            if (this.audio) {
+                return this.audio.loop;
+            }
+            return false;
+        },
+        set: function (value) {
+            this._loop = value;
+            if (this.audio) {
+                this.audio.loop = this._loop;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "playbackRate", {
+        get: function () {
+            if (this.audio) {
+                return this.audio.playbackRate;
+            }
+            return 0;
+        },
+        set: function (value) {
+            this._playbackRate = value;
+            if (this.audio) {
+                this.audio.playbackRate = this._playbackRate;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "volume", {
+        get: function () {
+            if (this.audio) {
+                return this.audio.volume;
+            }
+            return 0;
+        },
+        set: function (value) {
+            this._volume = value;
+            if (this.audio) {
+                this.audio.volume = this._volume;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "duration", {
+        /*只读的属性们*/
+        get: function () {
+            if (this.audio) {
+                return this.audio.duration;
+            }
+            return 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "paused", {
+        get: function () {
+            if (this.audio) {
+                return this.audio.paused;
+            }
+            return false;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+    * 支持的方法们~~~··~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *    */
+    /**
+     * 声音播放接口
+     *
+     *  await sound.play()
+     *
+     * @param {number} [offset] - 声音的开始偏移值
+     * @param {number} [length] - 声音持续时间（以秒为单位）
+     */
+    Audio.prototype.play = function (time, offset, length) {
+        this.audio && this.audio.play(offset, length);
+    };
+    /**
+    * 停止声音
+    * @param time (optional) X秒后停止声音。默认情况下立即停止
+    */
+    Audio.prototype.stop = function (time) {
+        this.audio && this.audio.stop(time);
+    };
+    /**
+    * 暂停声音
+    */
+    Audio.prototype.pause = function () {
+        this.audio && this.audio.pause();
+    };
+    /**
+    * 释放
+    */
+    Audio.prototype.dispose = function () {
+        if (this.audio) {
+            this.audio.removeAllListeners();
+            this.audio.dispose();
+        }
+    };
+    Audio.prototype.commitProperties = function () {
+        this.initAudio();
+    };
+    return Audio;
+}(DisplayObject_1.DisplayObject));
+exports.Audio = Audio;
 
 
 /***/ }),
@@ -8931,7 +9182,9 @@ var ClickEvent = /** @class */ (function () {
                 this.time = now;
             }
         }
-        e.data.originalEvent.preventDefault();
+        if (this.obj.stage && this.obj.stage.originalEventPreventDefault) {
+            e.data.originalEvent.preventDefault();
+        }
     };
     ClickEvent.prototype.emitTouchEvent = function (event, e, args) {
         if (Utils_1.debug) {
@@ -13552,13 +13805,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.11.1.3.11.1.3.11) ==1.3.11.1.3.11.1.3.11;
+//     return this.lastIndexOf(word, pos1.3.12.1.3.12.1.3.12) ==1.3.12.1.3.12.1.3.12;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.11";
+window.vf.gui.version = "1.3.12";
 
 
 /***/ })
