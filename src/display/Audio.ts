@@ -24,18 +24,21 @@ export class Audio extends DisplayObject {
     private _autoplay: boolean = false;
     private _loop: boolean = false;
     private _playbackRate: number = 1;
-    private _volume:number = 1;
+    private _volume: number = 1;
+
+
+    private stoping: any;
     public constructor() {
         super();
-        if(this._src)this.initAudio();
+        if (this._src) this.initAudio();
     }
 
     private initAudio() {
         let o: IAudioOption = {
             autoplay: this._autoplay,
             loop: this._loop,
-            playbackRate:this._playbackRate,
-            volume:this._volume
+            playbackRate: this._playbackRate,
+            volume: this._volume
         }
         this.audio = vf.AudioEngine.Ins().createAudio(this.uuid.toString(), this._src, o)
         /**
@@ -59,6 +62,7 @@ export class Audio extends DisplayObject {
         this.audio.on("ended", (e: any) => {
             this.emit("ended", e)
         });
+
     }
     //支持的参数们~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
@@ -66,12 +70,12 @@ export class Audio extends DisplayObject {
     */
     public set src(value) {
         let o = getSound(value);
-        if(typeof(o) === "object" && o.url){
+        if (typeof (o) === "object" && o.url) {
             this._src = o.url
-        }else{
+        } else {
             this._src = value;
         }
-        
+
         this.audio && this.dispose();
         this.initAudio();
     }
@@ -81,34 +85,34 @@ export class Audio extends DisplayObject {
 
     public set autoplay(value) {
         this._autoplay = value;
-        if(this.audio)this.audio.autoplay = this._autoplay;
+        if (this.audio) this.audio.autoplay = this._autoplay;
     }
     public get autoplay() {
         return this._autoplay;
     }
     public set loop(value) {
         this._loop = value;
-        if(this.audio)this.audio.loop = this._loop;
+        if (this.audio) this.audio.loop = this._loop;
     }
     public get loop() {
         return this.audio.loop;
     }
     public set playbackRate(value) {
         this._playbackRate = value;
-        if(this.audio)this.audio.playbackRate = this._playbackRate;
+        if (this.audio) this.audio.playbackRate = this._playbackRate;
     }
     public get playbackRate() {
         return this.audio.playbackRate;
     }
     public set volume(value) {
         this._volume = value;
-        if(this.audio)this.audio.volume = this._volume;
+        if (this.audio) this.audio.volume = this._volume;
     }
     public get volume() {
         return this.audio.volume;
     }
     /*只读的属性们*/
-       
+
     public get duration() {
         return this.audio.duration;
     }
@@ -137,13 +141,24 @@ export class Audio extends DisplayObject {
     * @param time (optional) X秒后停止声音。默认情况下立即停止
     */
     public stop(time?: number) {
+        let that = this;
         this.audio && this.audio.stop(time);
+        if(this.stoping)clearTimeout(this.stoping)
+        if (time) {
+            this.stoping = setTimeout(() => {
+                that.emit("stop", that)
+            }, time);
+        } else {
+            this.emit("stop", this);
+        }
+
     }
     /**
     * 暂停声音
     */
     public pause() {
         this.audio && this.audio.pause();
+
     }
     /**
     * 释放
@@ -155,13 +170,7 @@ export class Audio extends DisplayObject {
     /**
     * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    public get isReadyToPlay() {
-        return this.audio._isReadyToPlay;
-    }
     public get isPlaying() {
         return this.audio._isPlaying;
-    }
-    public get isPause() {
-        return this.audio._isPause;
     }
 }
