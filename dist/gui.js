@@ -3612,6 +3612,8 @@ var Audio = /** @class */ (function (_super) {
         _this._loop = false;
         _this._playbackRate = 1;
         _this._volume = 1;
+        if (_this._src)
+            _this.initAudio();
         return _this;
     }
     Audio.prototype.initAudio = function () {
@@ -3765,7 +3767,19 @@ var Audio = /** @class */ (function (_super) {
     * @param time (optional) X秒后停止声音。默认情况下立即停止
     */
     Audio.prototype.stop = function (time) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        var that = this;
         this.audio && this.audio.stop(time);
+        if (this.stoping)
+            clearTimeout(this.stoping);
+        if (time) {
+            this.stoping = setTimeout(function () {
+                that.emit("stop", that);
+            }, time);
+        }
+        else {
+            this.emit("stop", this);
+        }
     };
     /**
     * 暂停声音
@@ -3782,6 +3796,16 @@ var Audio = /** @class */ (function (_super) {
             this.audio.dispose();
         }
     };
+    Object.defineProperty(Audio.prototype, "isPlaying", {
+        /**
+        * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        */
+        get: function () {
+            return this.audio._isPlaying;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Audio.prototype.commitProperties = function () {
         this.initAudio();
     };
@@ -5693,21 +5717,24 @@ var ScrollBar = /** @class */ (function (_super) {
         /**
          * 是的自动隐藏滚动条
          */
-        _this.autohide = false;
+        _this.autohide = true;
         _this._hidden = false;
+        _this._dragScrolling = true;
         _this.thumbImg.on(Index_1.ComponentEvent.COMPLETE, _this.onThumbLoadComplete, _this);
         return _this;
     }
     ScrollBar.prototype.toggleHidden = function (hidden) {
         if (this.autohide) {
-            // if (hidden && !this._hidden) {
-            //     Tween.to(this, { alpha: 0 }, 200).start();
-            //     this._hidden = true;
-            // }
-            // else if (!hidden && this._hidden) {
-            //     Tween.to(this, { alpha: 1 }, 200).start();
-            //     this._hidden = false;
-            // }
+            if (hidden && !this._hidden) {
+                //Tween.to(this, { alpha: 0 }, 200).start();
+                this.alpha = 0;
+                this._hidden = true;
+            }
+            else if (!hidden && this._hidden) {
+                //Tween.to(this, { alpha: 1 }, 200).start();
+                this.alpha = 1;
+                this._hidden = false;
+            }
         }
     };
     ScrollBar.prototype.onThumbLoadComplete = function (rectangle, source) {
@@ -5736,6 +5763,20 @@ var ScrollBar = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ScrollBar.prototype, "dragScrolling", {
+        get: function () {
+            return this._source;
+        },
+        set: function (value) {
+            if (this._dragScrolling === value) {
+                return;
+            }
+            this._dragScrolling = value;
+            this.invalidateProperties();
+        },
+        enumerable: true,
+        configurable: true
+    });
     ScrollBar.prototype.commitProperties = function () {
         if (this._scrollingContainer !== Utils.getDisplayObject(this._source, this)) {
             if (this._scrollingContainer) {
@@ -5743,7 +5784,6 @@ var ScrollBar = /** @class */ (function (_super) {
                 this._scrollingContainer.off(Index_1.ComponentEvent.RESIZE, this.alignToContainer, this);
             }
             var scrollingContainer_1 = this._scrollingContainer = Utils.getDisplayObject(this._source, this);
-            scrollingContainer_1.dragScrolling = true;
             scrollingContainer_1.expandMask = 2;
             scrollingContainer_1.softness = 0.2;
             scrollingContainer_1.on(Index_1.ComponentEvent.CHANGE, this.alignToContainer, this);
@@ -5751,6 +5791,7 @@ var ScrollBar = /** @class */ (function (_super) {
         }
         var scrollingContainer = this._scrollingContainer;
         if (scrollingContainer) {
+            scrollingContainer.dragScrolling = this._dragScrolling;
             if (this.vertical) {
                 scrollingContainer.scrollY = true;
             }
@@ -5975,11 +6016,12 @@ var ScrollingContainer = /** @class */ (function (_super) {
         _this._Speed = new vf.Point();
         _this._stop = false;
         _this.isInitDrag = false;
-        _this.container.addChild(_this._innerContainer);
+        var innerContainer = _this._innerContainer;
+        _this.container.addChild(innerContainer);
         _this.container.name = "ScrollingContainer";
-        _this._innerContainer.name = "innerContainer";
-        _this._innerContainer.on("added", _this.$onAddStage, _this);
-        _this._innerContainer.on("removed", _this.$onRemoveStage, _this);
+        innerContainer.name = "innerContainer";
+        innerContainer.on("added", _this.$onAddStage, _this);
+        innerContainer.on("removed", _this.$onRemoveStage, _this);
         return _this;
     }
     Object.defineProperty(ScrollingContainer.prototype, "dragScrolling", {
@@ -9471,7 +9513,7 @@ var DragEvent = /** @class */ (function () {
             stage.on("touchcancel" /* touchcancel */, this._onDragEnd, this);
             this.bound = true;
         }
-        if (e.data.originalEvent.preventDefault) {
+        if (this.obj.stage && this.obj.stage.originalEventPreventDefault && e.data.originalEvent.preventDefault) {
             e.data.originalEvent.preventDefault();
         }
     };
@@ -13818,13 +13860,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.13.1.3.13.1.3.13) ==1.3.13.1.3.13.1.3.13;
+//     return this.lastIndexOf(word, pos1.3.14.1.3.14.1.3.14) ==1.3.14.1.3.14.1.3.14;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.13";
+window.vf.gui.version = "1.3.14";
 
 
 /***/ })
