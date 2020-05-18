@@ -18,17 +18,19 @@ export class Slider extends DisplayObject{
     public constructor(){
         super();
 
-        this._thumbDrag.onDragPress = this.onPress;
-        this._thumbDrag.onDragStart = this.onDragStart;
-        this._thumbDrag.onDragMove = this.onDragMove;
-        this._thumbDrag.onDragEnd = this.onDragEnd;
+        this._thumbDrag.onDragPress = this.onPress.bind(this);
+        this._thumbDrag.onDragStart = this.onDragStart.bind(this);
+        this._thumbDrag.onDragMove = this.onDragMove.bind(this);
+        this._thumbDrag.onDragEnd = this.onDragEnd.bind(this);
 
-        this._trackDrag.onDragPress = this.onPress;
-        this._trackDrag.onDragStart = this.onDragStart;
-        this._trackDrag.onDragMove = this.onDragMove;
-        this._trackDrag.onDragEnd = this.onDragEnd;
+        this._trackDrag.onDragPress = this.onPress.bind(this);
+        // this._trackDrag.onDragStart = this.onDragStart;
+        // this._trackDrag.onDragMove = this.onDragMove;
+        // this._trackDrag.onDragEnd = this.onDragEnd;
 
         this.thumbImg.container.name = "thumbImg";
+        this.thumbImg.fillMode = "scale";
+        this.thumbImg.scale9Grid = [0,0,0,0];
         this.thumbImg.anchorX = 0.5;
         this.thumbImg.anchorY = 0.5;
         this.thumbImg.on(ComponentEvent.COMPLETE,this.onImgload, this);
@@ -63,16 +65,25 @@ export class Slider extends DisplayObject{
     protected _localMousePosition = new vf.Point();
     protected _lastChange = 0;
     protected _lastChanging = 0;
-    
-    private _thumbDrag = new DragEvent(this);
-    private _trackDrag = new DragEvent(this);
 
     /** 状态展示 */
     readonly trackImg = new VfuiImage();
     readonly thumbImg = new VfuiImage();
     readonly tracklightImg = new VfuiImage();
 
-    private _value = 0;
+    protected _thumbDrag = new DragEvent(this.thumbImg);
+    protected _trackDrag = new DragEvent(this.trackImg);
+
+
+
+    /**
+     * 设置拖拽图，9切方式
+     */
+    public set trackScale9Grid(value: number[]) {
+        this.thumbImg.scale9Grid = value;
+    }
+
+    protected _value = 0;
     /**
      * 当前值
      */
@@ -94,7 +105,7 @@ export class Slider extends DisplayObject{
     /**
      * 最小值
      */
-    private _minValue = 0;
+    protected _minValue = 0;
     public get minValue() {
         return this._minValue;
     }
@@ -104,7 +115,7 @@ export class Slider extends DisplayObject{
     /**
      * 最大值
      */
-    private _maxValue = 100;
+    protected _maxValue = 100;
     public get maxValue() {
         return this._maxValue;
     }
@@ -114,18 +125,19 @@ export class Slider extends DisplayObject{
     /**
      * 是否垂直,滑块方向
      */
-    private _vertical = false;
+    protected _vertical = false;
     public get vertical() {
         return this._vertical;
     }
     public set vertical(value) {
         this._vertical = value;
         this.updateLayout();
+        this.invalidateProperties();
     }
     /** 
      * 背景
      */
-    private _track?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    protected _track?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get track(){
         return this._track;
     }
@@ -138,7 +150,7 @@ export class Slider extends DisplayObject{
     /** 
      * 手柄
      */
-    private _thumb?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    protected _thumb?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get thumb() {
         return this._thumb;
     }
@@ -151,7 +163,7 @@ export class Slider extends DisplayObject{
     /** 
      * 进度
      */
-    private _tracklight?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    protected _tracklight?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     public get tracklight() {
         return this._tracklight;
     }
@@ -162,7 +174,7 @@ export class Slider extends DisplayObject{
         }
     }
 
-    private isExcValueSystem = false;
+    protected isExcValueSystem = false;
     public setActualSize(w: number, h: number): void {
         super.setActualSize(w,h);
         if(this.trackImg.width!==w){
@@ -185,7 +197,7 @@ export class Slider extends DisplayObject{
         this.tracklightImg.release();
     }
     
-    private onImgload(){
+    protected onImgload(){
         this.updateLayout();
     }
 
@@ -208,6 +220,7 @@ export class Slider extends DisplayObject{
 
     protected updatePosition(soft?: boolean){
 
+        this.updateLayout();
         let val = 0;
         const thumbImg = this.thumbImg;
         const tracklightImg = this.tracklightImg;
@@ -243,7 +256,8 @@ export class Slider extends DisplayObject{
         }
     }
 
-    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {     
+    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {   
+        
         event.stopPropagation();
         if(this._trackDrag==dragEvent && this._trackDrag.id == event.data.identifier){
             if (isPressed){
@@ -303,4 +317,5 @@ export class Slider extends DisplayObject{
             this._lastChanging = value;
         }
     }
+    
 }

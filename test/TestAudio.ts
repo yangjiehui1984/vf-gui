@@ -11,9 +11,12 @@ export default class TestAudio {
 
         /** audio */
         var a = new vf.gui.Audio();
+        uiStage.addChild(a);
+
         a.loop = true;
+        a.autoplay = true;
         a.src = "https://s.vipkidstatic.com/fe-static/learning-stages/assets/great-20191221.mp3";
-        a.play();
+        
         a.on("ended",()=>{
             console.log("play ended");
             a.dispose();
@@ -32,8 +35,13 @@ export default class TestAudio {
         basicText.style.left = 15;
         basicText.style.top = 50;
         basicText.style.color = 0xffffff;
-        basicText.text = "Basic text in vf-gui 33434"
+        basicText.text = "点击我播放";
+        basicText.interactabled = true;
         uiStage.addChild(basicText);
+        basicText.on('down',()=>{
+            console.log(123);
+            a.play();
+        })
     }
 
 }
