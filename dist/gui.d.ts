@@ -2855,6 +2855,8 @@ declare module 'src/display/ScrollBar' {
 	    protected triggerValueChanging(): void;
 	    private _source;
 	    source: ScrollingContainer | string | undefined;
+	    private _dragScrolling;
+	    dragScrolling: boolean;
 	    protected commitProperties(): void;
 	    protected alignToContainer(): void;
 	    protected onDragMove(event: InteractionEvent, offset: vf.Point): void;
@@ -2953,7 +2955,7 @@ declare module 'src/display/ScrollingContainer' {
 	    readonly innerContainer: ContainerBase;
 	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
-	    protected getInnerBounds(force?: boolean): vf.Rectangle;
+	    getInnerBounds(force?: boolean): vf.Rectangle;
 	    $onInit(): void;
 	    protected initScrolling(): void;
 	    protected updateScrollBars(): void;
@@ -3874,6 +3876,7 @@ declare module 'src/display/Audio' {
 	    private _loop;
 	    private _playbackRate;
 	    private _volume;
+	    private stoping;
 	    constructor();
 	    private initAudio;
 	    /**
@@ -3911,6 +3914,10 @@ declare module 'src/display/Audio' {
 	    * 释放
 	    */
 	    dispose(): void;
+	    /**
+	    * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    */
+	    readonly isPlaying: any;
 	    protected commitProperties(): void;
 	}
 

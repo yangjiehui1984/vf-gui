@@ -23,11 +23,12 @@ export class ScrollingContainer extends Container {
     public constructor() {
         super();
         
-        this.container.addChild(this._innerContainer);
+        const innerContainer = this._innerContainer
+        this.container.addChild(innerContainer);
         this.container.name = "ScrollingContainer";
-        this._innerContainer.name = "innerContainer";
-        this._innerContainer.on("added", this.$onAddStage, this);
-        this._innerContainer.on("removed", this.$onRemoveStage, this);
+        innerContainer.name = "innerContainer";
+        innerContainer.on("added", this.$onAddStage, this);
+        innerContainer.on("removed", this.$onRemoveStage, this);
     }
     /**
      * 是否启动拖拽滚动
@@ -230,7 +231,7 @@ export class ScrollingContainer extends Container {
         return item as any;
     }
 
-    protected getInnerBounds(force?: boolean) {
+    public getInnerBounds(force?: boolean) {
 
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
         if (force || now() - this._boundCached > 1000) {

@@ -176,7 +176,8 @@ export class Audio extends DisplayObject {
     * @param time (optional) X秒后停止声音。默认情况下立即停止
     */
     public stop(time?: number) {
-        let that = this;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const that = this;
         this.audio && this.audio.stop(time);
         if(this.stoping)clearTimeout(this.stoping)
         if (time) {
@@ -209,7 +210,7 @@ export class Audio extends DisplayObject {
     * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
     public get isPlaying() {
-        return this.audio._isPlaying;
+        return (this.audio as any)._isPlaying;
     }
     protected commitProperties() {
         this.initAudio();
