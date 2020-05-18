@@ -162,13 +162,13 @@ export class Audio extends DisplayObject {
      * 声音播放接口
      *
      *  await sound.play()
-     *
+     * @param {number} [time] - 声音延迟开始
      * @param {number} [offset] - 声音的开始偏移值
      * @param {number} [length] - 声音持续时间（以秒为单位）
      */
 
     public play(time?: number, offset?: number, length?: number) {
-        this.audio && this.audio.play(offset, length);
+        this.audio && this.audio.play(time, offset, length);
     }
 
     /**
@@ -193,7 +193,6 @@ export class Audio extends DisplayObject {
     */
     public pause() {
         this.audio && this.audio.pause();
-
     }
     /**
     * 释放
