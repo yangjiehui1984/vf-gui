@@ -27,12 +27,7 @@ export class Audio extends DisplayObject {
     private audio?: vf.IAudio;
 
     private _src: any;
-    private _autoplay = false;
-    private _loop = false;
-    private _playbackRate = 1;
-    private _volume = 1;
-
-<<<<<<< HEAD
+  
     private _autoplay: boolean = false;
     private _loop: boolean = false;
     private _playbackRate: number = 1;
@@ -43,10 +38,6 @@ export class Audio extends DisplayObject {
     public constructor() {
         super();
         if (this._src) this.initAudio();
-=======
-    public constructor() {
-        super();
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 
     private initAudio() {
@@ -79,12 +70,7 @@ export class Audio extends DisplayObject {
         });
         this.audio.on("ended", (e: any) => {
             this.emit("ended", e)
-<<<<<<< HEAD
-        });
-
-=======
         },this);
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 
     //支持的参数们~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,21 +78,12 @@ export class Audio extends DisplayObject {
     * 设置src 支持3种 url base64 arraybuffer;
     */
     public set src(value) {
-<<<<<<< HEAD
-        let o = getSound(value);
-        if (typeof (o) === "object" && o.url) {
-=======
         const o = getSound(value);
         if(typeof(o) === "object" && o.url){
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
             this._src = o.url
         } else {
             this._src = value;
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
         this.audio && this.dispose();
         this.invalidateProperties();
     }
@@ -117,10 +94,6 @@ export class Audio extends DisplayObject {
 
     public set autoplay(value) {
         this._autoplay = value;
-<<<<<<< HEAD
-        if (this.audio) this.audio.autoplay = this._autoplay;
-=======
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 
     public get autoplay() {
@@ -129,14 +102,9 @@ export class Audio extends DisplayObject {
 
     public set loop(value) {
         this._loop = value;
-<<<<<<< HEAD
-        if (this.audio) this.audio.loop = this._loop;
-=======
         if(this.audio){
             this.audio.loop = this._loop;
         }
-        
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 
     public get loop() {
@@ -148,13 +116,9 @@ export class Audio extends DisplayObject {
 
     public set playbackRate(value) {
         this._playbackRate = value;
-<<<<<<< HEAD
-        if (this.audio) this.audio.playbackRate = this._playbackRate;
-=======
         if(this.audio){
             this.audio.playbackRate = this._playbackRate;
         }
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 
     public get playbackRate() {
@@ -166,13 +130,9 @@ export class Audio extends DisplayObject {
 
     public set volume(value) {
         this._volume = value;
-<<<<<<< HEAD
-        if (this.audio) this.audio.volume = this._volume;
-=======
         if(this.audio){
             this.audio.volume = this._volume;
         }
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
     public get volume() {
         if(this.audio){
@@ -182,10 +142,6 @@ export class Audio extends DisplayObject {
     }
 
     /*只读的属性们*/
-<<<<<<< HEAD
-
-=======
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     public get duration() {
         if(this.audio){
             return this.audio.duration;
@@ -249,15 +205,13 @@ export class Audio extends DisplayObject {
         }
     }
 
-<<<<<<< HEAD
     /**
     * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
     public get isPlaying() {
         return this.audio._isPlaying;
-=======
+    }
     protected commitProperties() {
         this.initAudio();
->>>>>>> bbc58d6fc5a5882c2f8fc6a020a2a0772366f3c0
     }
 }
