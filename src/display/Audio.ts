@@ -27,13 +27,17 @@ export class Audio extends DisplayObject {
     private audio?: vf.IAudio;
 
     private _src: any;
-    private _autoplay = false;
-    private _loop = false;
-    private _playbackRate = 1;
-    private _volume = 1;
+  
+    private _autoplay: boolean = false;
+    private _loop: boolean = false;
+    private _playbackRate: number = 1;
+    private _volume: number = 1;
 
+
+    private stoping: any;
     public constructor() {
         super();
+        if (this._src) this.initAudio();
     }
 
     private initAudio() {
@@ -41,8 +45,8 @@ export class Audio extends DisplayObject {
         const o: IAudioOption = {
             autoplay: this._autoplay,
             loop: this._loop,
-            playbackRate:this._playbackRate,
-            volume:this._volume
+            playbackRate: this._playbackRate,
+            volume: this._volume
         }
         
         this.audio = vf.AudioEngine.Ins().createAudio(this.uuid.toString(), this._src, o);
@@ -77,7 +81,7 @@ export class Audio extends DisplayObject {
         const o = getSound(value);
         if(typeof(o) === "object" && o.url){
             this._src = o.url
-        }else{
+        } else {
             this._src = value;
         }
         this.audio && this.dispose();
@@ -101,7 +105,6 @@ export class Audio extends DisplayObject {
         if(this.audio){
             this.audio.loop = this._loop;
         }
-        
     }
 
     public get loop() {
@@ -173,13 +176,24 @@ export class Audio extends DisplayObject {
     * @param time (optional) X秒后停止声音。默认情况下立即停止
     */
     public stop(time?: number) {
+        let that = this;
         this.audio && this.audio.stop(time);
+        if(this.stoping)clearTimeout(this.stoping)
+        if (time) {
+            this.stoping = setTimeout(() => {
+                that.emit("stop", that)
+            }, time);
+        } else {
+            this.emit("stop", this);
+        }
+
     }
     /**
     * 暂停声音
     */
     public pause() {
         this.audio && this.audio.pause();
+
     }
     /**
     * 释放
@@ -191,6 +205,12 @@ export class Audio extends DisplayObject {
         }
     }
 
+    /**
+    * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    */
+    public get isPlaying() {
+        return this.audio._isPlaying;
+    }
     protected commitProperties() {
         this.initAudio();
     }

@@ -21,6 +21,7 @@ export default class TestAudio {
             console.log("play ended");
             a.dispose();
         })
+        a.interactabled = true;
         a.on("canplaythrough",()=>{
             console.log("im ready");
            // a.play();
