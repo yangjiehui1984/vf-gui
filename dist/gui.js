@@ -5978,6 +5978,8 @@ var ScrollingContainer = /** @class */ (function (_super) {
         _this.container.addChild(_this._innerContainer);
         _this.container.name = "ScrollingContainer";
         _this._innerContainer.name = "innerContainer";
+        _this._innerContainer.on("added", _this.$onAddStage, _this);
+        _this._innerContainer.on("removed", _this.$onRemoveStage, _this);
         return _this;
     }
     Object.defineProperty(ScrollingContainer.prototype, "dragScrolling", {
@@ -6073,6 +6075,14 @@ var ScrollingContainer = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    ScrollingContainer.prototype.addChild = function (item) {
+        if (this._innerContainer.children.length !== this.uiChildren.length) {
+            return this.addChildAt(item, this._innerContainer.children.length);
+        }
+        else {
+            return this.addChildAt(item, this.uiChildren.length);
+        }
+    };
     ScrollingContainer.prototype.addChildAt = function (item, index) {
         if (item.parent) {
             item.parent.removeChild(item);
@@ -6083,13 +6093,15 @@ var ScrollingContainer = /** @class */ (function (_super) {
             item.initialized = true;
             item.$onInit();
         }
-        index = Math.min(this._innerContainer.children.length, index);
-        this.uiChildren.splice(index, 0, item);
         this.emit(Index_1.ComponentEvent.ADD, this);
         if (item instanceof ScrollBar_1.ScrollBar) {
-            this.container.addChildAt(item.container, index);
+            //index = this.uiChildren.push(item);
+            //index = Math.min(this.container.children.length,index);
+            this.container.addChild(item.container);
         }
         else {
+            index = Math.min(this._innerContainer.children.length, index);
+            this.uiChildren.splice(index, 0, item);
             this._innerContainer.addChildAt(item.container, index);
         }
         this.getInnerBounds(true);
@@ -10158,7 +10170,8 @@ exports.updateGridLayout = updateGridLayout;
 Object.defineProperty(exports, "__esModule", { value: true });
 var CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
 var CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
-exports.$TempRectangle = new vf.Rectangle();
+exports.$TempyAlignRectangle = new vf.Rectangle();
+exports.$TempLayoutRectangle = new vf.Rectangle();
 function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, marginLeft) {
     if (marginTop === void 0) { marginTop = 0; }
     if (marginLeft === void 0) { marginLeft = 0; }
@@ -10172,7 +10185,7 @@ function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, margin
     var oldY = target.y;
     var startX = 0;
     var startY = 0;
-    var bounds = target.getPreferredBounds(exports.$TempRectangle);
+    var bounds = target.getPreferredBounds(exports.$TempyAlignRectangle);
     switch (target.style.justifyContent) {
         case "center":
             startX = parentWidth - bounds.width >> 1;
@@ -10224,7 +10237,7 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
         isUpdateTransform = updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
     }
     if (target.isContainer) {
-        var bounds = target.getPreferredBounds(exports.$TempRectangle);
+        var bounds = target.getPreferredBounds(exports.$TempLayoutRectangle);
         var child = void 0;
         for (var i = 0; i < target.uiChildren.length; i++) {
             child = target.uiChildren[i];
@@ -13805,13 +13818,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.12.1.3.12.1.3.12) ==1.3.12.1.3.12.1.3.12;
+//     return this.lastIndexOf(word, pos1.3.13.1.3.13.1.3.13) ==1.3.13.1.3.13.1.3.13;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.12";
+window.vf.gui.version = "1.3.13";
 
 
 /***/ })

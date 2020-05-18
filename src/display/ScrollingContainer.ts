@@ -26,8 +26,8 @@ export class ScrollingContainer extends Container {
         this.container.addChild(this._innerContainer);
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
-    
-
+        this._innerContainer.on("added", this.$onAddStage, this);
+        this._innerContainer.on("removed", this.$onRemoveStage, this);
     }
     /**
      * 是否启动拖拽滚动
@@ -196,6 +196,14 @@ export class ScrollingContainer extends Container {
         return this._innerContainer;
     }
 
+    public addChild<T extends DisplayObjectAbstract>(item: T): T {
+        if (this._innerContainer.children.length !== this.uiChildren.length) {
+            return this.addChildAt(item, this._innerContainer.children.length);
+        } else {
+            return this.addChildAt(item, this.uiChildren.length);
+        }
+
+    }
     public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T {
 
         if (item.parent) {
@@ -208,12 +216,14 @@ export class ScrollingContainer extends Container {
             item.initialized = true;
             item.$onInit();
         }
-        index = Math.min(this._innerContainer.children.length,index);
-        this.uiChildren.splice(index, 0, item);
         this.emit(ComponentEvent.ADD, this);
         if(item instanceof ScrollBar){
-            this.container.addChildAt(item.container, index);
+            //index = this.uiChildren.push(item);
+            //index = Math.min(this.container.children.length,index);
+            this.container.addChild(item.container);
         }else{
+            index = Math.min(this._innerContainer.children.length,index);
+            this.uiChildren.splice(index, 0, item);
             this._innerContainer.addChildAt(item.container, index);
         }
         this.getInnerBounds(true);
