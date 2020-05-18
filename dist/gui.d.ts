@@ -2253,7 +2253,8 @@ declare module 'src/layout/CSSGridLayout' {
 declare module 'src/layout/CSSLayout' {
 	///   types="@vf.js/vf" />
 	import { DisplayObject } from 'src/core/DisplayObject';
-	export const $TempRectangle: vf.Rectangle;
+	export const $TempyAlignRectangle: vf.Rectangle;
+	export const $TempLayoutRectangle: vf.Rectangle;
 	/**
 	 * 调整目标的元素的大小并定位这些元素。
 	 */
@@ -2950,6 +2951,7 @@ declare module 'src/display/ScrollingContainer' {
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    protected setScrollPosition(speed?: vf.Point): void;
 	    readonly innerContainer: ContainerBase;
+	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
 	    protected getInnerBounds(force?: boolean): vf.Rectangle;
 	    $onInit(): void;
