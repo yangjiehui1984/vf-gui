@@ -1067,6 +1067,13 @@ var DisplayLayoutAbstract = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    DisplayLayoutAbstract.prototype.allInvalidate = function () {
+        this.invalidateSize();
+        this.measureSizes();
+        this.invalidateProperties();
+        this.invalidateDisplayList();
+        this.invalidateParentLayout();
+    };
     Object.defineProperty(DisplayLayoutAbstract.prototype, "height", {
         /**
          * @private
@@ -3755,12 +3762,12 @@ var Audio = /** @class */ (function (_super) {
      * 声音播放接口
      *
      *  await sound.play()
-     *
+     * @param {number} [time] - 声音延迟开始
      * @param {number} [offset] - 声音的开始偏移值
      * @param {number} [length] - 声音持续时间（以秒为单位）
      */
     Audio.prototype.play = function (time, offset, length) {
-        this.audio && this.audio.play(offset, length);
+        this.audio && this.audio.play(time, offset, length);
     };
     /**
     * 停止声音
@@ -10308,6 +10315,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /** ===================== background  ===================== */
+function drawBackgroundColor(background, color, w, h) {
+    background.clear();
+    background.beginFill(color);
+    background.drawRoundedRect(0, 0, w, h, 0);
+    background.endFill();
+}
+exports.drawBackgroundColor = drawBackgroundColor;
 function backgroundColor(target) {
     if (target.style == undefined) {
         return;
@@ -10320,6 +10334,7 @@ function backgroundColor(target) {
         target.$background.name = "background";
         target.container.addChildAt(target.$background, 0);
     }
+    drawBackgroundColor(target.$background, target.style.backgroundColor, target.width, target.height);
 }
 exports.backgroundColor = backgroundColor;
 function backgroundPositionSize(target) {
@@ -11188,6 +11203,7 @@ var CSSStyle = /** @class */ (function () {
         set: function (value) {
             this._fontSize = value;
             CSSFunction.updateFontStyle(this.parent, "fontSize", value);
+            this.parent.allInvalidate();
         },
         enumerable: true,
         configurable: true
@@ -13860,13 +13876,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.14.1.3.14.1.3.14) ==1.3.14.1.3.14.1.3.14;
+//     return this.lastIndexOf(word, pos1.3.15.1.3.15.1.3.15) ==1.3.15.1.3.15.1.3.15;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.14";
+window.vf.gui.version = "1.3.15";
 
 
 /***/ })
