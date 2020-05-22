@@ -168,7 +168,7 @@ export class ScrollingContainer extends Container {
             
             this._lastWidth = this._innerContainer.width;
             this._lastHeight = this._innerContainer.height;
-            if(this.style.maskImage){
+            if(this.style.maskImage && this._dragScrolling){
                 const _of = this.expandMask;
                 this.style.maskPosition = [_of,_of];
                 this.style.maskSize = [unscaledWidth,unscaledHeight];
