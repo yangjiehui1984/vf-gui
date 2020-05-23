@@ -10429,11 +10429,6 @@ function maskSize(target) {
         if (style.maskSize === undefined) {
             return;
         }
-        if (target.id === 'imgBearGroup') {
-            console.log("vfvfvfvfvfvfvfvfvfvf");
-            console.log(target.$mask);
-            console.log(style.maskSize);
-        }
         target.$mask.width = style.maskSize[0];
         target.$mask.height = style.maskSize[1];
         if (target.$mask instanceof vf.Graphics) {
@@ -11080,7 +11075,6 @@ var CSSStyle = /** @class */ (function () {
         },
         set: function (value) {
             this._maskSize = value;
-            console.log("vvv", value);
             CSSFunction.maskSize(this.parent);
         },
         enumerable: true,
@@ -13882,13 +13876,13 @@ exports.gui = gui;
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.3.16.1.3.16.1.3.16) ==1.3.16.1.3.16.1.3.16;
+//     return this.lastIndexOf(word, pos1.3.17.1.3.17.1.3.17) ==1.3.17.1.3.17.1.3.17;
 // });
 if (window.vf === undefined) {
     window.vf = {};
 }
 window.vf.gui = gui;
-window.vf.gui.version = "1.3.16";
+window.vf.gui.version = "1.3.17";
 
 
 /***/ })
