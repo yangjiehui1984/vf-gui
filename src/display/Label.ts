@@ -77,8 +77,19 @@ export class Label extends DisplayObject {
             }
             
         }
+
         if(!isNaN(values[UIKeys.explicitHeight])){
-            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >>1; 
+            switch(this.style.verticalAlign){
+                case "top":
+                    this.sprite.y = 0;
+                    break;
+                case "bottom":
+                    this.sprite.y =  values[UIKeys.explicitHeight] - this.sprite.height;
+                    break;
+                case "middle":
+                    this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >>1;
+                    break;
+            }
         }
     }
 

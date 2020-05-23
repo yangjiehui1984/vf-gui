@@ -11,7 +11,8 @@ export default class TestApplication {
             width: window.innerWidth,
             height: window.innerHeight,
             antialias: true,
-            forceCanvas: false
+            forceCanvas: false,
+            resolution:window.devicePixelRatio
         });
         updateViewSize(this.app, window.devicePixelRatio, vf.utils.isWebGLSupported(), 'noScale');
         this.uiStage = new vf.gui.Stage(this.app.view.width, this.app.view.height, this.app);

@@ -3,13 +3,18 @@ import { DisplayObject } from "../core/DisplayObject";
 import {MaskSprite} from "../core/MaskSprite";
 
 /** ===================== background  ===================== */
-
+export function drawBackgroundColor(background: vf.Graphics,color: number, w: number,h: number){
+    background.clear();
+    background.beginFill(color);
+    background.drawRoundedRect(0, 0, w, h, 0);
+    background.endFill();
+}
 export function backgroundColor(target: DisplayObject){
 
     if(target.style == undefined){
         return;
     }
-    if(target.style.backgroundColor==undefined  && target.$background == undefined){
+    if(target.style.backgroundColor == undefined  && target.$background == undefined){
         return;
     }
     if (target.$background === undefined) {
@@ -17,6 +22,7 @@ export function backgroundColor(target: DisplayObject){
         target.$background.name = "background";
         target.container.addChildAt(target.$background, 0);
     }
+    drawBackgroundColor(target.$background,target.style.backgroundColor as number,target.width,target.height);
 }
 
 export function backgroundPositionSize(target: DisplayObject){
@@ -147,8 +153,11 @@ export function maskImage(target: DisplayObject){
     target.$mask = undefined;
     const style = target.style;
     const container = target.container;
-    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | vf.Graphics | string;
+    let maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | vf.Graphics | string;
 
+    if(maskdisplay == null && style.maskImage instanceof vf.Graphics){
+        maskdisplay = style.maskImage as vf.Graphics;
+    }
     if(maskdisplay == null || maskdisplay === ''){
         return;
     }

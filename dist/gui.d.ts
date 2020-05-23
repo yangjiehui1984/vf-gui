@@ -1527,6 +1527,10 @@ declare module 'src/core/Stage' {
 	    app?: vf.Application;
 	    _stageWidth: number;
 	    _stageHeight: number;
+	    /**
+	     * 是否组织原始数据继续传递
+	     */
+	    originalEventPreventDefault: boolean;
 	    readonly stageWidth: number;
 	    readonly stageHeight: number;
 	    scaleX: number;
@@ -1838,6 +1842,7 @@ declare module 'src/core/DisplayLayoutAbstract' {
 	    * @param value
 	    */
 	    width: number;
+	    allInvalidate(): void;
 	    /**
 	     * @private
 	     * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
@@ -1885,8 +1890,10 @@ declare module 'src/core/DisplayLayoutAbstract' {
 
 }
 declare module 'src/layout/CSSSSystem' {
+	///   types="@vf.js/vf" />
 	import { DisplayObject } from 'src/core/DisplayObject';
 	/** ===================== background  ===================== */
+	export function drawBackgroundColor(background: vf.Graphics, color: number, w: number, h: number): void;
 	export function backgroundColor(target: DisplayObject): void;
 	export function backgroundPositionSize(target: DisplayObject): void;
 	export function backgroundRepeat(target: DisplayObject): void;
@@ -2142,6 +2149,11 @@ declare module 'src/layout/CSSStyle' {
 	    private _textAlign;
 	    textAlign: "left" | "right" | "center";
 	    /**
+	     * 多行文本(wordWrap = true) - 垂直对齐方式
+	     * */
+	    private _verticalAlign;
+	    verticalAlign: "top" | "bottom" | "middle";
+	    /**
 	     * 多行文本(wordWrap = true) - 行高
 	     * */
 	    private _lineHeight?;
@@ -2244,7 +2256,8 @@ declare module 'src/layout/CSSGridLayout' {
 declare module 'src/layout/CSSLayout' {
 	///   types="@vf.js/vf" />
 	import { DisplayObject } from 'src/core/DisplayObject';
-	export const $TempRectangle: vf.Rectangle;
+	export const $TempyAlignRectangle: vf.Rectangle;
+	export const $TempLayoutRectangle: vf.Rectangle;
 	/**
 	 * 调整目标的元素的大小并定位这些元素。
 	 */
@@ -2732,9 +2745,133 @@ declare module 'src/display/Container' {
 	}
 
 }
+declare module 'src/display/Slider' {
+	///   types="@vf.js/vf" />
+	import { DisplayObject } from 'src/core/DisplayObject';
+	import { Image as VfuiImage } from 'src/display/Image';
+	import { DragEvent, InteractionEvent } from 'src/interaction/Index';
+	/**
+	 * 滑动条/进度条
+	 *
+	 * @example let slider = new vf.gui.Slider();
+	 *
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
+	 */
+	export class Slider extends DisplayObject {
+	    constructor();
+	    /**
+	     * 当前值
+	     */
+	    protected _amt: number;
+	    /**
+	     * 小数的保留位，0不保留
+	     * @default 0
+	     */
+	    protected _decimals: number;
+	    protected _startValue: number;
+	    protected _maxPosition: number;
+	    protected _localMousePosition: vf.Point;
+	    protected _lastChange: number;
+	    protected _lastChanging: number;
+	    /** 状态展示 */
+	    readonly trackImg: VfuiImage;
+	    readonly thumbImg: VfuiImage;
+	    readonly tracklightImg: VfuiImage;
+	    protected _thumbDrag: DragEvent;
+	    protected _trackDrag: DragEvent;
+	    /**
+	     * 设置拖拽图，9切方式
+	     */
+	    trackScale9Grid: number[];
+	    protected _value: number;
+	    /**
+	     * 当前值
+	     */
+	    value: number;
+	    protected valueSystem(): void;
+	    /**
+	     * 最小值
+	     */
+	    protected _minValue: number;
+	    minValue: number;
+	    /**
+	     * 最大值
+	     */
+	    protected _maxValue: number;
+	    maxValue: number;
+	    /**
+	     * 是否垂直,滑块方向
+	     */
+	    protected _vertical: boolean;
+	    vertical: boolean;
+	    /**
+	     * 背景
+	     */
+	    protected _track?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    track: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    /**
+	     * 手柄
+	     */
+	    protected _thumb?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    thumb: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    /**
+	     * 进度
+	     */
+	    protected _tracklight?: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+	    tracklight: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+	    protected isExcValueSystem: boolean;
+	    setActualSize(w: number, h: number): void;
+	    release(): void;
+	    protected onImgload(): void;
+	    protected updateLayout(): void;
+	    protected updatePosition(soft?: boolean): void;
+	    protected onPress(event: InteractionEvent, isPressed: boolean, dragEvent?: DragEvent): void;
+	    protected onDragStart(event: InteractionEvent): void;
+	    protected onDragMove(event: InteractionEvent, offset: vf.Point): void;
+	    protected onDragEnd(event: InteractionEvent): void;
+	    protected updatePositionToMouse(mousePosition: vf.Point, soft: boolean): void;
+	    protected triggerValueChange(): void;
+	    protected triggerValueChanging(): void;
+	}
+
+}
+declare module 'src/display/ScrollBar' {
+	///   types="@vf.js/vf" />
+	import { Slider } from 'src/display/Slider';
+	import { ScrollingContainer } from 'src/display/ScrollingContainer';
+	import { Image } from 'src/display/Image';
+	import { InteractionEvent } from 'src/interaction/Index';
+	/**
+	 * UI 带有滚动条的容器
+	 */
+	export class ScrollBar extends Slider {
+	    constructor();
+	    /**
+	     * 是的自动隐藏滚动条
+	     */
+	    autohide: boolean;
+	    private _scrollingContainer;
+	    private _hidden;
+	    protected toggleHidden(hidden: boolean): void;
+	    protected onThumbLoadComplete(rectangle: vf.Rectangle, source: Image): void;
+	    protected triggerValueChanging(): void;
+	    private _source;
+	    source: ScrollingContainer | string | undefined;
+	    private _dragScrolling;
+	    dragScrolling: boolean;
+	    protected commitProperties(): void;
+	    protected alignToContainer(): void;
+	    protected onDragMove(event: InteractionEvent, offset: vf.Point): void;
+	    protected updatePosition(soft?: boolean): void;
+	    release(): void;
+	}
+
+}
 declare module 'src/display/ScrollingContainer' {
 	///   types="@vf.js/vf" />
 	import { Container } from 'src/display/Container';
+	import { ContainerBase } from 'src/core/ContainerBase';
 	import { DisplayObjectAbstract } from 'src/core/DisplayObjectAbstract';
 	/**
 	 * 可滚动的容器
@@ -2792,11 +2929,11 @@ declare module 'src/display/ScrollingContainer' {
 	    /**
 	     * 拖动处理类
 	     */
-	    private dragEvent;
+	    private dragEvent?;
 	    /**
 	     * 鼠标滚动
 	     */
-	    private mouseScrollEvent;
+	    private mouseScrollEvent?;
 	    /**
 	     * 是否滚动中
 	     */
@@ -2814,10 +2951,14 @@ declare module 'src/display/ScrollingContainer' {
 	    private _Position;
 	    private _Speed;
 	    private _stop;
+	    private isInitDrag;
+	    protected initDrag(): void;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    protected setScrollPosition(speed?: vf.Point): void;
+	    readonly innerContainer: ContainerBase;
+	    addChild<T extends DisplayObjectAbstract>(item: T): T;
 	    addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T;
-	    protected getInnerBounds(force?: boolean): vf.Rectangle;
+	    getInnerBounds(force?: boolean): vf.Rectangle;
 	    $onInit(): void;
 	    protected initScrolling(): void;
 	    protected updateScrollBars(): void;
@@ -2831,6 +2972,7 @@ declare module 'src/display/ScrollingContainer' {
 	    focusPosition(pos: vf.Point): void;
 	    protected updateScrollPosition(delta: number): void;
 	    protected updateDirection(direction: "x" | "y", delta: number): void;
+	    release(): void;
 	}
 
 }
@@ -3183,93 +3325,6 @@ declare module 'src/display/TextInput' {
 	    private _comparevfMatrices;
 	    private _compareClientRects;
 	    release(): void;
-	}
-
-}
-declare module 'src/display/Slider' {
-	///   types="@vf.js/vf" />
-	import { DisplayObject } from 'src/core/DisplayObject';
-	import { Image as VfuiImage } from 'src/display/Image';
-	import { DragEvent, InteractionEvent } from 'src/interaction/Index';
-	/**
-	 * 滑动条/进度条
-	 *
-	 * @example let slider = new vf.gui.Slider();
-	 *
-	 *
-	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestSlider
-	 */
-	export class Slider extends DisplayObject {
-	    constructor();
-	    /**
-	     * 当前值
-	     */
-	    protected _amt: number;
-	    /**
-	     * 小数的保留位，0不保留
-	     * @default 0
-	     */
-	    protected _decimals: number;
-	    protected _startValue: number;
-	    protected _maxPosition: number;
-	    protected _localMousePosition: vf.Point;
-	    protected _lastChange: number;
-	    protected _lastChanging: number;
-	    private _thumbDrag;
-	    private _trackDrag;
-	    /** 状态展示 */
-	    readonly trackImg: VfuiImage;
-	    readonly thumbImg: VfuiImage;
-	    readonly tracklightImg: VfuiImage;
-	    private _value;
-	    /**
-	     * 当前值
-	     */
-	    value: number;
-	    protected valueSystem(): void;
-	    /**
-	     * 最小值
-	     */
-	    private _minValue;
-	    minValue: number;
-	    /**
-	     * 最大值
-	     */
-	    private _maxValue;
-	    maxValue: number;
-	    /**
-	     * 是否垂直,滑块方向
-	     */
-	    private _vertical;
-	    vertical: boolean;
-	    /**
-	     * 背景
-	     */
-	    private _track?;
-	    track: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /**
-	     * 手柄
-	     */
-	    private _thumb?;
-	    thumb: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /**
-	     * 进度
-	     */
-	    private _tracklight?;
-	    tracklight: string | number | vf.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    private isExcValueSystem;
-	    setActualSize(w: number, h: number): void;
-	    release(): void;
-	    private onImgload;
-	    protected updateLayout(): void;
-	    protected updatePosition(soft?: boolean): void;
-	    protected onPress(event: InteractionEvent, isPressed: boolean, dragEvent?: DragEvent): void;
-	    protected onDragStart(event: InteractionEvent): void;
-	    protected onDragMove(event: InteractionEvent, offset: vf.Point): void;
-	    protected onDragEnd(event: InteractionEvent): void;
-	    protected updatePositionToMouse(mousePosition: vf.Point, soft: boolean): void;
-	    protected triggerValueChange(): void;
-	    protected triggerValueChanging(): void;
 	}
 
 }
@@ -3795,6 +3850,81 @@ declare module 'src/display/Tracing' {
 	}
 
 }
+declare module 'src/display/Audio' {
+	import { DisplayObject } from 'src/core/DisplayObject';
+	/**
+	 * 音频组件
+	 *
+	 * 准备完成 canplaythrough
+	 *
+	 * 播放事件 play
+	 *
+	 * 暂停事件 pause
+	 *
+	 * 错误事件 error
+	 *
+	 * 播放时间改变 timeupdate
+	 *
+	 * 播放完成 ended
+	 *
+	 * @example let audio = new vf.gui.Audio();
+	 *
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestLabel
+	 */
+	export class Audio extends DisplayObject {
+	    private audio?;
+	    private _src;
+	    private _autoplay;
+	    private _loop;
+	    private _playbackRate;
+	    private _volume;
+	    private stoping;
+	    constructor();
+	    private initAudio;
+	    /**
+	    * 设置src 支持3种 url base64 arraybuffer;
+	    */
+	    src: any;
+	    autoplay: any;
+	    loop: any;
+	    playbackRate: any;
+	    volume: any;
+	    readonly duration: number;
+	    readonly paused: boolean;
+	    /**
+	    * 支持的方法们~~~··~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    *    */
+	    /**
+	     * 声音播放接口
+	     *
+	     *  await sound.play()
+	     * @param {number} [time] - 声音延迟开始
+	     * @param {number} [offset] - 声音的开始偏移值
+	     * @param {number} [length] - 声音持续时间（以秒为单位）
+	     */
+	    play(time?: number, offset?: number, length?: number): void;
+	    /**
+	    * 停止声音
+	    * @param time (optional) X秒后停止声音。默认情况下立即停止
+	    */
+	    stop(time?: number): void;
+	    /**
+	    * 暂停声音
+	    */
+	    pause(): void;
+	    /**
+	    * 释放
+	    */
+	    dispose(): void;
+	    /**
+	    * 各种可取参数.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    */
+	    readonly isPlaying: any;
+	    protected commitProperties(): void;
+	}
+
+}
 declare module 'src/event/SchedulerEvent' {
 	export const enum SchedulerEvent {
 	    /**
@@ -4104,6 +4234,15 @@ declare module 'src/UI' {
 	 */
 	import { Tracing } from 'src/display/Tracing';
 	/**
+	 * 滚动组件
+	 *
+	 * @example let scrollBar = new vf.gui.ScrollBar();
+	 *
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/ScrollBar
+	 */
+	import { ScrollBar } from 'src/display/ScrollBar';
+	/**
 	 * 完整的缓动曲线列表
 	 *
 	 * @example vf.gui.Easing.Linear.None;
@@ -4131,6 +4270,19 @@ declare module 'src/UI' {
 	 */
 	import { Timeline } from 'src/tween/Timeline';
 	/**
+	 * 音频
+	 *
+	 *
+	 *
+	 * 估计是能播放  没毛病
+	 *
+	 * @example let audio = new vf.gui.Audio(“地址或者是arrbuffer”);
+	 *
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui/play/#example/TestAudio
+	 */
+	import { Audio } from 'src/display/Audio';
+	/**
 	 * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
 	 */
 	import * as Interaction from 'src/interaction/Index';
@@ -4145,7 +4297,7 @@ declare module 'src/UI' {
 	import { Scheduler } from 'src/core/Scheduler';
 	export type Application = vf.Application;
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
+	export { Audio, Filter, Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, Tracing, ConnectLine, ScrollBar, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Event, Enum, Scheduler };
 
 }
 declare module 'src/vf-gui' {
@@ -4416,6 +4568,15 @@ declare module 'test/TestApplication' {
 	}
 
 }
+declare module 'test/TestAudio' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestAudio {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	}
+
+}
 declare module 'test/TestButton' {
 	///   path="../gui.d.ts" />
 	///   types="@vf.js/vf" />
@@ -4535,6 +4696,16 @@ declare module 'test/TestRect' {
 	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
 	    private onLoad;
 	    private onClick;
+	}
+
+}
+declare module 'test/TestScrollBar' {
+	///   path="../gui.d.ts" />
+	///   types="@vf.js/vf" />
+	export default class TestScrollBar {
+	    constructor(app: vf.Application, uiStage: vf.gui.Stage);
+	    private onLoad;
+	    private getScrollingContainer;
 	}
 
 }

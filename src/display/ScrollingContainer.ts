@@ -8,6 +8,7 @@ import { now } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
 import { ContainerBase } from "../core/ContainerBase";
 import { DisplayObjectAbstract } from "../core/DisplayObjectAbstract";
+import { ScrollBar } from "./ScrollBar";
 
 
 /**
@@ -22,10 +23,108 @@ export class ScrollingContainer extends Container {
     public constructor() {
         super();
         
-        this.container.addChild(this._innerContainer);
+        const innerContainer = this._innerContainer
+        this.container.addChild(innerContainer);
         this.container.name = "ScrollingContainer";
-        this._innerContainer.name = "innerContainer";
-        
+        innerContainer.name = "innerContainer";
+        innerContainer.on("added", this.$onAddStage, this);
+        innerContainer.on("removed", this.$onRemoveStage, this);
+    }
+    /**
+     * 是否启动拖拽滚动
+     * @default true
+     */
+    private _dragScrolling = false;
+    public get dragScrolling() {
+        return this._dragScrolling;
+    }
+    public set dragScrolling(value) {
+        this._dragScrolling = value;
+        //Drag scroll and Mouse scroll
+        if (value) {
+            this.initDrag();
+            this.mouseScrollEvent && this.mouseScrollEvent.startEvent();
+            this.dragEvent && this.dragEvent.startEvent();
+        }else{
+            this.mouseScrollEvent && this.mouseScrollEvent.stopEvent();
+            this.dragEvent && this.dragEvent.stopEvent();
+        }
+    }
+    /**
+     * 滚动的阻力或柔度 (0-1) 
+     * @default 0.5
+     */
+    public softness = 0.5;
+    /** 
+     * 滚动条的圆角半径 设置0时，滚动条为直角长方形
+     * @default 0
+     */
+    public radius = 0;
+    /**
+     * 遮罩的扩充范围
+     */
+    public expandMask = 0;
+    /** 
+     * 是否开启滚动动画 
+     * @default false
+     */
+    public animating = false;
+    /** 
+     * 是否启用水平滚动 
+     * @default false
+     */
+    public scrollX = false;
+    /**
+     * 是否滚动中
+     */
+    public scrollY = false;
+    /**
+     * 内容容器
+     * @private
+     */
+    private _innerContainer = new ContainerBase();
+    /**
+     * 内容的宽高
+     */
+    public innerBounds = new vf.Rectangle();
+    /** 
+     * 拖动处理类
+     */
+    private dragEvent?: DragEvent;
+    /**
+     * 鼠标滚动
+     */
+    private mouseScrollEvent?: MouseScrollEvent;
+    /**
+     * 是否滚动中
+     */
+    private scrolling = false;
+    /**
+     * 临时方案，设置时间间隔，跳转容器宽高
+     */
+    private _boundCached = now() - 1000;
+
+    private _lastWidth = 0;
+    private _lastHeight = 0;
+
+    private _isInitScrolling = false;
+
+    private _containerStart = new vf.Point();
+    private _targetPosition = new vf.Point();
+    private _lastPosition = new vf.Point();
+    private _Position = new vf.Point();
+    private _Speed = new vf.Point();
+    private _stop = false;
+    private isInitDrag = false;
+
+    protected initDrag(){
+    
+        if(this.isInitDrag){
+            return;
+        }
+        this.dragEvent = new DragEvent(this);
+        this.mouseScrollEvent = new MouseScrollEvent(this,true);
+        this.isInitDrag = true;
         const _graphics = new vf.Graphics();
         _graphics.clear();
         _graphics.beginFill(0xffcc00);   
@@ -62,106 +161,23 @@ export class ScrollingContainer extends Container {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
             this.setScrollPosition(scrollSpeed);
         };
-
     }
-    /**
-     * 是否启动拖拽滚动
-     * @default true
-     */
-    private _dragScrolling = true;
-    public get dragScrolling() {
-        return this._dragScrolling;
-    }
-    public set dragScrolling(value) {
-        this._dragScrolling = value;
-        //Drag scroll and Mouse scroll
-        if (value) {
-            this.mouseScrollEvent.startEvent();
-            this.dragEvent.startEvent();
-        }else{
-            this.mouseScrollEvent.stopEvent();
-            this.dragEvent.stopEvent();
-        }
-    }
-    /**
-     * 滚动的阻力或柔度 (0-1) 
-     * @default 0.5
-     */
-    public softness = 0.5;
-    /** 
-     * 滚动条的圆角半径 设置0时，滚动条为直角长方形
-     * @default 0
-     */
-    public radius = 0;
-    /**
-     * 遮罩的扩充范围
-     */
-    public expandMask = 0;
-    /** 
-     * 是否开启滚动动画 
-     * @default false
-     */
-    public animating = false;
-    /** 
-     * 是否启用水平滚动 
-     * @default false
-     */
-    public scrollX = false;
-    /**
-     * 是否滚动中
-     */
-    public scrollY = false;
-    
-    /**
-     * 内容容器
-     * @private
-     */
-    private _innerContainer = new ContainerBase();
-    /**
-     * 内容的宽高
-     */
-    public innerBounds = new vf.Rectangle();
-    /** 
-     * 拖动处理类
-     */
-    private dragEvent = new DragEvent(this);
-    /**
-     * 鼠标滚动
-     */
-    private mouseScrollEvent = new MouseScrollEvent(this,true);
-    /**
-     * 是否滚动中
-     */
-    private scrolling = false;
-    /**
-     * 临时方案，设置时间间隔，跳转容器宽高
-     */
-    private _boundCached = now() - 1000;
-
-    private _lastWidth = 0;
-    private _lastHeight = 0;
-
-    private _isInitScrolling = false;
-
-    private _containerStart = new vf.Point();
-    private _targetPosition = new vf.Point();
-    private _lastPosition = new vf.Point();
-    private _Position = new vf.Point();
-    private _Speed = new vf.Point();
-    private _stop = false;
-
-
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
         if (this._lastWidth != unscaledWidth || this._lastHeight != unscaledHeight) {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
-            const _of = this.expandMask;
-            this.style.maskPosition = [_of,_of];
             
-            this._lastWidth = unscaledWidth;
-            this._lastHeight = unscaledHeight;
-            this.style.maskSize = [unscaledWidth,unscaledHeight];
+            this._lastWidth = this._innerContainer.width;
+            this._lastHeight = this._innerContainer.height;
+            if(this.style.maskImage && this._dragScrolling){
+                const _of = this.expandMask;
+                this.style.maskPosition = [_of,_of];
+                this.style.maskSize = [unscaledWidth,unscaledHeight];
+            }
+            
             this.setScrollPosition();
+            this.emit(ComponentEvent.RESIZE,this);
         }
+        
     }
 
     protected setScrollPosition(speed?: vf.Point) {
@@ -177,7 +193,18 @@ export class ScrollingContainer extends Container {
         }
     }
 
+    public get innerContainer(){
+        return this._innerContainer;
+    }
 
+    public addChild<T extends DisplayObjectAbstract>(item: T): T {
+        if (this._innerContainer.children.length !== this.uiChildren.length) {
+            return this.addChildAt(item, this._innerContainer.children.length);
+        } else {
+            return this.addChildAt(item, this.uiChildren.length);
+        }
+
+    }
     public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T {
 
         if (item.parent) {
@@ -185,15 +212,26 @@ export class ScrollingContainer extends Container {
         }
 
         item.parent = this as any;    
-        index = Math.min(this._innerContainer.children.length,index);
-        this._innerContainer.addChildAt(item.container, index);
-        this.uiChildren.splice(index, 0, item);
+        item.$nestLevel = this.$nestLevel + 1;
+        if (!item.initialized) {
+            item.initialized = true;
+            item.$onInit();
+        }
+        this.emit(ComponentEvent.ADD, this);
+        if(item instanceof ScrollBar){
+            //index = this.uiChildren.push(item);
+            //index = Math.min(this.container.children.length,index);
+            this.container.addChild(item.container);
+        }else{
+            index = Math.min(this._innerContainer.children.length,index);
+            this.uiChildren.splice(index, 0, item);
+            this._innerContainer.addChildAt(item.container, index);
+        }
         this.getInnerBounds(true);
-        
         return item as any;
     }
 
-    protected getInnerBounds(force?: boolean) {
+    public getInnerBounds(force?: boolean) {
 
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
         if (force || now() - this._boundCached > 1000) {
@@ -339,6 +377,15 @@ export class ScrollingContainer extends Container {
         this._innerContainer.position[direction] = Math.round(this._Position[direction]);
 
         this.updateScrollBars();
+    }
+
+    public release() {
+        super.release();
+        //this.offAll();
+        this.dragEvent && this.dragEvent.remove();
+        this.mouseScrollEvent && this.mouseScrollEvent.remove(); 
+
+
     }
 
 }
